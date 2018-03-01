@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KuchaMobile.Android", "KuchaMobile\KuchaMobile.Android\KuchaMobile.Android.csproj", "{001E193C-7FB5-4549-B6B8-41206836457F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KuchaMobile.Droid", "KuchaMobile\KuchaMobile.Android\KuchaMobile.Droid.csproj", "{001E193C-7FB5-4549-B6B8-41206836457F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KuchaMobile.iOS", "KuchaMobile\KuchaMobile.iOS\KuchaMobile.iOS.csproj", "{E2D3A88F-D0FF-48A2-AB65-CE1D81096A1D}"
 EndProject
