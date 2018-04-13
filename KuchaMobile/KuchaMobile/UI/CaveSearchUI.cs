@@ -1,4 +1,5 @@
 ﻿using KuchaMobile.Logic;
+using KuchaMobile.Logic.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,12 +9,24 @@ namespace KuchaMobile.UI
 {
     public class CaveSearchUI : ContentPage
     {
+        Label districtsFilterLabel;
+        Label regionsFilterLabel;
+        Label sitesFilterLabel;
         Picker caveFilterPicker;
+        public List<CaveDistrictModel> pickedDistricts;
+        public List<CaveRegionModel> pickedRegions;
+        public List<CaveSiteModel> pickedSites;
+
+        Dictionary<string, CaveTypeModel> caveTypeDictionary;
 
         public CaveSearchUI()
         {
             Title = "Cave Search";
             ToolbarItems.Add(new ToolbarItem("History", null, HistoryButton_Clicked));
+
+            pickedDistricts = new List<CaveDistrictModel>();
+            pickedRegions = new List<CaveRegionModel>();
+            pickedSites = new List<CaveSiteModel>();
 
             StackLayout contentStackLayout = new StackLayout();
             contentStackLayout.Padding = new Thickness(72, 16, 16, 16);
@@ -25,11 +38,11 @@ namespace KuchaMobile.UI
             caveFilterHeadlineLabel.Text = "Cave Filter";
             contentStackLayout.Children.Add(caveFilterHeadlineLabel);
 
-            List<caveTypeModel> caveTypes = Kucha.GetCaveTypes();
+            caveTypeDictionary = Kucha.GetCaveTypeDictionary();
             caveFilterPicker = new Picker();
-            foreach(caveTypeModel caveType in caveTypes)
+            foreach(string name in caveTypeDictionary.Keys)
             {
-                caveFilterPicker.Items.Add(caveType.nameEN);
+                caveFilterPicker.Items.Add(name);
             }
  
             caveFilterPicker.SelectedIndex = 0;
@@ -41,26 +54,114 @@ namespace KuchaMobile.UI
             locationFilterHeadlineLabel.Text = "Location Filter";
             contentStackLayout.Children.Add(locationFilterHeadlineLabel);
 
-            Label sitesFilterLabel = new Label();
-            sitesFilterLabel.FontSize = 12;
-            sitesFilterLabel.Text = "Sites";
-            contentStackLayout.Children.Add(sitesFilterLabel);
-
-            Label districtsFilterLabel = new Label();
+            districtsFilterLabel = new Label();
             districtsFilterLabel.FontSize = 12;
-            districtsFilterLabel.Text = "Districts";
+            districtsFilterLabel.Text = "Selektierte Districts: Keine";
             contentStackLayout.Children.Add(districtsFilterLabel);
 
-            Label regionsFilterLabel = new Label();
+            Button districtsFilterButton = new Button();
+            districtsFilterButton.Text = "Districts auswählen";
+            districtsFilterButton.Clicked += DistrictsFilterButton_Clicked;
+            contentStackLayout.Children.Add(districtsFilterButton);
+
+            regionsFilterLabel = new Label();
             regionsFilterLabel.FontSize = 12;
-            regionsFilterLabel.Text = "Regions";
+            regionsFilterLabel.Text = "Selektierte Regions: Keine";
             contentStackLayout.Children.Add(regionsFilterLabel);
+
+            Button regionsFilterButton = new Button();
+            regionsFilterButton.Text = "Regions auswählen";
+            regionsFilterButton.Clicked += RegionsFilterButton_Clicked;
+            contentStackLayout.Children.Add(regionsFilterButton);
+
+            sitesFilterLabel = new Label();
+            sitesFilterLabel.FontSize = 12;
+            sitesFilterLabel.Text = "Selektierte Sites: Keine";
+            contentStackLayout.Children.Add(sitesFilterLabel);
+
+            Button sitesFilterButton = new Button();
+            sitesFilterButton.Text = "Sites auswählen";
+            sitesFilterButton.Clicked += SitesFilterButton_Clicked;
+            contentStackLayout.Children.Add(sitesFilterButton);
 
             Button searchButton = new Button();
             searchButton.Text = "Suchen";
+            searchButton.Clicked += SearchButton_Clicked;
             contentStackLayout.Children.Add(searchButton);
 
             Content = contentStackLayout;
+        }
+
+        private void SearchButton_Clicked(object sender, EventArgs e)
+        {
+            string selectedCaveTypeName = caveFilterPicker.Items[caveFilterPicker.SelectedIndex];
+            CaveTypeModel caveTypeModel = caveTypeDictionary[selectedCaveTypeName];
+
+            List<CaveModel> caves = Internal.Connection.GetCaves(caveTypeModel, pickedDistricts, pickedRegions, pickedSites);
+            Navigation.PushAsync(new CaveSearchResultUI(caves), true);
+        }
+
+        private void SitesFilterButton_Clicked(object sender, EventArgs e)
+        {
+            Navigation.PushModalAsync(new CaveFilter(CaveFilter.CAVE_FILTER_TYPE.SITE, this), true);
+        }
+
+        private void RegionsFilterButton_Clicked(object sender, EventArgs e)
+        {
+            Navigation.PushModalAsync(new CaveFilter(CaveFilter.CAVE_FILTER_TYPE.REGION, this), true);
+        }
+
+        private void DistrictsFilterButton_Clicked(object sender, EventArgs e)
+        {
+            Navigation.PushModalAsync(new CaveFilter(CaveFilter.CAVE_FILTER_TYPE.DISTRICT, this), true);
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            if(pickedDistricts.Count == 0)
+            {
+                districtsFilterLabel.Text = "Selektierte Districts: Keine";
+            }
+            else
+            {
+                string labelString = "Selektierte Districts: ";
+                foreach(CaveDistrictModel district in pickedDistricts)
+                {
+                    labelString += district.name + ", ";
+                }                
+                districtsFilterLabel.Text = labelString.Remove(labelString.Length - 2);
+            }
+
+            if (pickedRegions.Count == 0)
+            {
+                regionsFilterLabel.Text = "Selektierte Regions: Keine";
+            }
+            else
+            {
+                string labelString = "Selektierte Regions: ";
+                foreach (CaveRegionModel region in pickedRegions)
+                {
+                    labelString += region.englishName + ", ";
+                }               
+                regionsFilterLabel.Text = labelString.Remove(labelString.Length - 2);
+            }
+
+            if (pickedSites.Count == 0)
+            {
+                sitesFilterLabel.Text = "Selektierte Sites: Keine";
+            }
+            else
+            {
+                string labelString = "Selektierte Sites: ";
+                foreach (CaveSiteModel site in pickedSites)
+                {
+                    labelString += site.name + ", ";
+                }              
+                sitesFilterLabel.Text = labelString.Remove(labelString.Length - 2);
+            }
+
         }
 
         private void HistoryButton_Clicked()

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace KuchaMobile.Logic.Models
 {
-    public class caveRegionModel
+    public class CaveRegionModel
     {
         public int regionID { get; set; }
         public string phoneticName { get; set; }

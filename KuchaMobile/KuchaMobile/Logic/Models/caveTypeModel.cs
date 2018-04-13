@@ -4,7 +4,7 @@ using System.Text;
 
 namespace KuchaMobile.Logic
 {
-    public class caveTypeModel
+    public class CaveTypeModel
     {
         public int caveTypeID { get; set; }
         public string nameEN { get; set; }

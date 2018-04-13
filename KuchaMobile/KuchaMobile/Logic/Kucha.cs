@@ -8,50 +8,73 @@ namespace KuchaMobile.Logic
 {
     public class Kucha
     {
-        static List<caveDistrictModel> caveDistricts;
-        static List<caveRegionModel> caveRegions;
-        static List<caveTypeModel> caveTypes;
-        static List<caveSiteModel> caveSites;
+        static List<CaveDistrictModel> caveDistricts;
+        static List<CaveRegionModel> caveRegions;
+        static List<CaveTypeModel> caveTypes;
+        static List<CaveSiteModel> caveSites;
+
+        static Dictionary<string, CaveTypeModel> caveTypeDictionary;
 
         private static bool RefreshCaveFilters()
         {
-            List<caveDistrictModel> caveDistrictModels = Connection.GetCaveDistrictModels();
+            List<CaveDistrictModel> caveDistrictModels = Connection.GetCaveDistrictModels();
             if (caveDistrictModels != null)
             {
                 caveDistricts = caveDistrictModels;
             }
             else return false;
 
-            List<caveRegionModel> caveRegionModels = Connection.GetCaveRegionModels();
+            List<CaveRegionModel> caveRegionModels = Connection.GetCaveRegionModels();
             if (caveRegionModels != null)
             {
                 caveRegions = caveRegionModels;
             }
             else return false;
 
-            List<caveSiteModel> caveSiteModels = Connection.GetCaveSiteModels();
+            List<CaveSiteModel> caveSiteModels = Connection.GetCaveSiteModels();
             if (caveSiteModels != null)
             {
                 caveSites = caveSiteModels;
             }
             else return false;
 
-            List<caveTypeModel> caveTypeModels = Connection.GetCaveTypeModels();
+            List<CaveTypeModel> caveTypeModels = Connection.GetCaveTypeModels();
             if (caveTypeModels != null)
             {
                 caveTypes = caveTypeModels;
+                caveTypeDictionary = new Dictionary<string, CaveTypeModel>();
+                caveTypeDictionary.Add("Egal", null);
+                foreach(CaveTypeModel c in caveTypeModels)
+                {
+                    caveTypeDictionary.Add(c.nameEN, c);
+                }
             }
             else return false;
 
             return true;
         }
 
-        public static List<caveSiteModel> GetCaveSites()
+        public static Dictionary<string, CaveTypeModel> GetCaveTypeDictionary()
+        {
+            return caveTypeDictionary;
+        }
+
+        public static List<CaveDistrictModel> GetCaveDistricts()
+        {
+            return caveDistricts;
+        }
+
+        public static List<CaveRegionModel> GetCaveRegions()
+        {
+            return caveRegions;
+        }
+
+        public static List<CaveSiteModel> GetCaveSites()
         {
             return caveSites;
         }
 
-        public static List<caveTypeModel> GetCaveTypes()
+        public static List<CaveTypeModel> GetCaveTypes()
         {
             return caveTypes;
         }

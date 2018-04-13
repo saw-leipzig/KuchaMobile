@@ -44,8 +44,53 @@ namespace KuchaMobile.Internal
             sessionID = Settings.LocalTokenSetting;
         }
 
+        public static List<CaveModel> GetCaves(CaveTypeModel caveType, List<CaveDistrictModel> caveDistricts, List<CaveRegionModel> caveRegions, List<CaveSiteModel> caveSites)
+        {
+            if (String.IsNullOrEmpty(sessionID))
+                return null;
+            string data = "";
+            string queryString = "json?caveID=all";
+            if (caveType != null)
+                queryString += "&caveTypeID=" + caveType.caveTypeID;
+            if(caveDistricts!=null && caveDistricts.Count>0)
+            {
+                queryString += "&districtID=";
+                foreach(CaveDistrictModel district in caveDistricts)
+                {
+                    queryString += district.districtID + ",";
+                }
+                queryString = queryString.Remove(queryString.Length - 1); //Remove final ,
+            }
+            if (caveRegions != null && caveRegions.Count > 0)
+            {
+                queryString += "&regionID=";
+                foreach (CaveRegionModel region in caveRegions)
+                {
+                    queryString += region.regionID + ",";
+                }
+                queryString = queryString.Remove(queryString.Length - 1); //Remove final ,
+            }
+            if (caveSites != null && caveSites.Count > 0)
+            {
+                queryString += "&siteID=";
+                foreach (CaveSiteModel site in caveSites)
+                {
+                    queryString += site.siteID + ",";
+                }
+                queryString = queryString.Remove(queryString.Length - 1); //Remove final ,
+            }
 
-        public static List<caveDistrictModel> GetCaveDistrictModels()
+            HttpStatusCode result = CallAPI(queryString + "&sessionID=" + sessionID, ref data);
+            if(result == HttpStatusCode.OK && !String.IsNullOrEmpty(data))
+            {
+                List<CaveModel> caves = JsonConvert.DeserializeObject<List<CaveModel>>(data);
+                if (caves == null) caves = new List<CaveModel>();
+                return caves;
+            }
+            return new List<CaveModel>();
+        }
+
+        public static List<CaveDistrictModel> GetCaveDistrictModels()
         {
             if (String.IsNullOrEmpty(sessionID))
                 return null;
@@ -54,13 +99,13 @@ namespace KuchaMobile.Internal
             HttpStatusCode result = CallAPI("json?districtID=all&sessionID=" + sessionID, ref data);
             if (result == HttpStatusCode.OK && !String.IsNullOrEmpty(data))
             {
-                List<caveDistrictModel> models = JsonConvert.DeserializeObject<List<caveDistrictModel>>(data);
+                List<CaveDistrictModel> models = JsonConvert.DeserializeObject<List<CaveDistrictModel>>(data);
                 return models;
             }
             else return null;
         }
 
-        public static List<caveRegionModel> GetCaveRegionModels()
+        public static List<CaveRegionModel> GetCaveRegionModels()
         {
             if (String.IsNullOrEmpty(sessionID))
                 return null;
@@ -69,13 +114,13 @@ namespace KuchaMobile.Internal
             HttpStatusCode result = CallAPI("json?regionID=all&sessionID=" + sessionID, ref data);
             if (result == HttpStatusCode.OK && !String.IsNullOrEmpty(data))
             {
-                List<caveRegionModel> models = JsonConvert.DeserializeObject<List<caveRegionModel>>(data);
+                List<CaveRegionModel> models = JsonConvert.DeserializeObject<List<CaveRegionModel>>(data);
                 return models;
             }
             else return null;
         }
 
-        public static List<caveSiteModel> GetCaveSiteModels()
+        public static List<CaveSiteModel> GetCaveSiteModels()
         {
             if (String.IsNullOrEmpty(sessionID))
                 return null;
@@ -84,13 +129,13 @@ namespace KuchaMobile.Internal
             HttpStatusCode result = CallAPI("json?siteID=all&sessionID=" + sessionID, ref data);
             if (result == HttpStatusCode.OK && !String.IsNullOrEmpty(data))
             {
-                List<caveSiteModel> models = JsonConvert.DeserializeObject<List<caveSiteModel>>(data);
+                List<CaveSiteModel> models = JsonConvert.DeserializeObject<List<CaveSiteModel>>(data);
                 return models;
             }
             else return null;
         }
 
-        public static List<caveTypeModel> GetCaveTypeModels()
+        public static List<CaveTypeModel> GetCaveTypeModels()
         {
             if (String.IsNullOrEmpty(sessionID))
                 return null;
@@ -99,7 +144,7 @@ namespace KuchaMobile.Internal
             HttpStatusCode result = CallAPI("json?caveTypeID=all&sessionID=" + sessionID, ref data);
             if (result == HttpStatusCode.OK && !String.IsNullOrEmpty(data))
             {
-                List<caveTypeModel> models = JsonConvert.DeserializeObject<List<caveTypeModel>>(data);
+                List<CaveTypeModel> models = JsonConvert.DeserializeObject<List<CaveTypeModel>>(data);
                 return models;
             }
             else return null;
