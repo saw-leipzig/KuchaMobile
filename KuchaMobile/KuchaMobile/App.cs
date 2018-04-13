@@ -1,4 +1,6 @@
-﻿using System;
+﻿using KuchaMobile.Logic;
+using KuchaMobile.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +17,10 @@ namespace KuchaMobile
 
         protected override void OnStart()
         {
-            MainPage = new MainPage();
+            if (!Kucha.InitializeDefaults())
+                MainPage = new LoginPage();
+            else 
+                MainPage = new MainPage();
         }
 
         protected override void OnSleep()

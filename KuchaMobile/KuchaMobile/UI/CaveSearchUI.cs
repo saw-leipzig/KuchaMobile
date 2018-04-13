@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KuchaMobile.Logic;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Xamarin.Forms;
@@ -24,9 +25,13 @@ namespace KuchaMobile.UI
             caveFilterHeadlineLabel.Text = "Cave Filter";
             contentStackLayout.Children.Add(caveFilterHeadlineLabel);
 
+            List<caveTypeModel> caveTypes = Kucha.GetCaveTypes();
             caveFilterPicker = new Picker();
-            caveFilterPicker.Items.Add("unknown");
-            caveFilterPicker.Items.Add("square cave");  //TODO: Replace with proper enum of models/cave object once available
+            foreach(caveTypeModel caveType in caveTypes)
+            {
+                caveFilterPicker.Items.Add(caveType.nameEN);
+            }
+ 
             caveFilterPicker.SelectedIndex = 0;
 
             contentStackLayout.Children.Add(caveFilterPicker);

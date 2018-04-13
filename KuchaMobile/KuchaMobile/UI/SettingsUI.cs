@@ -1,5 +1,6 @@
 ﻿using Acr.UserDialogs;
 using KuchaMobile.Internal;
+using KuchaMobile.Logic;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,6 +18,11 @@ namespace KuchaMobile.UI
             loginButton.Text = "Login";
             loginButton.Clicked += LoginButton_Clicked;
             contentStack.Children.Add(loginButton);
+
+            Button loadCaveTypesButton = new Button();
+            loadCaveTypesButton.Text = "Load Cave Types";
+            //loadCaveTypesButton.Clicked += LoadCaveTypesButton_Clicked;
+            contentStack.Children.Add(loadCaveTypesButton);
 
             Content = contentStack;
         }
