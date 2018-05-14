@@ -38,7 +38,7 @@ namespace KuchaMobile.Internal
             if (!String.IsNullOrEmpty(sessionID))
             {
                 string data = "";
-                HttpStatusCode result = CallAPI("json?sessionID=a" + sessionID, ref data);
+                HttpStatusCode result = CallAPI("json?checkSession&sessionID=" + sessionID, ref data);
                 if (result == HttpStatusCode.NoContent) //Should be like this!
                     return true;
                 else return false;
