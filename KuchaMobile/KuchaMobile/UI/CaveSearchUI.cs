@@ -97,7 +97,7 @@ namespace KuchaMobile.UI
             string selectedCaveTypeName = caveFilterPicker.Items[caveFilterPicker.SelectedIndex];
             CaveTypeModel caveTypeModel = caveTypeDictionary[selectedCaveTypeName];
 
-            List<CaveModel> caves = Internal.Connection.GetCaves(caveTypeModel, pickedDistricts, pickedRegions, pickedSites);
+            List<CaveModel> caves = Kucha.GetCavesByFilters(caveTypeModel, pickedDistricts, pickedRegions, pickedSites);
             Navigation.PushAsync(new CaveSearchResultUI(caves), true);
         }
 

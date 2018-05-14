@@ -17,7 +17,9 @@ namespace KuchaMobile
 
         protected override void OnStart()
         {
-            if (!Kucha.InitializeDefaults())
+            Kucha.LoadPersistantData();
+
+            if (!Kucha.CaveDataIsValid() || !Internal.Connection.HasLegitSessionID())
                 MainPage = new LoginPage();
             else 
                 MainPage = new MainPage();

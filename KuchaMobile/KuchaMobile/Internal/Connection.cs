@@ -35,8 +35,15 @@ namespace KuchaMobile.Internal
         }
         public static bool HasLegitSessionID()
         {
-            if (!String.IsNullOrEmpty(sessionID))   //Todo: AND IS NOT EXPIRED
-                return true;
+            if (!String.IsNullOrEmpty(sessionID))
+            {
+                string data = "";
+                HttpStatusCode result = CallAPI("json?sessionID=a" + sessionID, ref data);
+                if (result == HttpStatusCode.NoContent) //Should be like this!
+                    return true;
+                else return false;
+            }
+
             return false;
         }
         public static void LoadCachedSessionID()
@@ -44,50 +51,19 @@ namespace KuchaMobile.Internal
             sessionID = Settings.LocalTokenSetting;
         }
 
-        public static List<CaveModel> GetCaves(CaveTypeModel caveType, List<CaveDistrictModel> caveDistricts, List<CaveRegionModel> caveRegions, List<CaveSiteModel> caveSites)
+        public static List<CaveModel> GetAllCaves()
         {
             if (String.IsNullOrEmpty(sessionID))
                 return null;
-            string data = "";
-            string queryString = "json?caveID=all";
-            if (caveType != null)
-                queryString += "&caveTypeID=" + caveType.caveTypeID;
-            if(caveDistricts!=null && caveDistricts.Count>0)
-            {
-                queryString += "&districtID=";
-                foreach(CaveDistrictModel district in caveDistricts)
-                {
-                    queryString += district.districtID + ",";
-                }
-                queryString = queryString.Remove(queryString.Length - 1); //Remove final ,
-            }
-            if (caveRegions != null && caveRegions.Count > 0)
-            {
-                queryString += "&regionID=";
-                foreach (CaveRegionModel region in caveRegions)
-                {
-                    queryString += region.regionID + ",";
-                }
-                queryString = queryString.Remove(queryString.Length - 1); //Remove final ,
-            }
-            if (caveSites != null && caveSites.Count > 0)
-            {
-                queryString += "&siteID=";
-                foreach (CaveSiteModel site in caveSites)
-                {
-                    queryString += site.siteID + ",";
-                }
-                queryString = queryString.Remove(queryString.Length - 1); //Remove final ,
-            }
 
-            HttpStatusCode result = CallAPI(queryString + "&sessionID=" + sessionID, ref data);
-            if(result == HttpStatusCode.OK && !String.IsNullOrEmpty(data))
+            string data = "";
+            HttpStatusCode result = CallAPI("json?caveID=all&sessionID=" + sessionID, ref data);
+            if (result == HttpStatusCode.OK && !String.IsNullOrEmpty(data))
             {
-                List<CaveModel> caves = JsonConvert.DeserializeObject<List<CaveModel>>(data);
-                if (caves == null) caves = new List<CaveModel>();
-                return caves;
+                List<CaveModel> models = JsonConvert.DeserializeObject<List<CaveModel>>(data);
+                return models;
             }
-            return new List<CaveModel>();
+            else return null;
         }
 
         public static List<CaveDistrictModel> GetCaveDistrictModels()
