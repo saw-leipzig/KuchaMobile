@@ -27,17 +27,9 @@ namespace KuchaMobile.UI
             Content = contentStack;
         }
 
-        private async void LoginButton_Clicked(object sender, EventArgs e)
+        private void LoginButton_Clicked(object sender, EventArgs e)
         {
-            LoginResult x = await UserDialogs.Instance.LoginAsync("Login", "Logindaten eintragen");
-            if(x.Ok)
-            {
-                string username = x.LoginText;
-                string password = x.Password;
-
-                bool loginSuccess = Connection.Login(username, password);
-                UserDialogs.Instance.Toast("Login: " + loginSuccess.ToString());
-            }
+            App.Current.MainPage = new LoginPage();
         }
     }
 }

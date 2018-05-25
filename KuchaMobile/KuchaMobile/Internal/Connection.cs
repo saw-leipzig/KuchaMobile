@@ -10,6 +10,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static KuchaMobile.Logic.Models.IconographyRootCategory;
 
 namespace KuchaMobile.Internal
 {
@@ -49,6 +50,36 @@ namespace KuchaMobile.Internal
         public static void LoadCachedSessionID()
         {
             sessionID = Settings.LocalTokenSetting;
+        }
+
+        public static List<PaintedRepresentationModel> GetPaintedRepresentationsByFilter(List<Iconography> iconographies, bool exclusive)
+        {
+            if (String.IsNullOrEmpty(sessionID))
+                return null;
+            string data = "";
+
+            HttpStatusCode result;
+            List<int> allIconographiesIDList = new List<int>();
+            foreach (Iconography i in iconographies)
+            {
+                allIconographiesIDList.Add(i.iconographyID);
+            }
+            if (exclusive)
+            {
+                string queryString = "json?exclusivePaintedRepFromIconographyID=" + String.Join(",", allIconographiesIDList) + "&sessionID=" + sessionID;
+                result = CallAPI(queryString, ref data);
+            }
+            else
+            {
+                string queryString = "json?paintedRepFromIconographyID=" + String.Join(",", allIconographiesIDList) + "&sessionID=" + sessionID;
+                result = CallAPI(queryString, ref data);
+            }
+            if (result == HttpStatusCode.OK && !String.IsNullOrEmpty(data))
+            {
+                List<PaintedRepresentationModel> models = JsonConvert.DeserializeObject<List<PaintedRepresentationModel>>(data);
+                return models;
+            }
+            else return null;
         }
 
         public static List<CaveModel> GetAllCaves()
@@ -122,6 +153,29 @@ namespace KuchaMobile.Internal
             {
                 List<CaveTypeModel> models = JsonConvert.DeserializeObject<List<CaveTypeModel>>(data);
                 return models;
+            }
+            else return null;
+        }
+
+        public static List<Iconography> GetIconographyModels()
+        {
+            if (String.IsNullOrEmpty(sessionID))
+                return null;
+
+            string data = "";
+            HttpStatusCode result = CallAPI("json?iconographyID=all&sessionID=" + sessionID, ref data);
+            if (result == HttpStatusCode.OK && !String.IsNullOrEmpty(data))
+            {
+                List<IconographyRootCategory> rootCategories = JsonConvert.DeserializeObject<List<IconographyRootCategory>>(data);
+                List<Iconography> iconographies = new List<Iconography>();
+                foreach(var root in rootCategories)
+                {
+                    foreach (IconographySubcategory sub in root.children)
+                    {
+                        iconographies.AddRange(sub.children);
+                    }
+                }
+                return iconographies;
             }
             else return null;
         }

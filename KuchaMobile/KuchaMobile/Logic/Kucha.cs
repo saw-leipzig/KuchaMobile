@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using static KuchaMobile.Logic.Models.IconographyRootCategory;
 
 namespace KuchaMobile.Logic
 {
@@ -61,8 +62,21 @@ namespace KuchaMobile.Logic
             }
             else return false;
 
+            List<Iconography> iconographieModels = Connection.GetIconographyModels();
+            if (iconographieModels != null)
+            {
+                kuchaContainer.iconographies = iconographieModels;
+            }
+            else return false;
+
+            kuchaContainer.timeStamp = DateTime.UtcNow;
             Settings.KuchaContainerSetting = kuchaContainer;
             return true;
+        }
+
+        public static DateTime GetDataTimeStamp()
+        {
+            return kuchaContainer.timeStamp;
         }
 
         public static List<CaveModel> GetCavesByFilters(CaveTypeModel caveTypeModel, List<CaveDistrictModel> pickedDistricts, List<CaveRegionModel> pickedRegions, List<CaveSiteModel> pickedSites)
@@ -113,6 +127,17 @@ namespace KuchaMobile.Logic
         public static List<CaveTypeModel> GetCaveTypes()
         {
             return kuchaContainer.caveTypes;
+        }
+
+        public static List<Iconography> GetIconographies()
+        {
+            return kuchaContainer.iconographies;
+        }
+
+        public static List<PaintedRepresentationModel> GetPaintedRepresentationsByIconographies(List<Iconography> iconographies, bool exclusive)
+        {
+            List<PaintedRepresentationModel> resultList = Connection.GetPaintedRepresentationsByFilter(iconographies, exclusive);
+            return resultList;
         }
 
         public static void LoadPersistantData()

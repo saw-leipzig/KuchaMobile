@@ -53,11 +53,15 @@ namespace KuchaMobile.UI
             downloadDataButton = new Button();
             downloadDataButton.Clicked += DownloadDataButton_Clicked;
             downloadDataButton.Text = "Daten runterladen";
+            if (Connection.HasLegitSessionID() == false)
+                downloadDataButton.IsEnabled = false;
             contentStack.Children.Add(downloadDataButton);
 
             downloadStatusLabel = new Label();
-            if (Kucha.CaveDataIsValid())
+            if (!Kucha.CaveDataIsValid())
                 downloadStatusLabel.Text = "Bitte initiale Daten downloaden";
+            else
+                downloadStatusLabel.Text = "Daten vom " + Kucha.GetDataTimeStamp().ToShortDateString();
             contentStack.Children.Add(downloadStatusLabel);
 
             continueButton = new Button();
@@ -88,7 +92,8 @@ namespace KuchaMobile.UI
                     {
                         UserDialogs.Instance.Toast("Daten erfolgreich heruntergeladen!");
                         downloadDataButton.IsEnabled = false;
-                        if(loginButton.IsEnabled == true)
+                        downloadStatusLabel.Text = "Daten vom " + Kucha.GetDataTimeStamp().ToShortDateString();
+                        if (loginButton.IsEnabled == true)
                         {
                             continueButton.IsEnabled = true;
                         }
@@ -103,21 +108,33 @@ namespace KuchaMobile.UI
 
         private void LoginButton_Clicked(object sender, EventArgs e)
         {
-            bool loginSuccess = Connection.Login(nameEntry.Text, passwordEntry.Text);
-            if(loginSuccess)
+            UserDialogs.Instance.ShowLoading();
+            Task.Run(()=> 
             {
-                UserDialogs.Instance.Toast("Login erfolgreich!");
-                nameEntry.IsEnabled = false;
-                passwordEntry.IsEnabled = false;
-                loginButton.IsEnabled = false;
+                bool loginSuccess = Connection.Login(nameEntry.Text, passwordEntry.Text);
+                Device.BeginInvokeOnMainThread(()=> 
+                {
+                    UserDialogs.Instance.HideLoading();
+                    if (loginSuccess)
+                    {
+                        UserDialogs.Instance.Toast("Login erfolgreich!");
+                        nameEntry.IsEnabled = false;
+                        passwordEntry.IsEnabled = false;
+                        loginButton.IsEnabled = false;
+                        downloadDataButton.IsEnabled = true;
 
-                if (Kucha.CaveDataIsValid())
-                    continueButton.IsEnabled = true;
-            }
-            else
-            {
-                UserDialogs.Instance.Toast("Login fehlgeschlagen!");
-            }
+                        if (Kucha.CaveDataIsValid())
+                        {
+                            continueButton.IsEnabled = true;
+                        }
+                    }
+                    else
+                    {
+                        UserDialogs.Instance.Toast("Login fehlgeschlagen!");
+                    }
+                });               
+            });
+            
             
         }
     }
