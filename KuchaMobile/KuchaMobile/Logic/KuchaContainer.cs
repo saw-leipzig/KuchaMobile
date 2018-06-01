@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using static KuchaMobile.Logic.Models.IconographyRootCategory;
 
 namespace KuchaMobile.Logic
 {
@@ -13,7 +12,7 @@ namespace KuchaMobile.Logic
         public List<CaveSiteModel> caveSites;
         public List<CaveTypeModel> caveTypes;
         public List<CaveModel> caves;
-        public List<Iconography> iconographies;
+        public List<IconographyModel> iconographies;
 
         public Dictionary<string, CaveTypeModel> caveTypeDictionary;
 
@@ -27,7 +26,7 @@ namespace KuchaMobile.Logic
             caveTypes = new List<CaveTypeModel>();
             caves = new List<CaveModel>();
             caveTypeDictionary = new Dictionary<string, CaveTypeModel>();
-            iconographies = new List<Iconography>();
+            iconographies = new List<IconographyModel>();
             timeStamp = DateTime.Now;
         }
     }

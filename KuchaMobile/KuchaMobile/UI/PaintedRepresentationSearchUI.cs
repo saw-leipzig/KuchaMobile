@@ -4,20 +4,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Xamarin.Forms;
-using static KuchaMobile.Logic.Models.IconographyRootCategory;
 
 namespace KuchaMobile.UI
 {
     public class PaintedRepresentationSearchUI : ContentPage
     {
-        List<Iconography> allIconographies;
+        List<IconographyModel> allIconographies;
 
         StackLayout availableIconsStack;
         StackLayout selectedIconsStack;
         public PaintedRepresentationSearchUI()
         {
             Title = "Painted Representation Search";
-            allIconographies = new List<Iconography>(KuchaMobile.Logic.Kucha.GetIconographies());
+            allIconographies = new List<IconographyModel>(KuchaMobile.Logic.Kucha.GetIconographies());
             StackLayout contentStack = new StackLayout();
             Entry searchEntry = new Entry();
             searchEntry.Placeholder = "Hier suchen";
@@ -25,7 +24,7 @@ namespace KuchaMobile.UI
             contentStack.Children.Add(searchEntry);
             ScrollView availableIconsScrollView = new ScrollView();
             availableIconsStack = new StackLayout();
-            foreach(Iconography iconography in allIconographies)
+            foreach(IconographyModel iconography in allIconographies)
             {
                 IconStack i = new IconStack(iconography);
                 availableIconsStack.Children.Add(i);
@@ -60,7 +59,7 @@ namespace KuchaMobile.UI
 
         private void ExclusiveSearchButton_Clicked(object sender, EventArgs e)
         {
-            List<Iconography> iconographies = new List<Iconography>();
+            List<IconographyModel> iconographies = new List<IconographyModel>();
             foreach (IconStack iconStack in selectedIconsStack.Children)
             {
                 iconographies.Add(iconStack.iconography);
@@ -71,7 +70,7 @@ namespace KuchaMobile.UI
 
         private void AnySearchButton_Clicked(object sender, EventArgs e)
         {
-            List<Iconography> iconographies = new List<Iconography>();
+            List<IconographyModel> iconographies = new List<IconographyModel>();
             foreach(IconStack iconStack in selectedIconsStack.Children)
             {
                 iconographies.Add(iconStack.iconography);
@@ -82,8 +81,8 @@ namespace KuchaMobile.UI
 
         private void SearchEntry_TextChanged(object sender, TextChangedEventArgs e)
         {
-            List<Iconography> editedList = new List<Iconography>();
-            foreach(Iconography i in allIconographies)
+            List<IconographyModel> editedList = new List<IconographyModel>();
+            foreach(IconographyModel i in allIconographies)
             {
                 if(i.text.ToLower().Contains(e.NewTextValue.ToLower()))
                 {
@@ -91,7 +90,7 @@ namespace KuchaMobile.UI
                 }
             }
             availableIconsStack.Children.Clear();
-            foreach (Iconography iconography in editedList)
+            foreach (IconographyModel iconography in editedList)
             {
                 IconStack i = new IconStack(iconography);
                 availableIconsStack.Children.Add(i);
@@ -123,8 +122,8 @@ namespace KuchaMobile.UI
         private class IconStack : StackLayout
         {
             public bool selected;
-            public Iconography iconography;
-            public IconStack(Iconography iconographyModel)
+            public IconographyModel iconography;
+            public IconStack(IconographyModel iconographyModel)
             {
                 iconography = iconographyModel;
                 BackgroundColor = Color.Orange;

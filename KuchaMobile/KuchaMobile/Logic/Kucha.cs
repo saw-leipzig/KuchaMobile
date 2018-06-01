@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
-using static KuchaMobile.Logic.Models.IconographyRootCategory;
 
 namespace KuchaMobile.Logic
 {
@@ -62,7 +61,7 @@ namespace KuchaMobile.Logic
             }
             else return false;
 
-            List<Iconography> iconographieModels = Connection.GetIconographyModels();
+            List<IconographyModel> iconographieModels = Connection.GetIconographyModels();
             if (iconographieModels != null)
             {
                 kuchaContainer.iconographies = iconographieModels;
@@ -129,12 +128,12 @@ namespace KuchaMobile.Logic
             return kuchaContainer.caveTypes;
         }
 
-        public static List<Iconography> GetIconographies()
+        public static List<IconographyModel> GetIconographies()
         {
             return kuchaContainer.iconographies;
         }
 
-        public static List<PaintedRepresentationModel> GetPaintedRepresentationsByIconographies(List<Iconography> iconographies, bool exclusive)
+        public static List<PaintedRepresentationModel> GetPaintedRepresentationsByIconographies(List<IconographyModel> iconographies, bool exclusive)
         {
             List<PaintedRepresentationModel> resultList = Connection.GetPaintedRepresentationsByFilter(iconographies, exclusive);
             return resultList;

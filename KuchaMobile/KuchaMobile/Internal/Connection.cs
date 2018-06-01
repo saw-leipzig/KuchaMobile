@@ -10,7 +10,6 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using static KuchaMobile.Logic.Models.IconographyRootCategory;
 
 namespace KuchaMobile.Internal
 {
@@ -52,7 +51,7 @@ namespace KuchaMobile.Internal
             sessionID = Settings.LocalTokenSetting;
         }
 
-        public static List<PaintedRepresentationModel> GetPaintedRepresentationsByFilter(List<Iconography> iconographies, bool exclusive)
+        public static List<PaintedRepresentationModel> GetPaintedRepresentationsByFilter(List<IconographyModel> iconographies, bool exclusive)
         {
             if (String.IsNullOrEmpty(sessionID))
                 return null;
@@ -60,7 +59,7 @@ namespace KuchaMobile.Internal
 
             HttpStatusCode result;
             List<int> allIconographiesIDList = new List<int>();
-            foreach (Iconography i in iconographies)
+            foreach (IconographyModel i in iconographies)
             {
                 allIconographiesIDList.Add(i.iconographyID);
             }
@@ -157,24 +156,16 @@ namespace KuchaMobile.Internal
             else return null;
         }
 
-        public static List<Iconography> GetIconographyModels()
+        public static List<IconographyModel> GetIconographyModels()
         {
             if (String.IsNullOrEmpty(sessionID))
                 return null;
 
             string data = "";
-            HttpStatusCode result = CallAPI("json?iconographyID=all&sessionID=" + sessionID, ref data);
+            HttpStatusCode result = CallAPI("json?iconographyID=used&sessionID=" + sessionID, ref data);
             if (result == HttpStatusCode.OK && !String.IsNullOrEmpty(data))
             {
-                List<IconographyRootCategory> rootCategories = JsonConvert.DeserializeObject<List<IconographyRootCategory>>(data);
-                List<Iconography> iconographies = new List<Iconography>();
-                foreach(var root in rootCategories)
-                {
-                    foreach (IconographySubcategory sub in root.children)
-                    {
-                        iconographies.AddRange(sub.children);
-                    }
-                }
+                List<IconographyModel> iconographies = JsonConvert.DeserializeObject<List<IconographyModel>>(data);
                 return iconographies;
             }
             else return null;
