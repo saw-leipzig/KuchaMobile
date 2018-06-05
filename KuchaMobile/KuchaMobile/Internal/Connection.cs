@@ -189,7 +189,7 @@ namespace KuchaMobile.Internal
 
                 //Analyze response content:
                 if (response != null && response.Content != null)
-                data = response.Content.ReadAsStringAsync().Result;
+                data = System.Text.Encoding.UTF8.GetString(response.Content.ReadAsByteArrayAsync().Result);
 
             return result;
         }
