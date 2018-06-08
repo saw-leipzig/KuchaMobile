@@ -51,6 +51,27 @@ namespace KuchaMobile.Internal
             sessionID = Settings.LocalTokenSetting;
         }
 
+        public static string GetCaveSketchURL(string caveSketch)
+        {
+            if(!String.IsNullOrEmpty(sessionID))
+            {
+                string returnString = backendURL + "resource?cavesketch=" + caveSketch + "&sessionID=" + sessionID;
+                return returnString;
+            }
+            return String.Empty;
+        }
+
+        public static string GetCaveBackgroundImageURL(int caveTypeID)
+        {
+            if (!String.IsNullOrEmpty(sessionID))
+            {
+                string caveSketch = Kucha.GetCaveTypeSketchByID(caveTypeID);
+                string returnString = backendURL + "resource?background=" + caveSketch + "&sessionID=" + sessionID;
+                return returnString;
+            }
+            return String.Empty;
+        }
+
         public static List<PaintedRepresentationModel> GetPaintedRepresentationsByFilter(List<IconographyModel> iconographies, bool exclusive)
         {
             if (String.IsNullOrEmpty(sessionID))

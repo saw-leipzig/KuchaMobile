@@ -133,6 +133,56 @@ namespace KuchaMobile.Logic
             return kuchaContainer.iconographies;
         }
 
+        public static string GetCaveDistrictStringByID(int id)
+        {
+            foreach(CaveDistrictModel c in kuchaContainer.caveDistricts)
+            {
+                if (c.districtID == id)
+                    return c.name;
+            }
+            return "";
+        }
+
+        public static string GetCaveRegionStringByID(int id)
+        {
+            foreach (CaveRegionModel c in kuchaContainer.caveRegions)
+            {
+                if (c.regionID == id)
+                    return c.englishName;
+            }
+            return "";
+        }
+
+        public static string GetCaveSiteStringByID(int id)
+        {
+            foreach (CaveSiteModel c in kuchaContainer.caveSites)
+            {
+                if (c.siteID == id)
+                    return c.name;
+            }
+            return "";
+        }
+
+        public static string GetCaveTypeStringByID(int id)
+        {
+            foreach (CaveTypeModel c in kuchaContainer.caveTypes)
+            {
+                if (c.caveTypeID == id)
+                    return c.nameEN;
+            }
+            return "";
+        }
+
+        public static string GetCaveTypeSketchByID(int id)
+        {
+            foreach (CaveTypeModel c in kuchaContainer.caveTypes)
+            {
+                if (c.caveTypeID == id)
+                    return c.sketchName;
+            }
+            return "";
+        }
+
         public static List<PaintedRepresentationModel> GetPaintedRepresentationsByIconographies(List<IconographyModel> iconographies, bool exclusive)
         {
             List<PaintedRepresentationModel> resultList = Connection.GetPaintedRepresentationsByFilter(iconographies, exclusive);

@@ -25,8 +25,11 @@ namespace KuchaMobile.UI
 
         private class CaveResultGrid : Grid
         {
+            private CaveModel cave;
+
             public CaveResultGrid(CaveModel cave)
             {
+                this.cave = cave;
                 BackgroundColor = Color.LightGray;
                 Label nameLabel = new Label();
                 nameLabel.Text = cave.historicName;
@@ -37,6 +40,15 @@ namespace KuchaMobile.UI
                 Label someOtherLabel = new Label();
                 someOtherLabel.Text = cave.siteID+"";
                 Children.Add(someOtherLabel, 0, 1);
+
+                TapGestureRecognizer tapGestureRecognizer = new TapGestureRecognizer();
+                tapGestureRecognizer.Tapped += TapGestureRecognizer_Tapped;
+                GestureRecognizers.Add(tapGestureRecognizer);
+            }
+
+            private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
+            {
+                Navigation.PushAsync(new CaveUI(cave));
             }
         }
     }
