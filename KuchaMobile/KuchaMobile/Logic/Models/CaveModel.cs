@@ -36,12 +36,13 @@ namespace KuchaMobile.Logic.Models
         public string caveLayoutComments { get; set; }
 
         //Not in JSON but manually needed
-        public string CaveDisplyName
+        public string CaveDisplayName
         {
             get
             {
                 return string.Format("Cave: {0}", caveID);
             }
         }
+        public string Notes { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Acr.UserDialogs;
 using KuchaMobile.Internal;
 using KuchaMobile.Logic;
+using PCLStorage;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,12 +20,17 @@ namespace KuchaMobile.UI
             loginButton.Clicked += LoginButton_Clicked;
             contentStack.Children.Add(loginButton);
 
-            Button loadCaveTypesButton = new Button();
-            loadCaveTypesButton.Text = "Load Cave Types";
-            //loadCaveTypesButton.Clicked += LoadCaveTypesButton_Clicked;
-            contentStack.Children.Add(loadCaveTypesButton);
+            Button deleteLocalFilesButton = new Button();
+            deleteLocalFilesButton.Text = "Delete Local Files";
+            deleteLocalFilesButton.Clicked += DeleteLocalFilesButton_Clicked; ;
+            contentStack.Children.Add(deleteLocalFilesButton);
 
             Content = contentStack;
+        }
+
+        private void DeleteLocalFilesButton_Clicked(object sender, EventArgs e)
+        {
+            Kucha.RemoveAllData();
         }
 
         private void LoginButton_Clicked(object sender, EventArgs e)

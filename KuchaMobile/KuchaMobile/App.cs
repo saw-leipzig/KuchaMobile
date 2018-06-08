@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace KuchaMobile
@@ -17,11 +17,19 @@ namespace KuchaMobile
 
         protected override void OnStart()
         {
-            Kucha.LoadPersistantData();
+            Task.Run(() =>
+            {
+                Kucha.LoadPersistantData();
+            });
 
+            MainPage = new LoadingScreenUI();
+        }
+        
+        public void LoadingPersistantDataFinished()
+        {
             if (!Kucha.CaveDataIsValid() || !Internal.Connection.HasLegitSessionID())
                 MainPage = new LoginPage();
-            else 
+            else
                 MainPage = new MainPage();
         }
 

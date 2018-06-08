@@ -14,7 +14,7 @@ namespace KuchaMobile.UI
 
             ListView resultListView = new ListView();
             resultListView.ItemTemplate = new DataTemplate(typeof(TextCell));
-            resultListView.ItemTemplate.SetBinding(TextCell.TextProperty, "CaveDisplyName");
+            resultListView.ItemTemplate.SetBinding(TextCell.TextProperty, "CaveDisplayName");
             resultListView.ItemTemplate.SetBinding(TextCell.DetailProperty, "historicName");
             resultListView.ItemsSource = caves;
             resultListView.ItemTapped += ResultListView_ItemTapped;

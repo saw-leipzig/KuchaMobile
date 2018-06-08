@@ -4,6 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using PCLStorage;
+using Newtonsoft.Json;
+using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace KuchaMobile.Logic
 {
@@ -18,8 +22,10 @@ namespace KuchaMobile.Logic
         static Dictionary<string, CaveTypeModel> caveTypeDictionary;*/
         static KuchaContainer kuchaContainer;
 
-        public static bool RefreshCaveData()
+        public async static Task<bool> RefreshCaveData()
         {
+            if (kuchaContainer == null)
+                kuchaContainer = new KuchaContainer();
             List<CaveDistrictModel> caveDistrictModels = Connection.GetCaveDistrictModels();
             if (caveDistrictModels != null)
             {
@@ -69,13 +75,26 @@ namespace KuchaMobile.Logic
             else return false;
 
             kuchaContainer.timeStamp = DateTime.UtcNow;
-            Settings.KuchaContainerSetting = kuchaContainer;
+            IFolder rootFolder = FileSystem.Current.LocalStorage;
+            IFolder kuchaFolder = await rootFolder.CreateFolderAsync("Kucha", CreationCollisionOption.OpenIfExists);
+            IFile kuchaContainerStorage = await kuchaFolder.CreateFileAsync("KuchaContainer", CreationCollisionOption.ReplaceExisting);
+            await kuchaContainerStorage.WriteAllTextAsync(JsonConvert.SerializeObject(kuchaContainer));
+
+            //Settings.KuchaContainerSetting = kuchaContainer;
             return true;
         }
 
         public static DateTime GetDataTimeStamp()
         {
             return kuchaContainer.timeStamp;
+        }
+
+        public static void SaveCaveNotes(int caveID, string notes)
+        {
+            //Local RAM
+            kuchaContainer.caves.Find(c => c.caveID == caveID).Notes = notes;
+            //Device memory
+            //Settings.KuchaContainerSetting = kuchaContainer;
         }
 
         public static List<CaveModel> GetCavesByFilters(CaveTypeModel caveTypeModel, List<CaveDistrictModel> pickedDistricts, List<CaveRegionModel> pickedRegions, List<CaveSiteModel> pickedSites)
@@ -189,15 +208,63 @@ namespace KuchaMobile.Logic
             return resultList;
         }
 
-        public static void LoadPersistantData()
+        public async static void LoadPersistantData()
         {
-            kuchaContainer = Settings.KuchaContainerSetting;
+            IFolder rootFolder = FileSystem.Current.LocalStorage;
+            ExistenceCheckResult kuchaFolderExists = await rootFolder.CheckExistsAsync("Kucha");
+            bool loadSuccess = false;
+            if(kuchaFolderExists == ExistenceCheckResult.FolderExists)
+            {
+                IFolder kuchaFolder = await rootFolder.GetFolderAsync("Kucha");
+                IFile kuchaContainerFile;
+                if (kuchaFolder != null)
+                {
+                    ExistenceCheckResult kuchaFileExists = await kuchaFolder.CheckExistsAsync("KuchaContainer");
+                    if(kuchaFileExists == ExistenceCheckResult.FileExists)
+                    {
+                        kuchaContainerFile = await kuchaFolder.GetFileAsync("KuchaContainer");
+                        if (kuchaContainerFile != null)
+                        {
+                            string fileString = await kuchaContainerFile.ReadAllTextAsync();
+                            kuchaContainer = JsonConvert.DeserializeObject<KuchaContainer>(fileString);
+                            if (kuchaContainer != null)
+                                loadSuccess = true;
+                            else
+                                kuchaContainer = new KuchaContainer();
+                        }
+                    }
+                    else
+                    {
+                        await kuchaFolder.CreateFileAsync("KuchaContainer", CreationCollisionOption.ReplaceExisting);
+                        kuchaContainer = new KuchaContainer();
+                    }
+                }
+            }
+            else
+            {
+                //Kucha Folder does not exist - Create Folder and empty file
+                await rootFolder.CreateFolderAsync("Kucha", CreationCollisionOption.ReplaceExisting);
+                IFolder kuchaFolder = await rootFolder.GetFolderAsync("Kucha");
+                await kuchaFolder.CreateFileAsync("KuchaContainer", CreationCollisionOption.ReplaceExisting);
 
+            }
+
+            if (!loadSuccess)
+                kuchaContainer = new KuchaContainer();
             Connection.LoadCachedSessionID();
+
+            Device.BeginInvokeOnMainThread(()=> 
+            {
+                ((App)App.Current).LoadingPersistantDataFinished();
+            });           
         }
 
         public static bool CaveDataIsValid()
         {
+            if (kuchaContainer == null)
+                return false;
+            if (kuchaContainer.caves.Count == 0)
+                return false;
             if (kuchaContainer.caveDistricts == new List<CaveDistrictModel>() ||
                 kuchaContainer.caveRegions == new List<CaveRegionModel>() ||
                 kuchaContainer.caveSites == new List<CaveSiteModel>() ||
@@ -205,6 +272,19 @@ namespace KuchaMobile.Logic
                 kuchaContainer.caves == new List<CaveModel>())
                 return false;
             else return true;
+        }
+
+        public async static void RemoveAllData()
+        {
+            IFolder rootFolder = FileSystem.Current.LocalStorage;
+            ExistenceCheckResult kuchaFolderExists = await rootFolder.CheckExistsAsync("Kucha");
+            if (kuchaFolderExists == ExistenceCheckResult.FolderExists)
+            {
+                IFolder kuchaFolder = await rootFolder.GetFolderAsync("Kucha");
+                await kuchaFolder.DeleteAsync();
+                kuchaContainer = null;
+                App.Current.MainPage = new UI.LoginPage();
+            }
         }
     }
 }

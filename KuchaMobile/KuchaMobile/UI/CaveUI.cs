@@ -9,8 +9,11 @@ namespace KuchaMobile.UI
 {
     public class CaveUI : ContentPage
     {
+        Editor notesEditor;
+        CaveModel cave;
         public CaveUI(CaveModel cave)
         {
+            this.cave = cave;
             Title = "Cave " + cave.caveID;
             StackLayout contentStack = new StackLayout();
             Label nameLabel = new Label();
@@ -51,10 +54,26 @@ namespace KuchaMobile.UI
 
             contentStack.Children.Add(caveBackground);
 
+            Label notesLabel = new Label();
+            notesLabel.Text = "Private Notizen";
+            contentStack.Children.Add(notesLabel);
+
+            notesEditor = new Editor();
+            notesEditor.Text = cave.Notes;
+            contentStack.Children.Add(notesEditor);
+
             ScrollView scrollView = new ScrollView();
             scrollView.VerticalOptions = LayoutOptions.FillAndExpand;
             scrollView.Content = contentStack;
             Content = scrollView;
+        }
+        protected override void OnDisappearing()
+        {
+            if(this.cave.Notes != notesEditor.Text)
+            {
+                Kucha.SaveCaveNotes(cave.caveID, notesEditor.Text);
+            }
+            base.OnDisappearing();
         }
     }
 }

@@ -82,9 +82,9 @@ namespace KuchaMobile.UI
         private async void DownloadDataButton_Clicked(object sender, EventArgs e)
         {
             UserDialogs.Instance.ShowLoading("Daten werden heruntergeladen...");
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
-                bool success = Kucha.RefreshCaveData();
+                bool success = await Kucha.RefreshCaveData();
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     UserDialogs.Instance.HideLoading();
@@ -93,7 +93,7 @@ namespace KuchaMobile.UI
                         UserDialogs.Instance.Toast("Daten erfolgreich heruntergeladen!");
                         downloadDataButton.IsEnabled = false;
                         downloadStatusLabel.Text = "Daten vom " + Kucha.GetDataTimeStamp().ToShortDateString();
-                        if (loginButton.IsEnabled == true)
+                        if (!loginButton.IsEnabled == true)
                         {
                             continueButton.IsEnabled = true;
                         }

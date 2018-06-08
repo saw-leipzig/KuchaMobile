@@ -30,9 +30,6 @@ namespace KuchaMobile.Internal
         private const string localToken = "localToken";
         public static readonly string localTokenDefault = String.Empty;
 
-        private const string kuchaContainer = "kuchaContainer";
-        public static readonly string kuchaContainerDefault = JsonConvert.SerializeObject(new KuchaContainer());
-
         #endregion
 
         public static string LocalTokenSetting
@@ -44,18 +41,6 @@ namespace KuchaMobile.Internal
             set
             {
                 AppSettings.AddOrUpdateValue(localToken, value);
-            }
-        }
-
-        public static KuchaContainer KuchaContainerSetting
-        {
-            get
-            {
-                return JsonConvert.DeserializeObject<KuchaContainer>(AppSettings.GetValueOrDefault(kuchaContainer, kuchaContainerDefault));
-            }
-            set
-            {
-                AppSettings.AddOrUpdateValue(kuchaContainer, JsonConvert.SerializeObject(value));
             }
         }
     }
