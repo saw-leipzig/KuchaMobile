@@ -13,7 +13,9 @@ namespace KuchaMobile.UI
             Title = "Cavesearch: " + caves.Count + " Ergebnis(se)";
 
             ListView resultListView = new ListView();
-            resultListView.Header = "Ergebnisse";
+            resultListView.ItemTemplate = new DataTemplate(typeof(TextCell));
+            resultListView.ItemTemplate.SetBinding(TextCell.TextProperty, "CaveDisplyName");
+            resultListView.ItemTemplate.SetBinding(TextCell.DetailProperty, "historicName");
             resultListView.ItemsSource = caves;
             resultListView.ItemTapped += ResultListView_ItemTapped;
             

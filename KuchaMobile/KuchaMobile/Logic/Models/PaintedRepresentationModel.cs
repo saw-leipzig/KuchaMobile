@@ -33,6 +33,22 @@ namespace KuchaMobile.Logic.Models
         public List<object> preservationAttributesList { get; set; }
         public List<object> relatedBibliographyList { get; set; }
         public bool openAccess { get; set; }
+
+        //Not in JSON but manually needed
+        public string PRDisplayName
+        {
+            get
+            {
+                return String.Format("ID: "+depictionID);
+            }
+        }
+        public string PRDetailDisplayName
+        {
+            get
+            {
+                return String.Format(cave.historicName);
+            }
+        }
     }
 
     public class RelatedImage
