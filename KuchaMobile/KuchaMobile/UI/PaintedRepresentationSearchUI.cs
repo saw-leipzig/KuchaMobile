@@ -10,39 +10,59 @@ namespace KuchaMobile.UI
     public class PaintedRepresentationSearchUI : ContentPage
     {
         List<IconographyModel> allIconographies;
+        List<IconographyModel> availableIconographies;
+        List<IconographyModel> selectedIconographies;
 
-        StackLayout availableIconsStack;
-        StackLayout selectedIconsStack;
+        ListView availableIconsListView;
+        ListView selectedListView;
+
         public PaintedRepresentationSearchUI()
         {
             Title = "Painted Representation Search";
             allIconographies = new List<IconographyModel>(KuchaMobile.Logic.Kucha.GetIconographies());
+            availableIconographies = new List<IconographyModel>(allIconographies);
+            selectedIconographies = new List<IconographyModel>();
             StackLayout contentStack = new StackLayout();
+            Grid listGrid = new Grid();
+            listGrid.HorizontalOptions = LayoutOptions.FillAndExpand;
+            listGrid.VerticalOptions = LayoutOptions.FillAndExpand;
+            listGrid.ColumnDefinitions = new ColumnDefinitionCollection
+            {
+                new ColumnDefinition{ Width = new GridLength(1, GridUnitType.Star) },
+                new ColumnDefinition{ Width = new GridLength(1, GridUnitType.Star) }
+            };
+            listGrid.RowDefinitions = new RowDefinitionCollection
+            {
+                new RowDefinition { Height = new GridLength(1, GridUnitType.Star)},
+                new RowDefinition { Height = new GridLength(9, GridUnitType.Star)}
+            };
+
             Entry searchEntry = new Entry();
             searchEntry.Placeholder = "Hier suchen";
             searchEntry.TextChanged += SearchEntry_TextChanged;
-            contentStack.Children.Add(searchEntry);
-            ScrollView availableIconsScrollView = new ScrollView();
-            availableIconsStack = new StackLayout();
-            foreach(IconographyModel iconography in allIconographies)
-            {
-                IconStack i = new IconStack(iconography);
-                availableIconsStack.Children.Add(i);
-                TapGestureRecognizer availableIconTap = new TapGestureRecognizer();
-                availableIconTap.Tapped += AvailableIconTap_Tapped;
-                i.GestureRecognizers.Add(availableIconTap);
-                i.selected = false;
+            listGrid.Children.Add(searchEntry, 0, 0);
 
-            }
-            availableIconsScrollView.Content = availableIconsStack;
-            contentStack.Children.Add(availableIconsScrollView);
+            availableIconsListView = new ListView();
+            availableIconsListView.ItemTemplate = new DataTemplate(typeof(TextCell));
+            availableIconsListView.ItemTemplate.SetBinding(TextCell.TextProperty, "text");
+            availableIconsListView.ItemsSource = allIconographies;
+            availableIconsListView.ItemTapped += AvailableIconsListView_ItemTapped;
+            listGrid.Children.Add(availableIconsListView, 0, 1);
+
+
             Label infoLabel = new Label();
+            infoLabel.HorizontalOptions = LayoutOptions.Center;
             infoLabel.Text = "Ausgewählte Iconographys";
-            contentStack.Children.Add(infoLabel);
-            ScrollView selectedIconsScrollView = new ScrollView();
-            selectedIconsStack = new StackLayout();
-            selectedIconsScrollView.Content = selectedIconsStack;
-            contentStack.Children.Add(selectedIconsScrollView);
+            listGrid.Children.Add(infoLabel, 1, 0);
+
+            selectedListView = new ListView();
+            selectedListView.ItemTemplate = new DataTemplate(typeof(TextCell));
+            selectedListView.ItemTemplate.SetBinding(TextCell.TextProperty, "text");
+            selectedListView.ItemsSource = selectedIconographies;
+            selectedListView.ItemTapped += SelectedListView_ItemTapped;
+            listGrid.Children.Add(selectedListView, 1, 1);
+
+            contentStack.Children.Add(listGrid);
 
             Button anySearchButton = new Button();
             anySearchButton.Text = "Suchen";
@@ -57,25 +77,43 @@ namespace KuchaMobile.UI
             Content = contentStack;
         }
 
+        private void SelectedListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            IconographyModel iconographyModel = e.Item as IconographyModel;
+            List<IconographyModel> newSelected = new List<IconographyModel>(selectedIconographies);
+            newSelected.Remove(iconographyModel);
+            List<IconographyModel> newAvailable = new List<IconographyModel>(availableIconographies);
+            newAvailable.Add(iconographyModel);
+            newAvailable.Sort((x, y) => x.text.CompareTo(y.text));
+            availableIconsListView.ItemsSource = newAvailable;
+            selectedListView.ItemsSource = newSelected;
+            selectedIconographies = newSelected;
+            availableIconographies = newAvailable;
+        }
+
+        private void AvailableIconsListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            IconographyModel iconographyModel = e.Item as IconographyModel;
+            List<IconographyModel> newSelected = new List<IconographyModel>(selectedIconographies);
+            newSelected.Add(iconographyModel);
+            List<IconographyModel> newAvailable = new List<IconographyModel>(availableIconographies);
+            newAvailable.Remove(iconographyModel);
+            newSelected.Sort((x, y) => x.text.CompareTo(y.text));
+            availableIconsListView.ItemsSource = newAvailable;
+            selectedListView.ItemsSource = newSelected;
+            selectedIconographies = newSelected;
+            availableIconographies = newAvailable;
+        }
+
         private void ExclusiveSearchButton_Clicked(object sender, EventArgs e)
         {
-            List<IconographyModel> iconographies = new List<IconographyModel>();
-            foreach (IconStack iconStack in selectedIconsStack.Children)
-            {
-                iconographies.Add(iconStack.iconography);
-            }
-            List<PaintedRepresentationModel> paintedRepresentationModels = Logic.Kucha.GetPaintedRepresentationsByIconographies(iconographies, true);
+            List<PaintedRepresentationModel> paintedRepresentationModels = Logic.Kucha.GetPaintedRepresentationsByIconographies(selectedIconographies, true);
             Navigation.PushAsync(new PaintedRepresentationResultUI(paintedRepresentationModels), true);
         }
 
         private void AnySearchButton_Clicked(object sender, EventArgs e)
         {
-            List<IconographyModel> iconographies = new List<IconographyModel>();
-            foreach(IconStack iconStack in selectedIconsStack.Children)
-            {
-                iconographies.Add(iconStack.iconography);
-            }
-            List<PaintedRepresentationModel> paintedRepresentationModels = Logic.Kucha.GetPaintedRepresentationsByIconographies(iconographies, false);
+            List<PaintedRepresentationModel> paintedRepresentationModels = Logic.Kucha.GetPaintedRepresentationsByIconographies(selectedIconographies, false);
             Navigation.PushAsync(new PaintedRepresentationResultUI(paintedRepresentationModels), true);
         }
 
@@ -89,49 +127,7 @@ namespace KuchaMobile.UI
                     editedList.Add(i);
                 }
             }
-            availableIconsStack.Children.Clear();
-            foreach (IconographyModel iconography in editedList)
-            {
-                IconStack i = new IconStack(iconography);
-                availableIconsStack.Children.Add(i);
-                TapGestureRecognizer availableIconTap = new TapGestureRecognizer();
-                availableIconTap.Tapped += AvailableIconTap_Tapped;
-                i.GestureRecognizers.Add(availableIconTap);
-                i.selected = false;
-            }
-        }
-
-        private void AvailableIconTap_Tapped(object sender, EventArgs e)
-        {
-            IconStack i = sender as IconStack;
-            if(!i.selected)
-            {
-                i.selected=true;
-                availableIconsStack.Children.Remove(i);
-                selectedIconsStack.Children.Add(i);
-            }
-            else
-            {
-                i.selected = false;
-                selectedIconsStack.Children.Remove(i);
-                availableIconsStack.Children.Add(i);
-            }
-
-        }
-
-        private class IconStack : StackLayout
-        {
-            public bool selected;
-            public IconographyModel iconography;
-            public IconStack(IconographyModel iconographyModel)
-            {
-                iconography = iconographyModel;
-                BackgroundColor = Color.Orange;
-                Label nameLabel = new Label();
-                nameLabel.Text = iconographyModel.text;
-                Children.Add(nameLabel);
-                selected = false;
-            }
+            availableIconsListView.ItemsSource = editedList;
         }
     }
 }

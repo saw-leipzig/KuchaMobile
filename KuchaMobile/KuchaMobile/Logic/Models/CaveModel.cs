@@ -34,5 +34,15 @@ namespace KuchaMobile.Logic.Models
         public List<object> c14DocumentList { get; set; }
         public bool openAccess { get; set; }
         public string caveLayoutComments { get; set; }
+
+        public override string ToString()///Used in CaveSearchResultUI ListView
+        {
+            string finalString = "Cave: "+caveID;
+            if (!String.IsNullOrEmpty(historicName))
+                finalString += " ("+historicName+")";
+
+            return finalString;
+        }
+
     }
 }

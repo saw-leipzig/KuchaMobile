@@ -12,44 +12,20 @@ namespace KuchaMobile.UI
         {
             Title = "Cavesearch: " + caves.Count + " Ergebnis(se)";
 
-            StackLayout stackLayout = new StackLayout();
-            foreach(CaveModel cave in caves)
-            {
-                stackLayout.Children.Add(new CaveResultGrid(cave));
-            }
-            ScrollView scrollView = new ScrollView();
-            scrollView.Content = stackLayout;
-
-            Content = scrollView;
+            ListView resultListView = new ListView();
+            resultListView.Header = "Ergebnisse";
+            resultListView.ItemsSource = caves;
+            resultListView.ItemTapped += ResultListView_ItemTapped;
+            
+            Content = resultListView;
         }
 
-        private class CaveResultGrid : Grid
+        private void ResultListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            private CaveModel cave;
-
-            public CaveResultGrid(CaveModel cave)
-            {
-                this.cave = cave;
-                BackgroundColor = Color.LightGray;
-                Label nameLabel = new Label();
-                nameLabel.Text = cave.historicName;
-                Children.Add(nameLabel, 0, 0);
-                Label IDLabel = new Label();
-                IDLabel.Text = cave.caveID+"";
-                Children.Add(IDLabel, 1, 0);
-                Label someOtherLabel = new Label();
-                someOtherLabel.Text = cave.siteID+"";
-                Children.Add(someOtherLabel, 0, 1);
-
-                TapGestureRecognizer tapGestureRecognizer = new TapGestureRecognizer();
-                tapGestureRecognizer.Tapped += TapGestureRecognizer_Tapped;
-                GestureRecognizers.Add(tapGestureRecognizer);
-            }
-
-            private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
-            {
-                Navigation.PushAsync(new CaveUI(cave));
-            }
+            ((ListView)sender).SelectedItem = null;
+            var caveModel = e.Item as CaveModel;
+            Navigation.PushAsync(new CaveUI(caveModel));
         }
+      
     }
 }
