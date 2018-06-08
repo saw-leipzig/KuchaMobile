@@ -7,6 +7,7 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 using Acr.UserDialogs;
+using Android.Util;
 
 namespace KuchaMobile.Droid
 {
@@ -19,6 +20,11 @@ namespace KuchaMobile.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(bundle);
+
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            WindowManager.DefaultDisplay.GetRealMetrics(displayMetrics);
+            Internal.Helper.ScreenHeight = displayMetrics.HeightPixels;
+            Internal.Helper.ScreenWidth = displayMetrics.WidthPixels;
 
             UserDialogs.Init(this);
 

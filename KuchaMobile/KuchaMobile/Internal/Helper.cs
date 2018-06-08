@@ -5,8 +5,11 @@ using System.Text;
 
 namespace KuchaMobile.Internal
 {
-    static class Helper
+    public static class Helper
     {
+        public static int ScreenHeight { get; set; }
+        public static int ScreenWidth { get; set; }
+
         public static string GetMD5Hash(string TextToHash)
         {
             MD5 md5Hash = MD5.Create();

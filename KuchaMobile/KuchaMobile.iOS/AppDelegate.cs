@@ -25,6 +25,9 @@ namespace KuchaMobile.iOS
             global::Xamarin.Forms.Forms.Init();
             LoadApplication(new App());
 
+            Internal.Helper.ScreenHeight = (int)UIScreen.MainScreen.Bounds.Height;
+            Internal.Helper.ScreenWidth = (int)UIScreen.MainScreen.Bounds.Width;
+
             return base.FinishedLaunching(app, options);
         }
     }
