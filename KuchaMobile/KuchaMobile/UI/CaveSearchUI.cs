@@ -1,7 +1,9 @@
-﻿using KuchaMobile.Logic;
+﻿using KuchaMobile.Internal;
+using KuchaMobile.Logic;
 using KuchaMobile.Logic.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Xamarin.Forms;
 
@@ -12,7 +14,7 @@ namespace KuchaMobile.UI
         Label districtsFilterLabel;
         Label regionsFilterLabel;
         Label sitesFilterLabel;
-        Picker caveFilterPicker;
+        public Picker caveFilterPicker;
         public List<CaveDistrictModel> pickedDistricts;
         public List<CaveRegionModel> pickedRegions;
         public List<CaveSiteModel> pickedSites;
@@ -98,22 +100,36 @@ namespace KuchaMobile.UI
             CaveTypeModel caveTypeModel = caveTypeDictionary[selectedCaveTypeName];
 
             List<CaveModel> caves = Kucha.GetCavesByFilters(caveTypeModel, pickedDistricts, pickedRegions, pickedSites);
+            List<CaveFilter> searchHistory = Settings.CaveSearchHistorySetting;
+            if (searchHistory == null)
+                searchHistory = new List<CaveFilter>();
+            CaveFilter caveFilter = new CaveFilter();
+            caveFilter.caveTypeModel = caveTypeModel;
+            caveFilter.pickedDistricts = pickedDistricts;
+            caveFilter.pickedRegions = pickedRegions;
+            caveFilter.pickedSites = pickedSites;
+            caveFilter.FoundResultsString = "Ergebnisse: "+caves.Count;
+            caveFilter.SearchTimeString = "Am "+DateTime.UtcNow.ToString();
+            searchHistory.Add(caveFilter);
+            var newList = searchHistory.OrderByDescending(x => x.SearchTimeString).ToList();
+            Settings.CaveSearchHistorySetting = newList;
+
             Navigation.PushAsync(new CaveSearchResultUI(caves), true);
         }
 
         private void SitesFilterButton_Clicked(object sender, EventArgs e)
         {
-            Navigation.PushModalAsync(new CaveFilter(CaveFilter.CAVE_FILTER_TYPE.SITE, this), true);
+            Navigation.PushModalAsync(new CaveFilterUI(CaveFilterUI.CAVE_FILTER_TYPE.SITE, this), true);
         }
 
         private void RegionsFilterButton_Clicked(object sender, EventArgs e)
         {
-            Navigation.PushModalAsync(new CaveFilter(CaveFilter.CAVE_FILTER_TYPE.REGION, this), true);
+            Navigation.PushModalAsync(new CaveFilterUI(CaveFilterUI.CAVE_FILTER_TYPE.REGION, this), true);
         }
 
         private void DistrictsFilterButton_Clicked(object sender, EventArgs e)
         {
-            Navigation.PushModalAsync(new CaveFilter(CaveFilter.CAVE_FILTER_TYPE.DISTRICT, this), true);
+            Navigation.PushModalAsync(new CaveFilterUI(CaveFilterUI.CAVE_FILTER_TYPE.DISTRICT, this), true);
         }
 
         protected override void OnAppearing()
@@ -166,7 +182,7 @@ namespace KuchaMobile.UI
 
         private void HistoryButton_Clicked()
         {
-
+            Navigation.PushAsync(new CaveSearchHistoryUI(this));
         }
     }
 }

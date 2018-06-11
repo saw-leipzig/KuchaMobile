@@ -7,7 +7,7 @@ using Xamarin.Forms;
 
 namespace KuchaMobile.UI
 {
-    public class CaveFilter : ContentPage
+    public class CaveFilterUI : ContentPage
     {
         StackLayout listStack;
         public enum CAVE_FILTER_TYPE
@@ -19,7 +19,7 @@ namespace KuchaMobile.UI
         CAVE_FILTER_TYPE type;
         CaveSearchUI parent;
 
-        public CaveFilter(CAVE_FILTER_TYPE type, CaveSearchUI parent)
+        public CaveFilterUI(CAVE_FILTER_TYPE type, CaveSearchUI parent)
         {
             this.type = type;
             this.parent = parent;

@@ -33,7 +33,25 @@ namespace KuchaMobile.Internal
         private const string savedNotes = "savedNotes";
         public static readonly string savedNotesDefault = JsonConvert.SerializeObject(new List<NotesSaver>());
 
+        private const string caveSearchHistory = "caveSearchHistory";
+        public static readonly string caveSearchHistoryDefault = JsonConvert.SerializeObject(new List<CaveFilter>());
+
         #endregion
+
+        public static List<CaveFilter> CaveSearchHistorySetting
+        {
+            get
+            {
+                return JsonConvert.DeserializeObject<List<CaveFilter>>(AppSettings.GetValueOrDefault(
+                    caveSearchHistory,
+                    caveSearchHistoryDefault
+                    ));
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue(caveSearchHistory, JsonConvert.SerializeObject(value));
+            }
+        }
 
         public static List<NotesSaver> SavedNotesSetting
         {
