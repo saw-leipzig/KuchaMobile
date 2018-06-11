@@ -9,7 +9,8 @@ namespace KuchaMobile.Internal
         public enum NOTES_TYPE
         {
             NOTE_TYPE_CAVE,
-            NOTE_TYPE_PAINTEDREPRESENTATION
+            NOTE_TYPE_PAINTEDREPRESENTATION,
+            NOTES_TYPE_IMAGE
         }
 
         public int ID { get; set; }
