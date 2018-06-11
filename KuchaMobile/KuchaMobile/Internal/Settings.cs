@@ -30,7 +30,25 @@ namespace KuchaMobile.Internal
         private const string localToken = "localToken";
         public static readonly string localTokenDefault = String.Empty;
 
+        private const string savedNotes = "savedNotes";
+        public static readonly string savedNotesDefault = JsonConvert.SerializeObject(new List<NotesSaver>());
+
         #endregion
+
+        public static List<NotesSaver> SavedNotesSetting
+        {
+            get
+            {
+                return JsonConvert.DeserializeObject<List<NotesSaver>>(AppSettings.GetValueOrDefault(
+                    savedNotes,
+                    savedNotesDefault
+                    ));
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue(savedNotes, JsonConvert.SerializeObject(value));
+            }
+        }
 
         public static string LocalTokenSetting
         {

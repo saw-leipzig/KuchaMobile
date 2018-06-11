@@ -1,4 +1,5 @@
-﻿using KuchaMobile.Logic;
+﻿using KuchaMobile.Internal;
+using KuchaMobile.Logic;
 using KuchaMobile.Logic.Models;
 using System;
 using System.Collections.Generic;
@@ -59,7 +60,10 @@ namespace KuchaMobile.UI
             contentStack.Children.Add(notesLabel);
 
             notesEditor = new Editor();
-            notesEditor.Text = cave.Notes;
+            notesEditor.BackgroundColor = Color.White;
+            notesEditor.HeightRequest = 100;
+            var index = Settings.SavedNotesSetting.FindIndex(c => c.ID == cave.caveID && c.Type == NotesSaver.NOTES_TYPE.NOTE_TYPE_CAVE);
+            if (index != -1) notesEditor.Text = Settings.SavedNotesSetting[index].Note;
             contentStack.Children.Add(notesEditor);
 
             ScrollView scrollView = new ScrollView();
@@ -69,9 +73,26 @@ namespace KuchaMobile.UI
         }
         protected override void OnDisappearing()
         {
-            if(this.cave.Notes != notesEditor.Text)
+            var index = Settings.SavedNotesSetting.FindIndex(c => c.ID == cave.caveID && c.Type == NotesSaver.NOTES_TYPE.NOTE_TYPE_CAVE);
+            if (index == -1)
             {
-                Kucha.SaveCaveNotes(cave.caveID, notesEditor.Text);
+                if (!String.IsNullOrEmpty(notesEditor.Text))
+                {
+                    List<NotesSaver> savedNotes = Settings.SavedNotesSetting;
+                    savedNotes.Add(new NotesSaver(NotesSaver.NOTES_TYPE.NOTE_TYPE_CAVE, cave.caveID, notesEditor.Text));
+                    Settings.SavedNotesSetting = savedNotes;
+                }
+            }
+            else
+            {
+                NotesSaver currentNote = Settings.SavedNotesSetting[index];
+                if (currentNote.Note != notesEditor.Text)
+                {
+                    currentNote.Note = notesEditor.Text;
+                    List<NotesSaver> savedNotes = Settings.SavedNotesSetting;
+                    savedNotes[index] = currentNote;
+                    Settings.SavedNotesSetting = savedNotes;
+                }
             }
             base.OnDisappearing();
         }

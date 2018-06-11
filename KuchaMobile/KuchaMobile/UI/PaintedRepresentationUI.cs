@@ -1,4 +1,5 @@
-﻿using KuchaMobile.Logic;
+﻿using KuchaMobile.Internal;
+using KuchaMobile.Logic;
 using KuchaMobile.Logic.Models;
 using System;
 using System.Collections.Generic;
@@ -10,8 +11,13 @@ namespace KuchaMobile.UI
     public class PaintedRepresentationUI : ContentPage
     {
         public CaveModel cave { get; set; }
+
+        Editor notesEditor;
+
+        PaintedRepresentationModel paintedRepresentation;
         public PaintedRepresentationUI(PaintedRepresentationModel paintedRepresentation)
         {
+            this.paintedRepresentation = paintedRepresentation;
             this.cave = paintedRepresentation.cave;
             Title = "Painted Representation " + paintedRepresentation.depictionID;
 
@@ -74,12 +80,49 @@ namespace KuchaMobile.UI
                 imageStack.GestureRecognizers.Add(imageTap);
             }
 
+            Label notesLabel = new Label();
+            notesLabel.Text = "Private Notizen";
+            contentStack.Children.Add(notesLabel);
+
+            notesEditor = new Editor();
+            notesEditor.BackgroundColor = Color.White;
+            notesEditor.HeightRequest = 100;
+            var index = Settings.SavedNotesSetting.FindIndex(pr => pr.ID == paintedRepresentation.depictionID && pr.Type == NotesSaver.NOTES_TYPE.NOTE_TYPE_PAINTEDREPRESENTATION);
+            if (index != -1) notesEditor.Text = Settings.SavedNotesSetting[index].Note;
+            contentStack.Children.Add(notesEditor);
+
             ScrollView contentScrollView = new ScrollView();
             contentScrollView.HorizontalOptions = LayoutOptions.FillAndExpand;
             contentScrollView.VerticalOptions = LayoutOptions.FillAndExpand;
             contentScrollView.Content = contentStack;
 
             Content = contentScrollView;
+        }
+
+        protected override void OnDisappearing()
+        {
+            var index = Settings.SavedNotesSetting.FindIndex(pr => pr.ID == paintedRepresentation.depictionID && pr.Type == NotesSaver.NOTES_TYPE.NOTE_TYPE_PAINTEDREPRESENTATION);
+            if(index==-1)
+            {               
+                if(!String.IsNullOrEmpty(notesEditor.Text))
+                {
+                    List<NotesSaver> savedNotes = Settings.SavedNotesSetting;
+                    savedNotes.Add(new NotesSaver(NotesSaver.NOTES_TYPE.NOTE_TYPE_PAINTEDREPRESENTATION, paintedRepresentation.depictionID, notesEditor.Text));
+                    Settings.SavedNotesSetting = savedNotes;
+                }
+            }
+            else
+            {
+                NotesSaver currentNote = Settings.SavedNotesSetting[index];
+                if(currentNote.Note != notesEditor.Text)
+                {
+                    currentNote.Note = notesEditor.Text;
+                    List<NotesSaver> savedNotes = Settings.SavedNotesSetting;
+                    savedNotes[index] = currentNote;
+                    Settings.SavedNotesSetting = savedNotes;
+                }
+            }
+            base.OnDisappearing();
         }
 
         private void CaveTap_Tapped(object sender, EventArgs e)

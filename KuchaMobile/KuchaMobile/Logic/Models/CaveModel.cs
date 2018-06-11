@@ -43,6 +43,5 @@ namespace KuchaMobile.Logic.Models
                 return string.Format("Cave: {0}", caveID);
             }
         }
-        public string Notes { get; set; }
     }
 }

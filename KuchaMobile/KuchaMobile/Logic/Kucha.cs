@@ -13,13 +13,6 @@ namespace KuchaMobile.Logic
 {
     public class Kucha
     {
-        /*static List<CaveDistrictModel> caveDistricts;
-        static List<CaveRegionModel> caveRegions;
-        static List<CaveSiteModel> caveSites;
-        static List<CaveTypeModel> caveTypes;
-        static List<CaveModel> caves;
-
-        static Dictionary<string, CaveTypeModel> caveTypeDictionary;*/
         static KuchaContainer kuchaContainer;
 
         public async static Task<bool> RefreshCaveData()
@@ -91,10 +84,34 @@ namespace KuchaMobile.Logic
 
         public static void SaveCaveNotes(int caveID, string notes)
         {
-            //Local RAM
-            kuchaContainer.caves.Find(c => c.caveID == caveID).Notes = notes;
             //Device memory
-            //Settings.KuchaContainerSetting = kuchaContainer;
+            List<NotesSaver> currentSavedNotes = Settings.SavedNotesSetting;
+            var index = currentSavedNotes.FindIndex(id => id.ID == caveID && id.Type == NotesSaver.NOTES_TYPE.NOTE_TYPE_CAVE);
+            if(index>-1) //Element found
+            {
+                currentSavedNotes[index].Note = notes;
+            }
+            else
+            {
+                currentSavedNotes.Add(new NotesSaver(NotesSaver.NOTES_TYPE.NOTE_TYPE_CAVE, caveID, notes));
+            }
+            Settings.SavedNotesSetting = currentSavedNotes;
+        }
+
+        public static void SavePaintedRepresentationNotes(int paintedRepresentationID, string notes)
+        {
+            //We dont cache the Painted Representations for now, so only save on device memory
+            List<NotesSaver> currentSavedNotes = Settings.SavedNotesSetting;
+            var index = currentSavedNotes.FindIndex(id => id.ID == paintedRepresentationID && id.Type == NotesSaver.NOTES_TYPE.NOTE_TYPE_PAINTEDREPRESENTATION);
+            if (index > -1) //Element found
+            {
+                currentSavedNotes[index].Note = notes;
+            }
+            else
+            {
+                currentSavedNotes.Add(new NotesSaver(NotesSaver.NOTES_TYPE.NOTE_TYPE_PAINTEDREPRESENTATION, paintedRepresentationID, notes));
+            }
+            Settings.SavedNotesSetting = currentSavedNotes;
         }
 
         public static List<CaveModel> GetCavesByFilters(CaveTypeModel caveTypeModel, List<CaveDistrictModel> pickedDistricts, List<CaveRegionModel> pickedRegions, List<CaveSiteModel> pickedSites)
