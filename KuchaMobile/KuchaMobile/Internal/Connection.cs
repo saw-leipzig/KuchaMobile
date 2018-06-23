@@ -89,6 +89,23 @@ namespace KuchaMobile.Internal
             return String.Empty;
         }
 
+        public static List<PaintedRepresentationModel> GetAllPaintedRepresentations()
+        {
+            if (String.IsNullOrEmpty(sessionID))
+                return null;
+            string data = "";
+            HttpStatusCode result;
+            string queryString = "json?paintedRepFromIconographyID=all&sessionID=" + sessionID;
+            result = CallAPI(queryString, ref data);
+
+            if (result == HttpStatusCode.OK && !String.IsNullOrEmpty(data))
+            {
+                List<PaintedRepresentationModel> models = JsonConvert.DeserializeObject<List<PaintedRepresentationModel>>(data);
+                return models;
+            }
+            else return null;
+        }
+
         public static List<PaintedRepresentationModel> GetPaintedRepresentationsByFilter(List<IconographyModel> iconographies, bool exclusive)
         {
             if (String.IsNullOrEmpty(sessionID))

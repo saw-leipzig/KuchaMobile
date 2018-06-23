@@ -3,6 +3,7 @@ using KuchaMobile.Logic;
 using KuchaMobile.Logic.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Xamarin.Forms;
 
@@ -18,7 +19,7 @@ namespace KuchaMobile.UI
         public PaintedRepresentationUI(PaintedRepresentationModel paintedRepresentation)
         {
             this.paintedRepresentation = paintedRepresentation;
-            this.cave = paintedRepresentation.cave;
+            this.cave = Kucha.GetCaveByID(paintedRepresentation.caveID);
             Title = "Painted Representation " + paintedRepresentation.depictionID;
 
             StackLayout contentStack = new StackLayout();
@@ -44,24 +45,64 @@ namespace KuchaMobile.UI
             caveInfoLabel.Text = "Cave Infos";
             caveInfoLabel.FontSize = 20;
             caveStack.Children.Add(caveInfoLabel);
-            string caveInfoString = "Located in Cave: " + Kucha.GetCaveSiteStringByID(paintedRepresentation.cave.siteID) + ": " + paintedRepresentation.cave.caveID + " " + paintedRepresentation.cave.optionalHistoricName;
+            string caveInfoString = "Located in Cave: " + Kucha.GetCaveSiteStringByID(cave.siteID) + ": " + cave.caveID + " " + cave.optionalHistoricalName;
             Label caveLabel = new Label();
             caveLabel.Text = caveInfoString;
             caveStack.Children.Add(caveLabel);
 
-            if (!String.IsNullOrEmpty(paintedRepresentation.cave.optionalCaveSketch))
+            if (!String.IsNullOrEmpty(cave.optionalCaveSketch))
             {
                 Image caveSketch = new Image();
                 caveSketch.WidthRequest = 150;
                 caveSketch.Aspect = Aspect.AspectFit;
-                caveSketch.Source = ImageSource.FromUri(new Uri(Internal.Connection.GetCaveSketchURL(paintedRepresentation.cave.optionalCaveSketch)));
+                caveSketch.Source = ImageSource.FromUri(new Uri(Internal.Connection.GetCaveSketchURL(cave.optionalCaveSketch)));
                 caveStack.Children.Add(caveSketch);
+            }
+
+            if(!String.IsNullOrEmpty(paintedRepresentation.acquiredByExpedition))
+            {
+                Label aquiredByExpeditionLabel = new Label();
+                aquiredByExpeditionLabel.Text = "Aquired by Expedition: " + paintedRepresentation.acquiredByExpedition;
+                contentStack.Children.Add(aquiredByExpeditionLabel);
+            }
+
+            if(!String.IsNullOrEmpty(paintedRepresentation.currentLocation))
+            {
+                Label currentLocationLabel = new Label();
+                currentLocationLabel.Text = "Current Location: " + paintedRepresentation.currentLocation;
+                contentStack.Children.Add(currentLocationLabel);
+            }
+            if(!String.IsNullOrEmpty(paintedRepresentation.vendor))
+            {
+                Label vendorLabel = new Label();
+                vendorLabel.Text = "Vendor: " + paintedRepresentation.vendor;
+                contentStack.Children.Add(vendorLabel);
+            }
+            if(paintedRepresentation.Iconography.Any())
+            {
+                Label iconographyLabel = new Label();
+                iconographyLabel.Text = "Iconography: ";
+                foreach(string i in paintedRepresentation.Iconography)
+                {
+                    iconographyLabel.Text += i + "\n";
+                }
+                contentStack.Children.Add(iconographyLabel);
+            }
+            if (paintedRepresentation.PictorialElements.Any())
+            {
+                Label pictorialElementsLabel = new Label();
+                pictorialElementsLabel.Text = "Pictorial Elements: ";
+                foreach(string i in paintedRepresentation.PictorialElements)
+                {
+                    pictorialElementsLabel.Text += i + "\n";
+                }
+                contentStack.Children.Add(pictorialElementsLabel);
             }
 
             Image caveBackground = new Image();
             caveBackground.WidthRequest = 150;
             caveBackground.HeightRequest = 150;
-            caveBackground.Source = ImageSource.FromUri(new Uri(Internal.Connection.GetCaveBackgroundImageURL(paintedRepresentation.cave.caveTypeID)));
+            caveBackground.Source = ImageSource.FromUri(new Uri(Internal.Connection.GetCaveBackgroundImageURL(cave.caveTypeID)));
             caveStack.Children.Add(caveBackground);
             contentStack.Children.Add(caveStack);
 

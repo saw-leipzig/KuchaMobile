@@ -1,4 +1,5 @@
-﻿using KuchaMobile.Logic.Models;
+﻿using Acr.UserDialogs;
+using KuchaMobile.Logic.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -107,14 +108,36 @@ namespace KuchaMobile.UI
 
         private void ExclusiveSearchButton_Clicked(object sender, EventArgs e)
         {
-            List<PaintedRepresentationModel> paintedRepresentationModels = Logic.Kucha.GetPaintedRepresentationsByIconographies(selectedIconographies, true);
-            Navigation.PushAsync(new PaintedRepresentationResultUI(paintedRepresentationModels), true);
+            if (selectedIconographies.Any())
+            {
+                List<PaintedRepresentationModel> paintedRepresentationModels = Logic.Kucha.GetPaintedRepresentationsByIconographies(selectedIconographies, true);
+                Navigation.PushAsync(new PaintedRepresentationResultUI(paintedRepresentationModels), true);
+            }
+            else
+            {
+                List<PaintedRepresentationModel> paintedRepresentationModels = Logic.Kucha.GetAllPaintedRepresentations();
+                Navigation.PushAsync(new PaintedRepresentationResultUI(paintedRepresentationModels), true);
+            }
         }
 
         private void AnySearchButton_Clicked(object sender, EventArgs e)
         {
-            List<PaintedRepresentationModel> paintedRepresentationModels = Logic.Kucha.GetPaintedRepresentationsByIconographies(selectedIconographies, false);
-            Navigation.PushAsync(new PaintedRepresentationResultUI(paintedRepresentationModels), true);
+            if(selectedIconographies.Any())
+            {
+                List<PaintedRepresentationModel> paintedRepresentationModels = Logic.Kucha.GetPaintedRepresentationsByIconographies(selectedIconographies, false);
+                if (paintedRepresentationModels == null)
+                    UserDialogs.Instance.Toast("Fehler");
+                else 
+                    Navigation.PushAsync(new PaintedRepresentationResultUI(paintedRepresentationModels), true);
+            }
+            else
+            {
+                List<PaintedRepresentationModel> paintedRepresentationModels = Logic.Kucha.GetAllPaintedRepresentations();
+                if (paintedRepresentationModels == null)
+                    UserDialogs.Instance.Toast("Fehler");
+                else
+                    Navigation.PushAsync(new PaintedRepresentationResultUI(paintedRepresentationModels), true);
+            }
         }
 
         private void SearchEntry_TextChanged(object sender, TextChangedEventArgs e)

@@ -76,7 +76,10 @@ namespace KuchaMobile.Logic
             //Settings.KuchaContainerSetting = kuchaContainer;
             return true;
         }
-
+        public static CaveModel GetCaveByID(int id)
+        {
+            return kuchaContainer.caves.First(c => c.caveID == id);
+        }
         public static DateTime GetDataTimeStamp()
         {
             return kuchaContainer.timeStamp;
@@ -217,6 +220,12 @@ namespace KuchaMobile.Logic
                     return c.sketchName;
             }
             return "";
+        }
+
+        public static List<PaintedRepresentationModel> GetAllPaintedRepresentations()
+        {
+            List<PaintedRepresentationModel> resultList = Connection.GetAllPaintedRepresentations();
+            return resultList;
         }
 
         public static List<PaintedRepresentationModel> GetPaintedRepresentationsByIconographies(List<IconographyModel> iconographies, bool exclusive)

@@ -18,12 +18,12 @@ namespace KuchaMobile.UI
             Title = "Cave " + cave.caveID;
             StackLayout contentStack = new StackLayout();
             Label nameLabel = new Label();
-            nameLabel.Text = "Historical Name: " + cave.historicName;
+            nameLabel.Text = "Historical Name: " + cave.historicalName;
             contentStack.Children.Add(nameLabel);
-            if(!String.IsNullOrEmpty(cave.optionalHistoricName))
+            if(!String.IsNullOrEmpty(cave.optionalHistoricalName))
             {
                 Label optHistoricalNameLabel = new Label();
-                optHistoricalNameLabel.Text = "Optional Historical Name: " + cave.optionalHistoricName;
+                optHistoricalNameLabel.Text = "Optional Historical Name: " + cave.optionalHistoricalName;
                 contentStack.Children.Add(optHistoricalNameLabel);
             }
             Label siteLabel = new Label();
@@ -38,6 +38,13 @@ namespace KuchaMobile.UI
             Label typeLabel = new Label();
             typeLabel.Text = "Type: " + Kucha.GetCaveTypeStringByID(cave.caveTypeID);
             contentStack.Children.Add(typeLabel);
+
+            if(!String.IsNullOrEmpty(cave.measurementString))
+            {
+                Label measurementLabel = new Label();
+                measurementLabel.Text = "Measurement: " + cave.measurementString;
+                contentStack.Children.Add(measurementLabel);
+            }
 
             if(!String.IsNullOrEmpty(cave.optionalCaveSketch))
             {
