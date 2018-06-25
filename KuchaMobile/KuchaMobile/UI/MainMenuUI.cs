@@ -56,9 +56,18 @@ namespace KuchaMobile.UI
 
             Icon = "hamburger.png";
             Title = "Personal Organiser";
+            Frame imageFrame = new Frame();
+            imageFrame.BackgroundColor = Color.White;
+            imageFrame.Padding = 20;
+            imageFrame.HasShadow = true;
+            
+            Image huLogo = new Image();
+            huLogo.Source = "hu_logo.png";
+            huLogo.Aspect = Aspect.AspectFit;
+            imageFrame.Content = huLogo;
             Content = new StackLayout
             {
-                Children = { listView }
+                Children = { imageFrame,  listView }
             };
         }
     }

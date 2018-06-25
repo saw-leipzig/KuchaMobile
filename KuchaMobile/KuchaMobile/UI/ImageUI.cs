@@ -20,19 +20,27 @@ namespace KuchaMobile.UI
             displayImage.Source = ImageSource.FromUri(new Uri(Connection.GetPaintedRepresentationImageURL(image.imageID, Helper.ScreenHeight)));
             displayImage.Aspect = Aspect.AspectFill;
             imageLayout.Children.Add(displayImage);
-            imageLayout.Padding = 0;
-            imageLayout.Spacing = 0;
+            imageLayout.Padding = new Thickness(0, 10, 0, 20);
+            imageLayout.Spacing = 10;
 
+            Frame editorFrame = new Frame();
+            editorFrame.HasShadow = true;
+            editorFrame.BackgroundColor = Color.White;
+            StackLayout editorStack = new StackLayout();
             Label notesLabel = new Label();
             notesLabel.Text = "Private Notizen";
-            imageLayout.Children.Add(notesLabel);
+            notesLabel.TextColor = Color.Black;
+            notesLabel.FontSize = 20;
+            editorStack.Children.Add(notesLabel);
 
             notesEditor = new Editor();
             notesEditor.BackgroundColor = Color.White;
             notesEditor.HeightRequest = 100;
             var index = Settings.SavedNotesSetting.FindIndex(i => i.ID == image.imageID && i.Type == NotesSaver.NOTES_TYPE.NOTES_TYPE_IMAGE);
             if (index != -1) notesEditor.Text = Settings.SavedNotesSetting[index].Note;
-            imageLayout.Children.Add(notesEditor);
+            editorStack.Children.Add(notesEditor);
+            editorFrame.Content = editorStack;
+            imageLayout.Children.Add(editorFrame);
 
             ScrollView imageScrollView = new ScrollView();
             imageScrollView.Content = imageLayout;
