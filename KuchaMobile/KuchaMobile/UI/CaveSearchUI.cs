@@ -31,14 +31,17 @@ namespace KuchaMobile.UI
             pickedSites = new List<CaveSiteModel>();
 
             StackLayout contentStackLayout = new StackLayout();
-            contentStackLayout.Padding = new Thickness(72, 16, 16, 16);
+            contentStackLayout.Padding = new Thickness(16, 16, 16, 16);
             contentStackLayout.HorizontalOptions = LayoutOptions.FillAndExpand;
             contentStackLayout.VerticalOptions = LayoutOptions.FillAndExpand;
 
+            Frame caveTypeFrame = new Frame();
+            caveTypeFrame.BackgroundColor = Color.White;
+
             Label caveFilterHeadlineLabel = new Label();
             caveFilterHeadlineLabel.FontSize = 20;
-            caveFilterHeadlineLabel.Text = "Cave Filter";
-            contentStackLayout.Children.Add(caveFilterHeadlineLabel);
+            caveFilterHeadlineLabel.Text = "Cave Type";
+            caveTypeFrame.Children.Add(caveFilterHeadlineLabel);
 
             caveTypeDictionary = Kucha.GetCaveTypeDictionary();
             caveFilterPicker = new Picker();
@@ -49,7 +52,8 @@ namespace KuchaMobile.UI
  
             caveFilterPicker.SelectedIndex = 0;
 
-            contentStackLayout.Children.Add(caveFilterPicker);
+            caveTypeFrame.Children.Add(caveFilterPicker);
+
 
             Label locationFilterHeadlineLabel = new Label();
             locationFilterHeadlineLabel.FontSize = 20;
@@ -87,6 +91,7 @@ namespace KuchaMobile.UI
             contentStackLayout.Children.Add(sitesFilterButton);
 
             Button searchButton = new Button();
+            searchButton.Margin = new Thickness(0, 20, 0, 0);
             searchButton.Text = "Suchen";
             searchButton.Clicked += SearchButton_Clicked;
             contentStackLayout.Children.Add(searchButton);
