@@ -17,6 +17,7 @@ namespace KuchaMobile.UI
             ToolbarItems.Add(new ToolbarItem("Verlauf leeren", null, Clear_List));
 
             StackLayout contentStack = new StackLayout();
+            contentStack.Padding = 20;
             ListView listView = new ListView();
             listView.ItemTemplate = new DataTemplate(typeof(TextCell));
             listView.ItemTemplate.SetBinding(TextCell.TextProperty, "SearchTimeString");

@@ -23,27 +23,79 @@ namespace KuchaMobile.UI
             Title = "Painted Representation " + paintedRepresentation.depictionID;
 
             StackLayout contentStack = new StackLayout();
+            contentStack.Padding = 20;
+            Frame generalFrame = new Frame();
+            generalFrame.HasShadow = true;
+            generalFrame.BackgroundColor = Color.White;
+            StackLayout generalStack = new StackLayout();
+
             Label generalInfoLabel = new Label();
             generalInfoLabel.Text = "Generelle Infos";
             generalInfoLabel.FontSize = 20;
-            contentStack.Children.Add(generalInfoLabel);
+            generalInfoLabel.TextColor = Color.Black;
+            generalStack.Children.Add(generalInfoLabel);
             if(!String.IsNullOrEmpty(paintedRepresentation.description))
             {
                 Label descriptionLabel = new Label();
-                descriptionLabel.Text = paintedRepresentation.description;
-                contentStack.Children.Add(descriptionLabel);
+                descriptionLabel.Text = "Description: "+paintedRepresentation.description;
+                generalStack.Children.Add(descriptionLabel);
             }
+            if (!String.IsNullOrEmpty(paintedRepresentation.acquiredByExpedition))
+            {
+                Label aquiredByExpeditionLabel = new Label();
+                aquiredByExpeditionLabel.Text = "Aquired by Expedition: " + paintedRepresentation.acquiredByExpedition;
+                generalStack.Children.Add(aquiredByExpeditionLabel);
+            }
+
+            if (!String.IsNullOrEmpty(paintedRepresentation.currentLocation))
+            {
+                Label currentLocationLabel = new Label();
+                currentLocationLabel.Text = "Current Location: " + paintedRepresentation.currentLocation;
+                generalStack.Children.Add(currentLocationLabel);
+            }
+            if (!String.IsNullOrEmpty(paintedRepresentation.vendor))
+            {
+                Label vendorLabel = new Label();
+                vendorLabel.Text = "Vendor: " + paintedRepresentation.vendor;
+                generalStack.Children.Add(vendorLabel);
+            }
+            if (paintedRepresentation.Iconography.Any())
+            {
+                Label iconographyLabel = new Label();
+                iconographyLabel.Text = "Iconography: ";
+                foreach (string i in paintedRepresentation.Iconography)
+                {
+                    iconographyLabel.Text += i + "\n";
+                }
+                generalStack.Children.Add(iconographyLabel);
+            }
+            if (paintedRepresentation.PictorialElements.Any())
+            {
+                Label pictorialElementsLabel = new Label();
+                pictorialElementsLabel.Text = "Pictorial Elements: ";
+                foreach (string i in paintedRepresentation.PictorialElements)
+                {
+                    pictorialElementsLabel.Text += i + "\n";
+                }
+                generalStack.Children.Add(pictorialElementsLabel);
+            }
+            generalFrame.Content = generalStack;
+            contentStack.Children.Add(generalFrame);
+
+            Frame caveFrame = new Frame();
+            caveFrame.BackgroundColor = Color.White;
+            caveFrame.HasShadow = true;
 
             StackLayout caveStack = new StackLayout();
             caveStack.Spacing = 2;
-            caveStack.BackgroundColor = Color.White;
             TapGestureRecognizer caveTap = new TapGestureRecognizer();
             caveTap.Tapped += CaveTap_Tapped;
-            caveStack.GestureRecognizers.Add(caveTap);
+            caveFrame.GestureRecognizers.Add(caveTap);
 
             Label caveInfoLabel = new Label();
             caveInfoLabel.Text = "Cave Infos";
             caveInfoLabel.FontSize = 20;
+            caveInfoLabel.TextColor = Color.Black;
             caveStack.Children.Add(caveInfoLabel);
             string caveInfoString = "Located in Cave: " + Kucha.GetCaveSiteStringByID(cave.siteID) + ": " + cave.caveID + " " + cave.optionalHistoricalName;
             Label caveLabel = new Label();
@@ -59,78 +111,48 @@ namespace KuchaMobile.UI
                 caveStack.Children.Add(caveSketch);
             }
 
-            if(!String.IsNullOrEmpty(paintedRepresentation.acquiredByExpedition))
-            {
-                Label aquiredByExpeditionLabel = new Label();
-                aquiredByExpeditionLabel.Text = "Aquired by Expedition: " + paintedRepresentation.acquiredByExpedition;
-                contentStack.Children.Add(aquiredByExpeditionLabel);
-            }
-
-            if(!String.IsNullOrEmpty(paintedRepresentation.currentLocation))
-            {
-                Label currentLocationLabel = new Label();
-                currentLocationLabel.Text = "Current Location: " + paintedRepresentation.currentLocation;
-                contentStack.Children.Add(currentLocationLabel);
-            }
-            if(!String.IsNullOrEmpty(paintedRepresentation.vendor))
-            {
-                Label vendorLabel = new Label();
-                vendorLabel.Text = "Vendor: " + paintedRepresentation.vendor;
-                contentStack.Children.Add(vendorLabel);
-            }
-            if(paintedRepresentation.Iconography.Any())
-            {
-                Label iconographyLabel = new Label();
-                iconographyLabel.Text = "Iconography: ";
-                foreach(string i in paintedRepresentation.Iconography)
-                {
-                    iconographyLabel.Text += i + "\n";
-                }
-                contentStack.Children.Add(iconographyLabel);
-            }
-            if (paintedRepresentation.PictorialElements.Any())
-            {
-                Label pictorialElementsLabel = new Label();
-                pictorialElementsLabel.Text = "Pictorial Elements: ";
-                foreach(string i in paintedRepresentation.PictorialElements)
-                {
-                    pictorialElementsLabel.Text += i + "\n";
-                }
-                contentStack.Children.Add(pictorialElementsLabel);
-            }
-
             Image caveBackground = new Image();
             caveBackground.WidthRequest = 150;
             caveBackground.HeightRequest = 150;
             caveBackground.Source = ImageSource.FromUri(new Uri(Internal.Connection.GetCaveBackgroundImageURL(cave.caveTypeID)));
             caveStack.Children.Add(caveBackground);
-            contentStack.Children.Add(caveStack);
-
-            Label imageInfoLabel = new Label();
-            imageInfoLabel.Text = "Image Infos";
-            imageInfoLabel.FontSize = 20;
-            contentStack.Children.Add(imageInfoLabel);
+            caveFrame.Content = caveStack;
+            contentStack.Children.Add(caveFrame);
 
             foreach (RelatedImage image in paintedRepresentation.relatedImages)
-            {               
+            {
+                Frame imageFrame = new Frame();
+                imageFrame.HasShadow = true;
+                imageFrame.BackgroundColor = Color.White;
                 RelatedImageStack imageStack = new RelatedImageStack(image);
-                contentStack.Children.Add(imageStack);
+                imageFrame.Content = imageStack;
+                contentStack.Children.Add(imageFrame);
 
                 TapGestureRecognizer imageTap = new TapGestureRecognizer();
                 imageTap.Tapped += ImageTap_Tapped;
                 imageStack.GestureRecognizers.Add(imageTap);
             }
 
+
+            Frame notesFrame = new Frame();
+            notesFrame.HasShadow = true;
+            notesFrame.BackgroundColor = Color.White;
+            StackLayout notesStack = new StackLayout();
+
             Label notesLabel = new Label();
+            notesLabel.TextColor = Color.Black;
+            notesLabel.FontSize = 20;
             notesLabel.Text = "Private Notizen";
-            contentStack.Children.Add(notesLabel);
+            notesStack.Children.Add(notesLabel);
 
             notesEditor = new Editor();
             notesEditor.BackgroundColor = Color.White;
             notesEditor.HeightRequest = 100;
             var index = Settings.SavedNotesSetting.FindIndex(pr => pr.ID == paintedRepresentation.depictionID && pr.Type == NotesSaver.NOTES_TYPE.NOTE_TYPE_PAINTEDREPRESENTATION);
             if (index != -1) notesEditor.Text = Settings.SavedNotesSetting[index].Note;
-            contentStack.Children.Add(notesEditor);
+            notesStack.Children.Add(notesEditor);
+            notesFrame.Content = notesStack;
+            contentStack.Children.Add(notesFrame);
 
             ScrollView contentScrollView = new ScrollView();
             contentScrollView.HorizontalOptions = LayoutOptions.FillAndExpand;
@@ -187,6 +209,8 @@ namespace KuchaMobile.UI
                 BackgroundColor = Color.White;
 
                 Label idLabel = new Label();
+                idLabel.TextColor = Color.Black;
+                idLabel.FontSize = 20;
                 idLabel.Text = "ImageID: " + image.imageID;
                 Children.Add(idLabel);
 

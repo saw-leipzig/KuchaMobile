@@ -37,11 +37,15 @@ namespace KuchaMobile.UI
 
             Frame caveTypeFrame = new Frame();
             caveTypeFrame.BackgroundColor = Color.White;
+            caveTypeFrame.HasShadow = true;
+
+            StackLayout caveTypeStack = new StackLayout();
 
             Label caveFilterHeadlineLabel = new Label();
             caveFilterHeadlineLabel.FontSize = 20;
             caveFilterHeadlineLabel.Text = "Cave Type";
-            caveTypeFrame.Children.Add(caveFilterHeadlineLabel);
+            caveFilterHeadlineLabel.TextColor = Color.Black;
+            caveTypeStack.Children.Add(caveFilterHeadlineLabel);
 
             caveTypeDictionary = Kucha.GetCaveTypeDictionary();
             caveFilterPicker = new Picker();
@@ -52,51 +56,80 @@ namespace KuchaMobile.UI
  
             caveFilterPicker.SelectedIndex = 0;
 
-            caveTypeFrame.Children.Add(caveFilterPicker);
+            caveTypeStack.Children.Add(caveFilterPicker);
+            caveTypeFrame.Content = caveTypeStack;
+            contentStackLayout.Children.Add(caveTypeFrame);
 
+            Frame caveLocationFrame = new Frame();
+            caveLocationFrame.HasShadow = true;
+            caveLocationFrame.BackgroundColor = Color.White;
+
+            StackLayout caveLocationStack = new StackLayout();
 
             Label locationFilterHeadlineLabel = new Label();
             locationFilterHeadlineLabel.FontSize = 20;
+            locationFilterHeadlineLabel.TextColor = Color.Black;
             locationFilterHeadlineLabel.Text = "Location Filter";
-            contentStackLayout.Children.Add(locationFilterHeadlineLabel);
+            caveLocationStack.Children.Add(locationFilterHeadlineLabel);
 
             districtsFilterLabel = new Label();
             districtsFilterLabel.FontSize = 12;
             districtsFilterLabel.Text = "Selektierte Districts: Keine";
-            contentStackLayout.Children.Add(districtsFilterLabel);
+            caveLocationStack.Children.Add(districtsFilterLabel);
 
             Button districtsFilterButton = new Button();
             districtsFilterButton.Text = "Districts auswählen";
             districtsFilterButton.Clicked += DistrictsFilterButton_Clicked;
-            contentStackLayout.Children.Add(districtsFilterButton);
+            caveLocationStack.Children.Add(districtsFilterButton);
 
             regionsFilterLabel = new Label();
             regionsFilterLabel.FontSize = 12;
             regionsFilterLabel.Text = "Selektierte Regions: Keine";
-            contentStackLayout.Children.Add(regionsFilterLabel);
+            caveLocationStack.Children.Add(regionsFilterLabel);
 
             Button regionsFilterButton = new Button();
             regionsFilterButton.Text = "Regions auswählen";
             regionsFilterButton.Clicked += RegionsFilterButton_Clicked;
-            contentStackLayout.Children.Add(regionsFilterButton);
+            caveLocationStack.Children.Add(regionsFilterButton);
 
             sitesFilterLabel = new Label();
             sitesFilterLabel.FontSize = 12;
             sitesFilterLabel.Text = "Selektierte Sites: Keine";
-            contentStackLayout.Children.Add(sitesFilterLabel);
+            caveLocationStack.Children.Add(sitesFilterLabel);
 
             Button sitesFilterButton = new Button();
             sitesFilterButton.Text = "Sites auswählen";
             sitesFilterButton.Clicked += SitesFilterButton_Clicked;
-            contentStackLayout.Children.Add(sitesFilterButton);
+            caveLocationStack.Children.Add(sitesFilterButton);
+
+            caveLocationFrame.Content = caveLocationStack;
+            contentStackLayout.Children.Add(caveLocationFrame);
+
+            Frame buttonFrame = new Frame();
+            buttonFrame.HasShadow = true;
+            buttonFrame.BackgroundColor = Color.White;
+
+            StackLayout buttonStack = new StackLayout();
+            Label buttonHeadlineLabel = new Label();
+            buttonHeadlineLabel.FontSize = 20;
+            buttonHeadlineLabel.Text = "Start searching";
+            buttonHeadlineLabel.TextColor = Color.Black;
+            buttonStack.Children.Add(buttonHeadlineLabel);
 
             Button searchButton = new Button();
-            searchButton.Margin = new Thickness(0, 20, 0, 0);
+            searchButton.BackgroundColor = Color.FromHex("2196f3");
+            searchButton.TextColor = Color.White;
             searchButton.Text = "Suchen";
             searchButton.Clicked += SearchButton_Clicked;
-            contentStackLayout.Children.Add(searchButton);
+            buttonStack.Children.Add(searchButton);
+            buttonFrame.Content = buttonStack;
 
-            Content = contentStackLayout;
+            contentStackLayout.Children.Add(buttonFrame);
+
+            ScrollView scrollView = new ScrollView();
+            scrollView.Content = contentStackLayout;
+
+            Content = scrollView;
         }
 
         private void SearchButton_Clicked(object sender, EventArgs e)
@@ -124,17 +157,17 @@ namespace KuchaMobile.UI
 
         private void SitesFilterButton_Clicked(object sender, EventArgs e)
         {
-            Navigation.PushModalAsync(new CaveFilterUI(CaveFilterUI.CAVE_FILTER_TYPE.SITE, this), true);
+            Navigation.PushAsync(new CaveFilterUI(CaveFilterUI.CAVE_FILTER_TYPE.SITE, this), true);
         }
 
         private void RegionsFilterButton_Clicked(object sender, EventArgs e)
         {
-            Navigation.PushModalAsync(new CaveFilterUI(CaveFilterUI.CAVE_FILTER_TYPE.REGION, this), true);
+            Navigation.PushAsync(new CaveFilterUI(CaveFilterUI.CAVE_FILTER_TYPE.REGION, this), true);
         }
 
         private void DistrictsFilterButton_Clicked(object sender, EventArgs e)
         {
-            Navigation.PushModalAsync(new CaveFilterUI(CaveFilterUI.CAVE_FILTER_TYPE.DISTRICT, this), true);
+            Navigation.PushAsync(new CaveFilterUI(CaveFilterUI.CAVE_FILTER_TYPE.DISTRICT, this), true);
         }
 
         protected override void OnAppearing()

@@ -30,7 +30,8 @@ namespace KuchaMobile.UI
                 case CAVE_FILTER_TYPE.SITE: Title = "Sites"; break;
             }
             StackLayout finalStack = new StackLayout();
-
+            finalStack.Padding = new Thickness(16, 10, 16, 10);
+            
             listStack = new StackLayout();
             if(type== CAVE_FILTER_TYPE.DISTRICT)
             {
@@ -59,8 +60,12 @@ namespace KuchaMobile.UI
             finalStack.Children.Add(scrollView);
             Button doneButton = new Button();
             doneButton.Text = "Fertig";
+            doneButton.BackgroundColor = Color.FromHex("2196f3");
+            doneButton.TextColor = Color.White;
+            doneButton.HorizontalOptions = LayoutOptions.Center;
             doneButton.Clicked += DoneButton_Clicked;
-            finalStack.Children.Add(doneButton);
+            doneButton.Margin = new Thickness(0, 20, 0, 10);
+            listStack.Children.Add(doneButton);
 
             Content = finalStack;
         }
@@ -70,36 +75,46 @@ namespace KuchaMobile.UI
             if(type == CAVE_FILTER_TYPE.DISTRICT)
             {
                 List<CaveDistrictModel> selectedModels = new List<CaveDistrictModel>();
-                foreach(CaveDistrictGrid grid in listStack.Children)
+                foreach(var x in listStack.Children)
                 {
-                    if ((grid.Children[1] as Switch).IsToggled)
-                        selectedModels.Add(grid.caveDistrictModel);
+                    if (x is CaveDistrictGrid)
+                    {
+                        CaveDistrictGrid grid = x as CaveDistrictGrid;
+                        if ((grid.Children[1] as Switch).IsToggled)
+                            selectedModels.Add(grid.caveDistrictModel);
+                    }
                 }
                 parent.pickedDistricts = selectedModels;
-                Navigation.PopModalAsync();
             }
             else if(type == CAVE_FILTER_TYPE.REGION)
             {
                 List<CaveRegionModel> selectedModels = new List<CaveRegionModel>();
-                foreach (CaveRegionGrid grid in listStack.Children)
+                foreach (var x in listStack.Children)
                 {
-                    if ((grid.Children[1] as Switch).IsToggled)
-                        selectedModels.Add(grid.caveRegionModel);
+                    if (x is CaveRegionGrid)
+                    {
+                        CaveRegionGrid grid = x as CaveRegionGrid;
+                        if ((grid.Children[1] as Switch).IsToggled)
+                            selectedModels.Add(grid.caveRegionModel);
+                    }
+                    parent.pickedRegions = selectedModels;
                 }
-                parent.pickedRegions = selectedModels;
-                Navigation.PopModalAsync();
             }
             else if(type == CAVE_FILTER_TYPE.SITE)
             {
                 List<CaveSiteModel> selectedModels = new List<CaveSiteModel>();
-                foreach (CaveSiteGrid grid in listStack.Children)
+                foreach (var x in listStack.Children)
                 {
-                    if ((grid.Children[1] as Switch).IsToggled)
-                        selectedModels.Add(grid.caveSiteModel);
+                    if(x is CaveSiteGrid)
+                    {
+                        CaveSiteGrid grid = x as CaveSiteGrid;
+                        if ((grid.Children[1] as Switch).IsToggled)
+                            selectedModels.Add(grid.caveSiteModel);
+                    }
                 }
-                parent.pickedSites = selectedModels;
-                Navigation.PopModalAsync();
+                parent.pickedSites = selectedModels;              
             }
+            Navigation.PopAsync();
         }
 
         private class CaveDistrictGrid : Grid
