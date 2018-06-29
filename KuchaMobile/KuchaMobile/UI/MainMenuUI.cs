@@ -17,19 +17,19 @@ namespace KuchaMobile.UI
             masterPageItems.Add(new MasterPageItem
             {
                 Title = "Cave",
-                //IconSource = "contacts.png",
+                IconSource = "cave.png",
                 TargetType = typeof(CaveSearchUI)
             });
             masterPageItems.Add(new MasterPageItem
             {
                 Title = "Painted Representation",
-               // IconSource = "todo.png",
+                IconSource = "image.png",
                 TargetType = typeof(PaintedRepresentationSearchUI)
             });
             masterPageItems.Add(new MasterPageItem
             {
                 Title = "Settings",
-                //IconSource = "reminders.png",
+                IconSource = "cog.png",
                 TargetType = typeof(SettingsUI)
             });
 
@@ -55,8 +55,8 @@ namespace KuchaMobile.UI
                 SeparatorVisibility = SeparatorVisibility.Default
             };
 
-            Icon = "hamburger.png";
-            Title = "Personal Organiser";
+            Icon = "null";
+            Title = "Kucha Mobile";
             Frame imageFrame = new Frame();
             imageFrame.BackgroundColor = Color.White;
             imageFrame.Padding = 20;

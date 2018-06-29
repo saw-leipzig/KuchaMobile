@@ -140,4 +140,25 @@
       <Name>KuchaMobile</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\cave.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\hu_logo.png">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\icon.png">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\cog.png" />
+  </ItemGroup>
 </Project>

@@ -37,6 +37,11 @@ namespace KuchaMobile.UI
             deleteLocalFilesButton.Clicked += DeleteLocalFilesButton_Clicked;
             contentStack.Children.Add(deleteLocalFilesButton);
 
+            Label licenseLabel = new Label();
+            licenseLabel.TextColor = Color.LightGray;
+            licenseLabel.Text = "Icon licenses\n\ncave by Alexander Skowalsky from the Noun Project\nImage by Viktor Vorobyev from the Noun Project\ncog by Vicons Design from the Noun Project\n\nAll icons issued under Creative Commons license.";
+            licenseLabel.Margin = new Thickness(0, 50, 0, 0);
+            contentStack.Children.Add(licenseLabel);
             Content = contentStack;
         }
 
