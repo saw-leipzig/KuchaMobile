@@ -17,19 +17,19 @@ namespace KuchaMobile.UI
             masterPageItems.Add(new MasterPageItem
             {
                 Title = "Cave",
-                IconSource = "contacts.png",
+                //IconSource = "contacts.png",
                 TargetType = typeof(CaveSearchUI)
             });
             masterPageItems.Add(new MasterPageItem
             {
                 Title = "Painted Representation",
-                IconSource = "todo.png",
+               // IconSource = "todo.png",
                 TargetType = typeof(PaintedRepresentationSearchUI)
             });
             masterPageItems.Add(new MasterPageItem
             {
                 Title = "Settings",
-                IconSource = "reminders.png",
+                //IconSource = "reminders.png",
                 TargetType = typeof(SettingsUI)
             });
 
@@ -44,6 +44,7 @@ namespace KuchaMobile.UI
                     var image = new Image();
                     image.SetBinding(Image.SourceProperty, "IconSource");
                     var label = new Label { VerticalOptions = LayoutOptions.FillAndExpand };
+                    label.FontAttributes = FontAttributes.Bold;
                     label.SetBinding(Label.TextProperty, "Title");
 
                     grid.Children.Add(image);
@@ -51,11 +52,9 @@ namespace KuchaMobile.UI
 
                     return new ViewCell { View = grid };
                 }),
-                SeparatorVisibility = SeparatorVisibility.None
+                SeparatorVisibility = SeparatorVisibility.Default
             };
 
-            Icon = "hamburger.png";
-            Title = "Personal Organiser";
             Content = new StackLayout
             {
                 Children = { listView }
