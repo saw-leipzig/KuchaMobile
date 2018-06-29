@@ -2,8 +2,6 @@
 using KuchaMobile.Internal;
 using KuchaMobile.Logic;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -11,17 +9,16 @@ namespace KuchaMobile.UI
 {
     public class LoginPage : ContentPage
     {
-        Entry nameEntry;
-        Entry passwordEntry;
-        Label loginstatusLabel;
-        Label downloadStatusLabel;
-        Button loginButton;
-        Button downloadDataButton;
-        Button continueButton;
+        private Entry nameEntry;
+        private Entry passwordEntry;
+        private Label loginstatusLabel;
+        private Label downloadStatusLabel;
+        private Button loginButton;
+        private Button downloadDataButton;
+        private Button continueButton;
 
         public LoginPage()
         {
-
             StackLayout contentStack = new StackLayout();
             contentStack.Padding = 20;
             Image huLogo = new Image();
@@ -96,7 +93,7 @@ namespace KuchaMobile.UI
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     UserDialogs.Instance.HideLoading();
-                    if(success)
+                    if (success)
                     {
                         UserDialogs.Instance.Toast("Daten erfolgreich heruntergeladen!");
                         downloadDataButton.IsEnabled = false;
@@ -105,22 +102,22 @@ namespace KuchaMobile.UI
                         {
                             continueButton.IsEnabled = true;
                         }
-                    }else
+                    }
+                    else
                     {
                         UserDialogs.Instance.Toast("Daten konnten nicht heruntergeladen werden. Bitte Netzwerkverbindung prüfen.");
                     }
                 });
             });
-
         }
 
         private void LoginButton_Clicked(object sender, EventArgs e)
         {
             UserDialogs.Instance.ShowLoading();
-            Task.Run(()=> 
+            Task.Run(() =>
             {
                 bool loginSuccess = Connection.Login(nameEntry.Text, passwordEntry.Text);
-                Device.BeginInvokeOnMainThread(()=> 
+                Device.BeginInvokeOnMainThread(() =>
                 {
                     UserDialogs.Instance.HideLoading();
                     if (loginSuccess)
@@ -140,10 +137,8 @@ namespace KuchaMobile.UI
                     {
                         UserDialogs.Instance.Toast("Login fehlgeschlagen!");
                     }
-                });               
+                });
             });
-            
-            
         }
     }
 }

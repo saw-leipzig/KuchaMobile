@@ -2,15 +2,15 @@
 using KuchaMobile.Logic.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Xamarin.Forms;
 
 namespace KuchaMobile.UI
 {
     public class ImageUI : ContentPage
     {
-        Editor notesEditor;
-        RelatedImage image;
+        private Editor notesEditor;
+        private RelatedImage image;
+
         public ImageUI(RelatedImage image)
         {
             this.image = image;

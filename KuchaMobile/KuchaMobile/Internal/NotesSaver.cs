@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace KuchaMobile.Internal
+﻿namespace KuchaMobile.Internal
 {
     public class NotesSaver
     {
@@ -23,6 +19,5 @@ namespace KuchaMobile.Internal
             this.ID = ID;
             this.Note = note;
         }
-
     }
 }

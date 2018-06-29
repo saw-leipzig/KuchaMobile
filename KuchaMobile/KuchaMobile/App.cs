@@ -1,9 +1,5 @@
 ﻿using KuchaMobile.Logic;
 using KuchaMobile.UI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -24,7 +20,7 @@ namespace KuchaMobile
 
             MainPage = new LoadingScreenUI();
         }
-        
+
         public void LoadingPersistantDataFinished()
         {
             if (!Kucha.CaveDataIsValid() || !Internal.Connection.HasLegitSessionID())

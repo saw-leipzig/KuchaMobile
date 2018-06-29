@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Xamarin.Forms;
 
 namespace KuchaMobile.UI
@@ -9,7 +8,7 @@ namespace KuchaMobile.UI
     {
         public ListView ListView { get { return listView; } }
 
-        ListView listView;
+        private ListView listView;
 
         public MainMenuUI()
         {
@@ -36,7 +35,8 @@ namespace KuchaMobile.UI
             listView = new ListView
             {
                 ItemsSource = masterPageItems,
-                ItemTemplate = new DataTemplate(() => {
+                ItemTemplate = new DataTemplate(() =>
+                {
                     var grid = new Grid { Padding = new Thickness(5, 10) };
                     grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(30) });
                     grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
@@ -61,14 +61,14 @@ namespace KuchaMobile.UI
             imageFrame.BackgroundColor = Color.White;
             imageFrame.Padding = 20;
             imageFrame.HasShadow = true;
-            
+
             Image huLogo = new Image();
             huLogo.Source = "hu_logo.png";
             huLogo.Aspect = Aspect.AspectFit;
             imageFrame.Content = huLogo;
             Content = new StackLayout
             {
-                Children = { imageFrame,  listView }
+                Children = { imageFrame, listView }
             };
         }
     }

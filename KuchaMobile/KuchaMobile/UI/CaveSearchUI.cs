@@ -4,22 +4,21 @@ using KuchaMobile.Logic.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xamarin.Forms;
 
 namespace KuchaMobile.UI
 {
     public class CaveSearchUI : ContentPage
     {
-        Label districtsFilterLabel;
-        Label regionsFilterLabel;
-        Label sitesFilterLabel;
+        private Label districtsFilterLabel;
+        private Label regionsFilterLabel;
+        private Label sitesFilterLabel;
         public Picker caveFilterPicker;
         public List<CaveDistrictModel> pickedDistricts;
         public List<CaveRegionModel> pickedRegions;
         public List<CaveSiteModel> pickedSites;
 
-        Dictionary<string, CaveTypeModel> caveTypeDictionary;
+        private Dictionary<string, CaveTypeModel> caveTypeDictionary;
 
         public CaveSearchUI()
         {
@@ -49,11 +48,11 @@ namespace KuchaMobile.UI
 
             caveTypeDictionary = Kucha.GetCaveTypeDictionary();
             caveFilterPicker = new Picker();
-            foreach(string name in caveTypeDictionary.Keys)
+            foreach (string name in caveTypeDictionary.Keys)
             {
                 caveFilterPicker.Items.Add(name);
             }
- 
+
             caveFilterPicker.SelectedIndex = 0;
 
             caveTypeStack.Children.Add(caveFilterPicker);
@@ -146,8 +145,8 @@ namespace KuchaMobile.UI
             caveFilter.pickedDistricts = pickedDistricts;
             caveFilter.pickedRegions = pickedRegions;
             caveFilter.pickedSites = pickedSites;
-            caveFilter.FoundResultsString = "Ergebnisse: "+caves.Count;
-            caveFilter.SearchTimeString = "Am "+DateTime.UtcNow.ToString();
+            caveFilter.FoundResultsString = "Ergebnisse: " + caves.Count;
+            caveFilter.SearchTimeString = "Am " + DateTime.UtcNow.ToString();
             searchHistory.Add(caveFilter);
             var newList = searchHistory.OrderByDescending(x => x.SearchTimeString).ToList();
             Settings.CaveSearchHistorySetting = newList;
@@ -174,17 +173,17 @@ namespace KuchaMobile.UI
         {
             base.OnAppearing();
 
-            if(pickedDistricts.Count == 0)
+            if (pickedDistricts.Count == 0)
             {
                 districtsFilterLabel.Text = "Selektierte Districts: Keine";
             }
             else
             {
                 string labelString = "Selektierte Districts: ";
-                foreach(CaveDistrictModel district in pickedDistricts)
+                foreach (CaveDistrictModel district in pickedDistricts)
                 {
                     labelString += district.name + ", ";
-                }                
+                }
                 districtsFilterLabel.Text = labelString.Remove(labelString.Length - 2);
             }
 
@@ -198,7 +197,7 @@ namespace KuchaMobile.UI
                 foreach (CaveRegionModel region in pickedRegions)
                 {
                     labelString += region.englishName + ", ";
-                }               
+                }
                 regionsFilterLabel.Text = labelString.Remove(labelString.Length - 2);
             }
 
@@ -212,10 +211,9 @@ namespace KuchaMobile.UI
                 foreach (CaveSiteModel site in pickedSites)
                 {
                     labelString += site.name + ", ";
-                }              
+                }
                 sitesFilterLabel.Text = labelString.Remove(labelString.Length - 2);
             }
-
         }
 
         private void HistoryButton_Clicked()

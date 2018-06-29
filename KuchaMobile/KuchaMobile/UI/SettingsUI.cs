@@ -1,10 +1,8 @@
 ﻿using Acr.UserDialogs;
 using KuchaMobile.Internal;
 using KuchaMobile.Logic;
-using PCLStorage;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -12,7 +10,8 @@ namespace KuchaMobile.UI
 {
     public class SettingsUI : ContentPage
     {
-        Label downloadStatusLabel;
+        private Label downloadStatusLabel;
+
         public SettingsUI()
         {
             Title = "Einstellungen";

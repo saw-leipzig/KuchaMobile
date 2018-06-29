@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace KuchaMobile.Logic
+﻿namespace KuchaMobile.Logic
 {
     public class CaveTypeModel
     {

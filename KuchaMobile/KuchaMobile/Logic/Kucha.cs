@@ -1,11 +1,10 @@
 ﻿using KuchaMobile.Internal;
 using KuchaMobile.Logic.Models;
+using Newtonsoft.Json;
+using PCLStorage;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
-using PCLStorage;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -13,7 +12,7 @@ namespace KuchaMobile.Logic
 {
     public class Kucha
     {
-        static KuchaContainer kuchaContainer;
+        private static KuchaContainer kuchaContainer;
 
         public async static Task<bool> RefreshCaveData()
         {
@@ -46,7 +45,7 @@ namespace KuchaMobile.Logic
                 kuchaContainer.caveTypes = caveTypeModels;
                 kuchaContainer.caveTypeDictionary = new Dictionary<string, CaveTypeModel>();
                 kuchaContainer.caveTypeDictionary.Add("Egal", null);
-                foreach(CaveTypeModel c in caveTypeModels)
+                foreach (CaveTypeModel c in caveTypeModels)
                 {
                     kuchaContainer.caveTypeDictionary.Add(c.nameEN, c);
                 }
@@ -76,12 +75,13 @@ namespace KuchaMobile.Logic
             //Settings.KuchaContainerSetting = kuchaContainer;
             return true;
         }
+
         public static CaveModel GetCaveByID(int id)
         {
             CaveModel resultCave = null;
-            foreach(CaveModel c in kuchaContainer.caves)
+            foreach (CaveModel c in kuchaContainer.caves)
             {
-                if(c.caveID == id)
+                if (c.caveID == id)
                 {
                     resultCave = c;
                     break;
@@ -89,6 +89,7 @@ namespace KuchaMobile.Logic
             }
             return resultCave;
         }
+
         public static DateTime GetDataTimeStamp()
         {
             return kuchaContainer.timeStamp;
@@ -99,7 +100,7 @@ namespace KuchaMobile.Logic
             //Device memory
             List<NotesSaver> currentSavedNotes = Settings.SavedNotesSetting;
             var index = currentSavedNotes.FindIndex(id => id.ID == caveID && id.Type == NotesSaver.NOTES_TYPE.NOTE_TYPE_CAVE);
-            if(index>-1) //Element found
+            if (index > -1) //Element found
             {
                 currentSavedNotes[index].Note = notes;
             }
@@ -129,24 +130,24 @@ namespace KuchaMobile.Logic
         public static List<CaveModel> GetCavesByFilters(CaveTypeModel caveTypeModel, List<CaveDistrictModel> pickedDistricts, List<CaveRegionModel> pickedRegions, List<CaveSiteModel> pickedSites)
         {
             List<CaveModel> resultCaves = new List<CaveModel>(kuchaContainer.caves);   //Clone them to not access the full list
-            if(caveTypeModel!=null)
+            if (caveTypeModel != null)
             {
                 resultCaves.RemoveAll(cave => cave.caveTypeID != caveTypeModel.caveTypeID);
             }
 
-            if(pickedDistricts != null && pickedDistricts.Count>0)
+            if (pickedDistricts != null && pickedDistricts.Count > 0)
             {
-                resultCaves.RemoveAll(cave => pickedDistricts.Any(district => cave.districtID == district.districtID)==false);
+                resultCaves.RemoveAll(cave => pickedDistricts.Any(district => cave.districtID == district.districtID) == false);
             }
 
-            if(pickedRegions != null && pickedRegions.Count>0)
+            if (pickedRegions != null && pickedRegions.Count > 0)
             {
-                resultCaves.RemoveAll(cave => pickedRegions.Any(region => cave.regionID == region.regionID)==false);
+                resultCaves.RemoveAll(cave => pickedRegions.Any(region => cave.regionID == region.regionID) == false);
             }
 
-            if(pickedSites != null && pickedSites.Count > 0)
+            if (pickedSites != null && pickedSites.Count > 0)
             {
-                resultCaves.RemoveAll(cave => pickedSites.Any(site => cave.siteID == site.siteID)==false);
+                resultCaves.RemoveAll(cave => pickedSites.Any(site => cave.siteID == site.siteID) == false);
             }
             return resultCaves;
         }
@@ -183,7 +184,7 @@ namespace KuchaMobile.Logic
 
         public static string GetCaveDistrictStringByID(int id)
         {
-            foreach(CaveDistrictModel c in kuchaContainer.caveDistricts)
+            foreach (CaveDistrictModel c in kuchaContainer.caveDistricts)
             {
                 if (c.districtID == id)
                     return c.name;
@@ -248,14 +249,14 @@ namespace KuchaMobile.Logic
             IFolder rootFolder = FileSystem.Current.LocalStorage;
             ExistenceCheckResult kuchaFolderExists = await rootFolder.CheckExistsAsync("Kucha");
             bool loadSuccess = false;
-            if(kuchaFolderExists == ExistenceCheckResult.FolderExists)
+            if (kuchaFolderExists == ExistenceCheckResult.FolderExists)
             {
                 IFolder kuchaFolder = await rootFolder.GetFolderAsync("Kucha");
                 IFile kuchaContainerFile;
                 if (kuchaFolder != null)
                 {
                     ExistenceCheckResult kuchaFileExists = await kuchaFolder.CheckExistsAsync("KuchaContainer");
-                    if(kuchaFileExists == ExistenceCheckResult.FileExists)
+                    if (kuchaFileExists == ExistenceCheckResult.FileExists)
                     {
                         kuchaContainerFile = await kuchaFolder.GetFileAsync("KuchaContainer");
                         if (kuchaContainerFile != null)
@@ -281,17 +282,16 @@ namespace KuchaMobile.Logic
                 await rootFolder.CreateFolderAsync("Kucha", CreationCollisionOption.ReplaceExisting);
                 IFolder kuchaFolder = await rootFolder.GetFolderAsync("Kucha");
                 await kuchaFolder.CreateFileAsync("KuchaContainer", CreationCollisionOption.ReplaceExisting);
-
             }
 
             if (!loadSuccess)
                 kuchaContainer = new KuchaContainer();
             Connection.LoadCachedSessionID();
 
-            Device.BeginInvokeOnMainThread(()=> 
+            Device.BeginInvokeOnMainThread(() =>
             {
                 ((App)App.Current).LoadingPersistantDataFinished();
-            });           
+            });
         }
 
         public static bool CaveDataIsValid()

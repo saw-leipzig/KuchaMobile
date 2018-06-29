@@ -2,28 +2,29 @@
 using KuchaMobile.Logic.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Xamarin.Forms;
 
 namespace KuchaMobile.UI
 {
     public class CaveFilterUI : ContentPage
     {
-        StackLayout listStack;
+        private StackLayout listStack;
+
         public enum CAVE_FILTER_TYPE
         {
             SITE,
             DISTRICT,
             REGION
         }
-        CAVE_FILTER_TYPE type;
-        CaveSearchUI parent;
+
+        private CAVE_FILTER_TYPE type;
+        private CaveSearchUI parent;
 
         public CaveFilterUI(CAVE_FILTER_TYPE type, CaveSearchUI parent)
         {
             this.type = type;
             this.parent = parent;
-            switch(type)
+            switch (type)
             {
                 case CAVE_FILTER_TYPE.DISTRICT: Title = "Districts"; break;
                 case CAVE_FILTER_TYPE.REGION: Title = "Regions"; break;
@@ -31,16 +32,16 @@ namespace KuchaMobile.UI
             }
             StackLayout finalStack = new StackLayout();
             finalStack.Padding = new Thickness(16, 10, 16, 10);
-            
+
             listStack = new StackLayout();
-            if(type== CAVE_FILTER_TYPE.DISTRICT)
+            if (type == CAVE_FILTER_TYPE.DISTRICT)
             {
-                foreach(CaveDistrictModel caveDistrict in Kucha.GetCaveDistricts())
+                foreach (CaveDistrictModel caveDistrict in Kucha.GetCaveDistricts())
                 {
                     listStack.Children.Add(new CaveDistrictGrid(caveDistrict, parent.pickedDistricts.Contains(caveDistrict)));
                 }
             }
-            else if(type == CAVE_FILTER_TYPE.REGION)
+            else if (type == CAVE_FILTER_TYPE.REGION)
             {
                 foreach (CaveRegionModel caveRegion in Kucha.GetCaveRegions())
                 {
@@ -72,10 +73,10 @@ namespace KuchaMobile.UI
 
         private void DoneButton_Clicked(object sender, EventArgs e)
         {
-            if(type == CAVE_FILTER_TYPE.DISTRICT)
+            if (type == CAVE_FILTER_TYPE.DISTRICT)
             {
                 List<CaveDistrictModel> selectedModels = new List<CaveDistrictModel>();
-                foreach(var x in listStack.Children)
+                foreach (var x in listStack.Children)
                 {
                     if (x is CaveDistrictGrid)
                     {
@@ -86,7 +87,7 @@ namespace KuchaMobile.UI
                 }
                 parent.pickedDistricts = selectedModels;
             }
-            else if(type == CAVE_FILTER_TYPE.REGION)
+            else if (type == CAVE_FILTER_TYPE.REGION)
             {
                 List<CaveRegionModel> selectedModels = new List<CaveRegionModel>();
                 foreach (var x in listStack.Children)
@@ -100,19 +101,19 @@ namespace KuchaMobile.UI
                     parent.pickedRegions = selectedModels;
                 }
             }
-            else if(type == CAVE_FILTER_TYPE.SITE)
+            else if (type == CAVE_FILTER_TYPE.SITE)
             {
                 List<CaveSiteModel> selectedModels = new List<CaveSiteModel>();
                 foreach (var x in listStack.Children)
                 {
-                    if(x is CaveSiteGrid)
+                    if (x is CaveSiteGrid)
                     {
                         CaveSiteGrid grid = x as CaveSiteGrid;
                         if ((grid.Children[1] as Switch).IsToggled)
                             selectedModels.Add(grid.caveSiteModel);
                     }
                 }
-                parent.pickedSites = selectedModels;              
+                parent.pickedSites = selectedModels;
             }
             Navigation.PopAsync();
         }
@@ -120,6 +121,7 @@ namespace KuchaMobile.UI
         private class CaveDistrictGrid : Grid
         {
             public CaveDistrictModel caveDistrictModel;
+
             public CaveDistrictGrid(CaveDistrictModel caveDistrictModel, bool enabled)
             {
                 this.caveDistrictModel = caveDistrictModel;
@@ -136,6 +138,7 @@ namespace KuchaMobile.UI
         private class CaveRegionGrid : Grid
         {
             public CaveRegionModel caveRegionModel;
+
             public CaveRegionGrid(CaveRegionModel caveRegionModel, bool enabled)
             {
                 this.caveRegionModel = caveRegionModel;
@@ -152,6 +155,7 @@ namespace KuchaMobile.UI
         private class CaveSiteGrid : Grid
         {
             public CaveSiteModel caveSiteModel;
+
             public CaveSiteGrid(CaveSiteModel caveSiteModel, bool enabled)
             {
                 this.caveSiteModel = caveSiteModel;

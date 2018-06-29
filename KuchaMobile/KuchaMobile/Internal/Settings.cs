@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using KuchaMobile.Logic;
-using KuchaMobile.Logic.Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
+using System;
+using System.Collections.Generic;
 
 namespace KuchaMobile.Internal
 {
     /// <summary>
     /// This is the Settings static class that can be used in your Core solution or in any
     /// of your client applications. All settings are laid out the same exact way with getters
-    /// and setters. 
+    /// and setters.
     /// </summary>
     public static class Settings
     {
@@ -26,7 +23,6 @@ namespace KuchaMobile.Internal
 
         #region Setting Constants
 
-
         private const string localToken = "localToken";
         public static readonly string localTokenDefault = String.Empty;
 
@@ -36,7 +32,7 @@ namespace KuchaMobile.Internal
         private const string caveSearchHistory = "caveSearchHistory";
         public static readonly string caveSearchHistoryDefault = JsonConvert.SerializeObject(new List<CaveFilter>());
 
-        #endregion
+        #endregion Setting Constants
 
         public static List<CaveFilter> CaveSearchHistorySetting
         {
@@ -81,4 +77,3 @@ namespace KuchaMobile.Internal
         }
     }
 }
-

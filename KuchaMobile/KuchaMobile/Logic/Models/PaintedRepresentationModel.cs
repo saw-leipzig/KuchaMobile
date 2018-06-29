@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace KuchaMobile.Logic.Models
 {
@@ -15,14 +14,16 @@ namespace KuchaMobile.Logic.Models
         public string currentLocation { get; set; }
         public List<string> Iconography { get; set; }
         public List<string> PictorialElements { get; set; }
+
         //Not in JSON but manually needed
         public string PRDisplayName
         {
             get
             {
-                return String.Format("ID: "+depictionID);
+                return String.Format("ID: " + depictionID);
             }
         }
+
         public string PRDetailDisplayName
         {
             get
@@ -48,5 +49,4 @@ namespace KuchaMobile.Logic.Models
         public bool openAccess { get; set; }
         public string date { get; set; }
     }
-
 }

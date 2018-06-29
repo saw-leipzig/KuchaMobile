@@ -1,7 +1,6 @@
 ﻿using KuchaMobile.Logic.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace KuchaMobile.Logic
 {
@@ -19,7 +18,7 @@ namespace KuchaMobile.Logic
         public DateTime timeStamp;
 
         public KuchaContainer()
-        {   
+        {
             caveDistricts = new List<CaveDistrictModel>();
             caveRegions = new List<CaveRegionModel>();
             caveSites = new List<CaveSiteModel>();

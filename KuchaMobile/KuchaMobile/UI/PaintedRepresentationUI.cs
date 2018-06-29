@@ -4,7 +4,6 @@ using KuchaMobile.Logic.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xamarin.Forms;
 
 namespace KuchaMobile.UI
@@ -13,9 +12,10 @@ namespace KuchaMobile.UI
     {
         public CaveModel cave { get; set; }
 
-        Editor notesEditor;
+        private Editor notesEditor;
 
-        PaintedRepresentationModel paintedRepresentation;
+        private PaintedRepresentationModel paintedRepresentation;
+
         public PaintedRepresentationUI(PaintedRepresentationModel paintedRepresentation)
         {
             this.paintedRepresentation = paintedRepresentation;
@@ -34,10 +34,10 @@ namespace KuchaMobile.UI
             generalInfoLabel.FontSize = 20;
             generalInfoLabel.TextColor = Color.Black;
             generalStack.Children.Add(generalInfoLabel);
-            if(!String.IsNullOrEmpty(paintedRepresentation.description))
+            if (!String.IsNullOrEmpty(paintedRepresentation.description))
             {
                 Label descriptionLabel = new Label();
-                descriptionLabel.Text = "Description: "+paintedRepresentation.description;
+                descriptionLabel.Text = "Description: " + paintedRepresentation.description;
                 generalStack.Children.Add(descriptionLabel);
             }
             if (!String.IsNullOrEmpty(paintedRepresentation.acquiredByExpedition))
@@ -88,10 +88,10 @@ namespace KuchaMobile.UI
 
             StackLayout caveStack = new StackLayout();
             caveStack.Spacing = 2;
-            if(cave == null)
+            if (cave == null)
             {
                 Label caveInfoLabel = new Label();
-                caveInfoLabel.Text = "Cave could not be loaded - the backend probably sent an invalid ID or the local database needs to be updated. (ID "+ paintedRepresentation.caveID+")";
+                caveInfoLabel.Text = "Cave could not be loaded - the backend probably sent an invalid ID or the local database needs to be updated. (ID " + paintedRepresentation.caveID + ")";
                 caveInfoLabel.FontSize = 20;
                 caveInfoLabel.TextColor = Color.Black;
                 caveStack.Children.Add(caveInfoLabel);
@@ -127,7 +127,7 @@ namespace KuchaMobile.UI
                 caveBackground.Source = ImageSource.FromUri(new Uri(Internal.Connection.GetCaveBackgroundImageURL(cave.caveTypeID)));
                 caveStack.Children.Add(caveBackground);
             }
-            
+
             caveFrame.Content = caveStack;
             contentStack.Children.Add(caveFrame);
 
@@ -144,7 +144,6 @@ namespace KuchaMobile.UI
                 imageTap.Tapped += ImageTap_Tapped;
                 imageStack.GestureRecognizers.Add(imageTap);
             }
-
 
             Frame notesFrame = new Frame();
             notesFrame.HasShadow = true;
@@ -177,9 +176,9 @@ namespace KuchaMobile.UI
         protected override void OnDisappearing()
         {
             var index = Settings.SavedNotesSetting.FindIndex(pr => pr.ID == paintedRepresentation.depictionID && pr.Type == NotesSaver.NOTES_TYPE.NOTE_TYPE_PAINTEDREPRESENTATION);
-            if(index==-1)
-            {               
-                if(!String.IsNullOrEmpty(notesEditor.Text))
+            if (index == -1)
+            {
+                if (!String.IsNullOrEmpty(notesEditor.Text))
                 {
                     List<NotesSaver> savedNotes = Settings.SavedNotesSetting;
                     savedNotes.Add(new NotesSaver(NotesSaver.NOTES_TYPE.NOTE_TYPE_PAINTEDREPRESENTATION, paintedRepresentation.depictionID, notesEditor.Text));
@@ -189,7 +188,7 @@ namespace KuchaMobile.UI
             else
             {
                 NotesSaver currentNote = Settings.SavedNotesSetting[index];
-                if(currentNote.Note != notesEditor.Text)
+                if (currentNote.Note != notesEditor.Text)
                 {
                     currentNote.Note = notesEditor.Text;
                     List<NotesSaver> savedNotes = Settings.SavedNotesSetting;
@@ -211,9 +210,10 @@ namespace KuchaMobile.UI
             Navigation.PushAsync(new ImageUI(stack.relatedImage));
         }
 
-        class RelatedImageStack : StackLayout
+        private class RelatedImageStack : StackLayout
         {
             public RelatedImage relatedImage { get; set; }
+
             public RelatedImageStack(RelatedImage image)
             {
                 this.relatedImage = image;
@@ -226,10 +226,10 @@ namespace KuchaMobile.UI
                 idLabel.Text = "ImageID: " + image.imageID;
                 Children.Add(idLabel);
 
-                if(!String.IsNullOrEmpty(image.title))
+                if (!String.IsNullOrEmpty(image.title))
                 {
                     Label titleLabel = new Label();
-                    titleLabel.Text = "Titel: "+image.title;
+                    titleLabel.Text = "Titel: " + image.title;
                     Children.Add(titleLabel);
                 }
 
@@ -243,7 +243,7 @@ namespace KuchaMobile.UI
                 if (!String.IsNullOrEmpty(image.copyright))
                 {
                     Label copyRightLabel = new Label();
-                    copyRightLabel.Text = "Copyright: "+image.copyright;
+                    copyRightLabel.Text = "Copyright: " + image.copyright;
                     Children.Add(copyRightLabel);
                 }
 
@@ -259,7 +259,6 @@ namespace KuchaMobile.UI
                     dateLabel.Text = "Date: " + image.date;
                     Children.Add(dateLabel);
                 }
-
 
                 Image prImage = new Image();
                 prImage.WidthRequest = 150;

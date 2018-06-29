@@ -1,8 +1,6 @@
 ﻿using KuchaMobile.Logic;
 using KuchaMobile.Logic.Models;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace KuchaMobile.Internal
 {

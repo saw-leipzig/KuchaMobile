@@ -3,20 +3,19 @@ using KuchaMobile.Logic.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xamarin.Forms;
 
 namespace KuchaMobile.UI
 {
     public class PaintedRepresentationSearchUI : ContentPage
     {
-        List<IconographyModel> allIconographies;
-        List<IconographyModel> availableIconographies;
-        List<IconographyModel> selectedIconographies;
+        private List<IconographyModel> allIconographies;
+        private List<IconographyModel> availableIconographies;
+        private List<IconographyModel> selectedIconographies;
 
-        ListView availableIconsListView;
-        ListView selectedListView;
-        Switch exclusiveSwitch;
+        private ListView availableIconsListView;
+        private ListView selectedListView;
+        private Switch exclusiveSwitch;
 
         public PaintedRepresentationSearchUI()
         {
@@ -97,7 +96,7 @@ namespace KuchaMobile.UI
 
         private void SearchButton_Clicked(object sender, EventArgs e)
         {
-            if(exclusiveSwitch.IsToggled)
+            if (exclusiveSwitch.IsToggled)
             {
                 if (selectedIconographies.Any())
                 {
@@ -162,9 +161,9 @@ namespace KuchaMobile.UI
         private void SearchEntry_TextChanged(object sender, TextChangedEventArgs e)
         {
             List<IconographyModel> editedList = new List<IconographyModel>();
-            foreach(IconographyModel i in allIconographies)
+            foreach (IconographyModel i in allIconographies)
             {
-                if(i.text.ToLower().Contains(e.NewTextValue.ToLower()))
+                if (i.text.ToLower().Contains(e.NewTextValue.ToLower()))
                 {
                     editedList.Add(i);
                 }

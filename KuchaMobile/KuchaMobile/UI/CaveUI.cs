@@ -3,15 +3,15 @@ using KuchaMobile.Logic;
 using KuchaMobile.Logic.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Xamarin.Forms;
 
 namespace KuchaMobile.UI
 {
     public class CaveUI : ContentPage
     {
-        Editor notesEditor;
-        CaveModel cave;
+        private Editor notesEditor;
+        private CaveModel cave;
+
         public CaveUI(CaveModel cave)
         {
             this.cave = cave;
@@ -31,14 +31,14 @@ namespace KuchaMobile.UI
             Label nameLabel = new Label();
             nameLabel.Text = "Historical Name: " + cave.historicalName;
             generalCaveStack.Children.Add(nameLabel);
-            if(!String.IsNullOrEmpty(cave.optionalHistoricalName))
+            if (!String.IsNullOrEmpty(cave.optionalHistoricalName))
             {
                 Label optHistoricalNameLabel = new Label();
                 optHistoricalNameLabel.Text = "Optional Historical Name: " + cave.optionalHistoricalName;
                 generalCaveStack.Children.Add(optHistoricalNameLabel);
             }
             Label siteLabel = new Label();
-            siteLabel.Text = "Site: "+Kucha.GetCaveSiteStringByID(cave.siteID);
+            siteLabel.Text = "Site: " + Kucha.GetCaveSiteStringByID(cave.siteID);
             generalCaveStack.Children.Add(siteLabel);
             Label districtLabel = new Label();
             districtLabel.Text = "District: " + Kucha.GetCaveDistrictStringByID(cave.districtID);
@@ -50,7 +50,7 @@ namespace KuchaMobile.UI
             typeLabel.Text = "Type: " + Kucha.GetCaveTypeStringByID(cave.caveTypeID);
             generalCaveStack.Children.Add(typeLabel);
 
-            if(!String.IsNullOrEmpty(cave.measurementString))
+            if (!String.IsNullOrEmpty(cave.measurementString))
             {
                 Label measurementLabel = new Label();
                 measurementLabel.Text = "Measurement: " + cave.measurementString;
@@ -113,6 +113,7 @@ namespace KuchaMobile.UI
             scrollView.Content = contentStack;
             Content = scrollView;
         }
+
         protected override void OnDisappearing()
         {
             var index = Settings.SavedNotesSetting.FindIndex(c => c.ID == cave.caveID && c.Type == NotesSaver.NOTES_TYPE.NOTE_TYPE_CAVE);

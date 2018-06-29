@@ -1,15 +1,13 @@
 ﻿using KuchaMobile.Internal;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using Xamarin.Forms;
-using System.Linq;
 
 namespace KuchaMobile.UI
 {
     public class CaveSearchHistoryUI : ContentPage
     {
-        CaveSearchUI parent;
+        private CaveSearchUI parent;
+
         public CaveSearchHistoryUI(CaveSearchUI parent)
         {
             this.parent = parent;
@@ -37,9 +35,9 @@ namespace KuchaMobile.UI
             parent.pickedSites = caveFilter.pickedSites;
 
             var index = -1;
-            if(caveFilter.caveTypeModel != null)
+            if (caveFilter.caveTypeModel != null)
                 index = parent.caveFilterPicker.Items.IndexOf(caveFilter.caveTypeModel.nameEN);
-            if(index!=-1)
+            if (index != -1)
             {
                 parent.caveFilterPicker.SelectedIndex = index;
             }
@@ -50,7 +48,7 @@ namespace KuchaMobile.UI
         private async void Clear_List()
         {
             bool response = await DisplayAlert("Verlauf leeren?", "Möchtest du den Suchverlauf wirklich leeren?", "Ja", "Nein");
-            if(response)
+            if (response)
             {
                 Settings.CaveSearchHistorySetting = new List<CaveFilter>();
                 await Navigation.PopAsync();

@@ -3,17 +3,14 @@ using KuchaMobile.Logic.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace KuchaMobile.Internal
 {
-    static class Connection
+    internal static class Connection
     {
         private static string backendURL = "https://kuchatest.saw-leipzig.de/";
         private static HttpClient client = new HttpClient();
@@ -33,6 +30,7 @@ namespace KuchaMobile.Internal
             }
             else return false;
         }
+
         public static bool HasLegitSessionID()
         {
             if (!String.IsNullOrEmpty(sessionID))
@@ -46,17 +44,18 @@ namespace KuchaMobile.Internal
 
             return false;
         }
+
         public static void LoadCachedSessionID()
         {
             sessionID = Settings.LocalTokenSetting;
         }
 
-        public static string GetPaintedRepresentationImageURL(int id, int sizeInPx=0)
+        public static string GetPaintedRepresentationImageURL(int id, int sizeInPx = 0)
         {
             if (!String.IsNullOrEmpty(sessionID))
             {
                 string returnString = "";
-                if(sizeInPx==0)
+                if (sizeInPx == 0)
                 {
                     returnString = backendURL + "resource?imageID=" + id + "&sessionID=" + sessionID;
                 }
@@ -68,9 +67,10 @@ namespace KuchaMobile.Internal
             }
             return String.Empty;
         }
+
         public static string GetCaveSketchURL(string caveSketch)
         {
-            if(!String.IsNullOrEmpty(sessionID))
+            if (!String.IsNullOrEmpty(sessionID))
             {
                 string returnString = backendURL + "resource?cavesketch=" + caveSketch + "&sessionID=" + sessionID;
                 return returnString;
@@ -242,8 +242,8 @@ namespace KuchaMobile.Internal
             if (response != null)
                 System.Diagnostics.Debug.WriteLine($"API GET request: {response.StatusCode}; Query: {command}");
 
-                //Analyze response content:
-                if (response != null && response.Content != null)
+            //Analyze response content:
+            if (response != null && response.Content != null)
                 data = System.Text.Encoding.UTF8.GetString(response.Content.ReadAsByteArrayAsync().Result);
 
             return result;
@@ -284,6 +284,5 @@ namespace KuchaMobile.Internal
             //Return:
             return response.StatusCode;
         }
-
     }
 }

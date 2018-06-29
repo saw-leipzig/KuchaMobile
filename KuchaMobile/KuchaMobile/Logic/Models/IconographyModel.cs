@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace KuchaMobile.Logic.Models
+﻿namespace KuchaMobile.Logic.Models
 {
     public class IconographyModel
     {

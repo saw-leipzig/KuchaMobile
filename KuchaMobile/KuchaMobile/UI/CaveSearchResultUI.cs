@@ -1,7 +1,5 @@
 ﻿using KuchaMobile.Logic.Models;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using Xamarin.Forms;
 
 namespace KuchaMobile.UI
@@ -18,7 +16,7 @@ namespace KuchaMobile.UI
             resultListView.ItemTemplate.SetBinding(TextCell.DetailProperty, "historicalName");
             resultListView.ItemsSource = caves;
             resultListView.ItemTapped += ResultListView_ItemTapped;
-            
+
             Content = resultListView;
         }
 
@@ -28,6 +26,5 @@ namespace KuchaMobile.UI
             var caveModel = e.Item as CaveModel;
             Navigation.PushAsync(new CaveUI(caveModel));
         }
-      
     }
 }
