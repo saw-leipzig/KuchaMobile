@@ -27,7 +27,10 @@ namespace KuchaMobile.Logic.Models
         {
             get
             {
-                return String.Format(Kucha.GetCaveByID(caveID).historicalName);
+                CaveModel c = Kucha.GetCaveByID(caveID);
+                if (c != null)
+                    return String.Format(Kucha.GetCaveByID(caveID).historicalName);
+                else return "Invalid Cave ID";
             }
         }
     }

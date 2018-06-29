@@ -95,7 +95,7 @@ namespace KuchaMobile.Internal
                 return null;
             string data = "";
             HttpStatusCode result;
-            string queryString = "json?paintedRepFromIconographyID=all&sessionID=" + sessionID;
+            string queryString = "json?paintedRepID=all&sessionID=" + sessionID;
             result = CallAPI(queryString, ref data);
 
             if (result == HttpStatusCode.OK && !String.IsNullOrEmpty(data))

@@ -88,34 +88,46 @@ namespace KuchaMobile.UI
 
             StackLayout caveStack = new StackLayout();
             caveStack.Spacing = 2;
-            TapGestureRecognizer caveTap = new TapGestureRecognizer();
-            caveTap.Tapped += CaveTap_Tapped;
-            caveFrame.GestureRecognizers.Add(caveTap);
-
-            Label caveInfoLabel = new Label();
-            caveInfoLabel.Text = "Cave Infos";
-            caveInfoLabel.FontSize = 20;
-            caveInfoLabel.TextColor = Color.Black;
-            caveStack.Children.Add(caveInfoLabel);
-            string caveInfoString = "Located in Cave: " + Kucha.GetCaveSiteStringByID(cave.siteID) + ": " + cave.caveID + " " + cave.optionalHistoricalName;
-            Label caveLabel = new Label();
-            caveLabel.Text = caveInfoString;
-            caveStack.Children.Add(caveLabel);
-
-            if (!String.IsNullOrEmpty(cave.optionalCaveSketch))
+            if(cave == null)
             {
-                Image caveSketch = new Image();
-                caveSketch.WidthRequest = 150;
-                caveSketch.Aspect = Aspect.AspectFit;
-                caveSketch.Source = ImageSource.FromUri(new Uri(Internal.Connection.GetCaveSketchURL(cave.optionalCaveSketch)));
-                caveStack.Children.Add(caveSketch);
+                Label caveInfoLabel = new Label();
+                caveInfoLabel.Text = "Cave could not be loaded - the backend probably sent an invalid ID or the local database needs to be updated. (ID "+ paintedRepresentation.caveID+")";
+                caveInfoLabel.FontSize = 20;
+                caveInfoLabel.TextColor = Color.Black;
+                caveStack.Children.Add(caveInfoLabel);
             }
+            else
+            {
+                TapGestureRecognizer caveTap = new TapGestureRecognizer();
+                caveTap.Tapped += CaveTap_Tapped;
+                caveFrame.GestureRecognizers.Add(caveTap);
 
-            Image caveBackground = new Image();
-            caveBackground.WidthRequest = 150;
-            caveBackground.HeightRequest = 150;
-            caveBackground.Source = ImageSource.FromUri(new Uri(Internal.Connection.GetCaveBackgroundImageURL(cave.caveTypeID)));
-            caveStack.Children.Add(caveBackground);
+                Label caveInfoLabel = new Label();
+                caveInfoLabel.Text = "Cave Infos";
+                caveInfoLabel.FontSize = 20;
+                caveInfoLabel.TextColor = Color.Black;
+                caveStack.Children.Add(caveInfoLabel);
+                string caveInfoString = "Located in Cave: " + Kucha.GetCaveSiteStringByID(cave.siteID) + ": " + cave.caveID + " " + cave.optionalHistoricalName;
+                Label caveLabel = new Label();
+                caveLabel.Text = caveInfoString;
+                caveStack.Children.Add(caveLabel);
+
+                if (!String.IsNullOrEmpty(cave.optionalCaveSketch))
+                {
+                    Image caveSketch = new Image();
+                    caveSketch.WidthRequest = 150;
+                    caveSketch.Aspect = Aspect.AspectFit;
+                    caveSketch.Source = ImageSource.FromUri(new Uri(Internal.Connection.GetCaveSketchURL(cave.optionalCaveSketch)));
+                    caveStack.Children.Add(caveSketch);
+                }
+
+                Image caveBackground = new Image();
+                caveBackground.WidthRequest = 150;
+                caveBackground.HeightRequest = 150;
+                caveBackground.Source = ImageSource.FromUri(new Uri(Internal.Connection.GetCaveBackgroundImageURL(cave.caveTypeID)));
+                caveStack.Children.Add(caveBackground);
+            }
+            
             caveFrame.Content = caveStack;
             contentStack.Children.Add(caveFrame);
 

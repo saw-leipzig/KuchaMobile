@@ -78,7 +78,16 @@ namespace KuchaMobile.Logic
         }
         public static CaveModel GetCaveByID(int id)
         {
-            return kuchaContainer.caves.First(c => c.caveID == id);
+            CaveModel resultCave = null;
+            foreach(CaveModel c in kuchaContainer.caves)
+            {
+                if(c.caveID == id)
+                {
+                    resultCave = c;
+                    break;
+                }
+            }
+            return resultCave;
         }
         public static DateTime GetDataTimeStamp()
         {
