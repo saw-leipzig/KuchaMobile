@@ -23,6 +23,12 @@ namespace KuchaMobile.UI
         {
 
             StackLayout contentStack = new StackLayout();
+            contentStack.Padding = 20;
+            Image huLogo = new Image();
+            huLogo.Source = "hu_logo.png";
+            huLogo.HeightRequest = 100;
+            huLogo.Aspect = Aspect.AspectFit;
+            contentStack.Children.Add(huLogo);
             nameEntry = new Entry();
             nameEntry.Placeholder = "Nutzername";
             if (Connection.HasLegitSessionID())
@@ -71,7 +77,9 @@ namespace KuchaMobile.UI
                 continueButton.IsEnabled = false;
             contentStack.Children.Add(continueButton);
 
-            Content = contentStack;
+            ScrollView s = new ScrollView();
+            s.Content = contentStack;
+            Content = s;
         }
 
         private void ContinueButton_Clicked(object sender, EventArgs e)
