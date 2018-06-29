@@ -16,6 +16,7 @@ namespace KuchaMobile.UI
 
         ListView availableIconsListView;
         ListView selectedListView;
+        Switch exclusiveSwitch;
 
         public PaintedRepresentationSearchUI()
         {
@@ -24,6 +25,7 @@ namespace KuchaMobile.UI
             availableIconographies = new List<IconographyModel>(allIconographies);
             selectedIconographies = new List<IconographyModel>();
             StackLayout contentStack = new StackLayout();
+            contentStack.Padding = new Thickness(20, 10, 20, 10);
             Grid listGrid = new Grid();
             listGrid.HorizontalOptions = LayoutOptions.FillAndExpand;
             listGrid.VerticalOptions = LayoutOptions.FillAndExpand;
@@ -41,7 +43,7 @@ namespace KuchaMobile.UI
             Entry searchEntry = new Entry();
             searchEntry.Placeholder = "Hier suchen";
             searchEntry.TextChanged += SearchEntry_TextChanged;
-            listGrid.Children.Add(searchEntry, 0, 0);
+            contentStack.Children.Add(searchEntry);
 
             availableIconsListView = new ListView();
             availableIconsListView.ItemTemplate = new DataTemplate(typeof(TextCell));
@@ -50,11 +52,15 @@ namespace KuchaMobile.UI
             availableIconsListView.ItemTapped += AvailableIconsListView_ItemTapped;
             listGrid.Children.Add(availableIconsListView, 0, 1);
 
-
             Label infoLabel = new Label();
             infoLabel.HorizontalOptions = LayoutOptions.Center;
             infoLabel.Text = "Ausgewählte Iconographys";
             listGrid.Children.Add(infoLabel, 1, 0);
+
+            Label infoLabel2 = new Label();
+            infoLabel2.HorizontalOptions = LayoutOptions.Center;
+            infoLabel2.Text = "Verfügbare Iconographys";
+            listGrid.Children.Add(infoLabel2, 0, 0);
 
             selectedListView = new ListView();
             selectedListView.ItemTemplate = new DataTemplate(typeof(TextCell));
@@ -65,17 +71,64 @@ namespace KuchaMobile.UI
 
             contentStack.Children.Add(listGrid);
 
-            Button anySearchButton = new Button();
-            anySearchButton.Text = "Suchen";
-            anySearchButton.Clicked += AnySearchButton_Clicked;
-            contentStack.Children.Add(anySearchButton);
+            StackLayout exclusiveSearchStack = new StackLayout();
+            exclusiveSearchStack.HorizontalOptions = LayoutOptions.Center;
+            exclusiveSearchStack.Orientation = StackOrientation.Horizontal;
+            Label exclusiveLabel = new Label();
+            exclusiveLabel.Text = "Exklusive Suche";
+            exclusiveSearchStack.Children.Add(exclusiveLabel);
 
-            Button exclusiveSearchButton = new Button();
-            exclusiveSearchButton.Text = "Exklusiv Suche";
-            exclusiveSearchButton.Clicked += ExclusiveSearchButton_Clicked;
-            contentStack.Children.Add(exclusiveSearchButton);
+            exclusiveSwitch = new Switch();
+            exclusiveSwitch.IsToggled = false;
+            exclusiveSearchStack.Children.Add(exclusiveSwitch);
+            contentStack.Children.Add(exclusiveSearchStack);
+
+            Button searchButton = new Button();
+            searchButton.WidthRequest = 150;
+            searchButton.BackgroundColor = Color.FromHex("2196f3");
+            searchButton.TextColor = Color.White;
+            searchButton.HorizontalOptions = LayoutOptions.Center;
+            searchButton.Text = "Suchen";
+            searchButton.Clicked += SearchButton_Clicked;
+            contentStack.Children.Add(searchButton);
 
             Content = contentStack;
+        }
+
+        private void SearchButton_Clicked(object sender, EventArgs e)
+        {
+            if(exclusiveSwitch.IsToggled)
+            {
+                if (selectedIconographies.Any())
+                {
+                    List<PaintedRepresentationModel> paintedRepresentationModels = Logic.Kucha.GetPaintedRepresentationsByIconographies(selectedIconographies, true);
+                    Navigation.PushAsync(new PaintedRepresentationResultUI(paintedRepresentationModels), true);
+                }
+                else
+                {
+                    List<PaintedRepresentationModel> paintedRepresentationModels = Logic.Kucha.GetAllPaintedRepresentations();
+                    Navigation.PushAsync(new PaintedRepresentationResultUI(paintedRepresentationModels), true);
+                }
+            }
+            else
+            {
+                if (selectedIconographies.Any())
+                {
+                    List<PaintedRepresentationModel> paintedRepresentationModels = Logic.Kucha.GetPaintedRepresentationsByIconographies(selectedIconographies, false);
+                    if (paintedRepresentationModels == null)
+                        UserDialogs.Instance.Toast("Fehler");
+                    else
+                        Navigation.PushAsync(new PaintedRepresentationResultUI(paintedRepresentationModels), true);
+                }
+                else
+                {
+                    List<PaintedRepresentationModel> paintedRepresentationModels = Logic.Kucha.GetAllPaintedRepresentations();
+                    if (paintedRepresentationModels == null)
+                        UserDialogs.Instance.Toast("Fehler");
+                    else
+                        Navigation.PushAsync(new PaintedRepresentationResultUI(paintedRepresentationModels), true);
+                }
+            }
         }
 
         private void SelectedListView_ItemTapped(object sender, ItemTappedEventArgs e)
@@ -104,40 +157,6 @@ namespace KuchaMobile.UI
             selectedListView.ItemsSource = newSelected;
             selectedIconographies = newSelected;
             availableIconographies = newAvailable;
-        }
-
-        private void ExclusiveSearchButton_Clicked(object sender, EventArgs e)
-        {
-            if (selectedIconographies.Any())
-            {
-                List<PaintedRepresentationModel> paintedRepresentationModels = Logic.Kucha.GetPaintedRepresentationsByIconographies(selectedIconographies, true);
-                Navigation.PushAsync(new PaintedRepresentationResultUI(paintedRepresentationModels), true);
-            }
-            else
-            {
-                List<PaintedRepresentationModel> paintedRepresentationModels = Logic.Kucha.GetAllPaintedRepresentations();
-                Navigation.PushAsync(new PaintedRepresentationResultUI(paintedRepresentationModels), true);
-            }
-        }
-
-        private void AnySearchButton_Clicked(object sender, EventArgs e)
-        {
-            if(selectedIconographies.Any())
-            {
-                List<PaintedRepresentationModel> paintedRepresentationModels = Logic.Kucha.GetPaintedRepresentationsByIconographies(selectedIconographies, false);
-                if (paintedRepresentationModels == null)
-                    UserDialogs.Instance.Toast("Fehler");
-                else 
-                    Navigation.PushAsync(new PaintedRepresentationResultUI(paintedRepresentationModels), true);
-            }
-            else
-            {
-                List<PaintedRepresentationModel> paintedRepresentationModels = Logic.Kucha.GetAllPaintedRepresentations();
-                if (paintedRepresentationModels == null)
-                    UserDialogs.Instance.Toast("Fehler");
-                else
-                    Navigation.PushAsync(new PaintedRepresentationResultUI(paintedRepresentationModels), true);
-            }
         }
 
         private void SearchEntry_TextChanged(object sender, TextChangedEventArgs e)
