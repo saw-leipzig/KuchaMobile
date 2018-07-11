@@ -24,7 +24,7 @@ namespace KuchaMobile.UI
             availableIconographies = new List<IconographyModel>(allIconographies);
             selectedIconographies = new List<IconographyModel>();
             StackLayout contentStack = new StackLayout();
-            contentStack.Padding = new Thickness(20, 10, 20, 10);
+            contentStack.Padding = new Thickness(16, 10, 16, 10);
             Grid listGrid = new Grid();
             listGrid.HorizontalOptions = LayoutOptions.FillAndExpand;
             listGrid.VerticalOptions = LayoutOptions.FillAndExpand;

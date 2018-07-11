@@ -20,7 +20,7 @@ namespace KuchaMobile.UI
         public LoginPage()
         {
             StackLayout contentStack = new StackLayout();
-            contentStack.Padding = 20;
+            contentStack.Padding = 16;
             Image huLogo = new Image();
             huLogo.Source = "hu_logo.png";
             huLogo.HeightRequest = 100;
@@ -39,19 +39,31 @@ namespace KuchaMobile.UI
                 passwordEntry.IsEnabled = false;
             contentStack.Children.Add(passwordEntry);
 
-            loginButton = new Button();
-            loginButton.Clicked += LoginButton_Clicked;
-            if (Connection.HasLegitSessionID())
-                loginButton.IsEnabled = false;
-            loginButton.Text = "Login";
-            contentStack.Children.Add(loginButton);
-
             loginstatusLabel = new Label();
+            loginstatusLabel.Margin = new Thickness(0, 10, 0, 0);
+            loginstatusLabel.TranslationY += 10;
             if (Connection.HasLegitSessionID())
                 loginstatusLabel.Text = "Eingeloggt mit gültiger Sitzung";
             else
                 loginstatusLabel.Text = "Bitte logge dich ein";
             contentStack.Children.Add(loginstatusLabel);
+
+            loginButton = new Button();
+            loginButton.Clicked += LoginButton_Clicked;
+
+            if (Connection.HasLegitSessionID())
+                loginButton.IsEnabled = false;
+            loginButton.Text = "Login";
+            contentStack.Children.Add(loginButton);
+
+            downloadStatusLabel = new Label();
+            downloadStatusLabel.Margin = new Thickness(0, 10, 0, 0);
+            downloadStatusLabel.TranslationY += 10;
+            if (!Kucha.CaveDataIsValid())
+                downloadStatusLabel.Text = "Bitte initiale Daten downloaden";
+            else
+                downloadStatusLabel.Text = "Daten vom " + Kucha.GetDataTimeStamp().ToShortDateString();
+            contentStack.Children.Add(downloadStatusLabel);
 
             downloadDataButton = new Button();
             downloadDataButton.Clicked += DownloadDataButton_Clicked;
@@ -60,14 +72,8 @@ namespace KuchaMobile.UI
                 downloadDataButton.IsEnabled = false;
             contentStack.Children.Add(downloadDataButton);
 
-            downloadStatusLabel = new Label();
-            if (!Kucha.CaveDataIsValid())
-                downloadStatusLabel.Text = "Bitte initiale Daten downloaden";
-            else
-                downloadStatusLabel.Text = "Daten vom " + Kucha.GetDataTimeStamp().ToShortDateString();
-            contentStack.Children.Add(downloadStatusLabel);
-
             continueButton = new Button();
+            continueButton.Margin = new Thickness(0, 10, 0, 0);
             continueButton.Text = "Fortfahren";
             continueButton.Clicked += ContinueButton_Clicked;
             if (!Connection.HasLegitSessionID() || !Kucha.CaveDataIsValid())

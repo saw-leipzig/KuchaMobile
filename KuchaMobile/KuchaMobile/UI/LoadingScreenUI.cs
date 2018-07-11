@@ -21,7 +21,7 @@ namespace KuchaMobile.UI
             ActivityIndicator activityIndicator = new ActivityIndicator();
             activityIndicator.IsRunning = true;
             StackLayout contentStack = new StackLayout();
-            contentStack.Padding = 20;
+            contentStack.Padding = 16;
             contentStack.BackgroundColor = Color.White;
             contentStack.Children.Add(huLogo);
             contentStack.Children.Add(textLabel);

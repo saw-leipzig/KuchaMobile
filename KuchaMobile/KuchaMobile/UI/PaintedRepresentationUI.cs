@@ -23,7 +23,7 @@ namespace KuchaMobile.UI
             Title = "Painted Representation " + paintedRepresentation.depictionID;
 
             StackLayout contentStack = new StackLayout();
-            contentStack.Padding = 20;
+            contentStack.Padding = 16;
             Frame generalFrame = new Frame();
             generalFrame.HasShadow = true;
             generalFrame.BackgroundColor = Color.White;

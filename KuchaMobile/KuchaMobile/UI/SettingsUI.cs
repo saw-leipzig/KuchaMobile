@@ -16,7 +16,7 @@ namespace KuchaMobile.UI
         {
             Title = "Einstellungen";
             StackLayout contentStack = new StackLayout();
-            contentStack.Padding = 20;
+            contentStack.Padding = 16;
             downloadStatusLabel = new Label();
             downloadStatusLabel.Text = "Daten vom " + Kucha.GetDataTimeStamp().ToShortDateString();
             contentStack.Children.Add(downloadStatusLabel);

@@ -17,7 +17,7 @@ namespace KuchaMobile.UI
             this.cave = cave;
             Title = "Cave " + cave.caveID;
             StackLayout contentStack = new StackLayout();
-            contentStack.Padding = 20;
+            contentStack.Padding = 16;
             Frame generalCaveFrame = new Frame();
             generalCaveFrame.HasShadow = true;
             generalCaveFrame.BackgroundColor = Color.White;
