@@ -27,13 +27,13 @@ namespace KuchaMobile.UI
             huLogo.Aspect = Aspect.AspectFit;
             contentStack.Children.Add(huLogo);
             nameEntry = new Entry();
-            nameEntry.Placeholder = "Nutzername";
+            nameEntry.Placeholder = "Username";
             if (Connection.HasLegitSessionID())
                 nameEntry.IsEnabled = false;
             contentStack.Children.Add(nameEntry);
 
             passwordEntry = new Entry();
-            passwordEntry.Placeholder = "Passwort";
+            passwordEntry.Placeholder = "Password";
             passwordEntry.IsPassword = true;
             if (Connection.HasLegitSessionID())
                 passwordEntry.IsEnabled = false;
@@ -43,9 +43,9 @@ namespace KuchaMobile.UI
             loginstatusLabel.Margin = new Thickness(0, 10, 0, 0);
             loginstatusLabel.TranslationY += 10;
             if (Connection.HasLegitSessionID())
-                loginstatusLabel.Text = "Eingeloggt mit gültiger Sitzung";
+                loginstatusLabel.Text = "Logged in with valid session";
             else
-                loginstatusLabel.Text = "Bitte logge dich ein";
+                loginstatusLabel.Text = "Please log in";
             contentStack.Children.Add(loginstatusLabel);
 
             loginButton = new Button();
@@ -60,21 +60,21 @@ namespace KuchaMobile.UI
             downloadStatusLabel.Margin = new Thickness(0, 10, 0, 0);
             downloadStatusLabel.TranslationY += 10;
             if (!Kucha.CaveDataIsValid())
-                downloadStatusLabel.Text = "Bitte initiale Daten downloaden";
+                downloadStatusLabel.Text = "Please download initial data";
             else
-                downloadStatusLabel.Text = "Daten vom " + Kucha.GetDataTimeStamp().ToShortDateString();
+                downloadStatusLabel.Text = "Data from " + Kucha.GetDataTimeStamp().ToShortDateString();
             contentStack.Children.Add(downloadStatusLabel);
 
             downloadDataButton = new Button();
             downloadDataButton.Clicked += DownloadDataButton_Clicked;
-            downloadDataButton.Text = "Daten runterladen";
+            downloadDataButton.Text = "Download Data";
             if (Connection.HasLegitSessionID() == false)
                 downloadDataButton.IsEnabled = false;
             contentStack.Children.Add(downloadDataButton);
 
             continueButton = new Button();
             continueButton.Margin = new Thickness(0, 10, 0, 0);
-            continueButton.Text = "Fortfahren";
+            continueButton.Text = "Continue";
             continueButton.Clicked += ContinueButton_Clicked;
             if (!Connection.HasLegitSessionID() || !Kucha.CaveDataIsValid())
                 continueButton.IsEnabled = false;
@@ -92,7 +92,7 @@ namespace KuchaMobile.UI
 
         private async void DownloadDataButton_Clicked(object sender, EventArgs e)
         {
-            UserDialogs.Instance.ShowLoading("Daten werden heruntergeladen...");
+            UserDialogs.Instance.ShowLoading("Downloading Data...");
             await Task.Run(async () =>
             {
                 bool success = await Kucha.RefreshCaveData();
@@ -101,9 +101,9 @@ namespace KuchaMobile.UI
                     UserDialogs.Instance.HideLoading();
                     if (success)
                     {
-                        UserDialogs.Instance.Toast("Daten erfolgreich heruntergeladen!");
+                        UserDialogs.Instance.Toast("Data successfully downloaded!");
                         downloadDataButton.IsEnabled = false;
-                        downloadStatusLabel.Text = "Daten vom " + Kucha.GetDataTimeStamp().ToShortDateString();
+                        downloadStatusLabel.Text = "Data from " + Kucha.GetDataTimeStamp().ToShortDateString();
                         if (!loginButton.IsEnabled == true)
                         {
                             continueButton.IsEnabled = true;
@@ -111,7 +111,7 @@ namespace KuchaMobile.UI
                     }
                     else
                     {
-                        UserDialogs.Instance.Toast("Daten konnten nicht heruntergeladen werden. Bitte Netzwerkverbindung prüfen.");
+                        UserDialogs.Instance.Toast("Data download failed. Please check your connectivity.");
                     }
                 });
             });
@@ -128,7 +128,7 @@ namespace KuchaMobile.UI
                     UserDialogs.Instance.HideLoading();
                     if (loginSuccess)
                     {
-                        UserDialogs.Instance.Toast("Login erfolgreich!");
+                        UserDialogs.Instance.Toast("Login successful!");
                         nameEntry.IsEnabled = false;
                         passwordEntry.IsEnabled = false;
                         loginButton.IsEnabled = false;
@@ -141,7 +141,7 @@ namespace KuchaMobile.UI
                     }
                     else
                     {
-                        UserDialogs.Instance.Toast("Login fehlgeschlagen!");
+                        UserDialogs.Instance.Toast("Login failed!");
                     }
                 });
             });

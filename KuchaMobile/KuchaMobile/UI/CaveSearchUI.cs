@@ -73,31 +73,31 @@ namespace KuchaMobile.UI
 
             districtsFilterLabel = new Label();
             districtsFilterLabel.FontSize = 12;
-            districtsFilterLabel.Text = "Selektierte Districts: Keine";
+            districtsFilterLabel.Text = "Selected Districts: None";
             caveLocationStack.Children.Add(districtsFilterLabel);
 
             Button districtsFilterButton = new Button();
-            districtsFilterButton.Text = "Districts auswählen";
+            districtsFilterButton.Text = "Select Districts";
             districtsFilterButton.Clicked += DistrictsFilterButton_Clicked;
             caveLocationStack.Children.Add(districtsFilterButton);
 
             regionsFilterLabel = new Label();
             regionsFilterLabel.FontSize = 12;
-            regionsFilterLabel.Text = "Selektierte Regions: Keine";
+            regionsFilterLabel.Text = "Selected Regions: None";
             caveLocationStack.Children.Add(regionsFilterLabel);
 
             Button regionsFilterButton = new Button();
-            regionsFilterButton.Text = "Regions auswählen";
+            regionsFilterButton.Text = "Select Regions";
             regionsFilterButton.Clicked += RegionsFilterButton_Clicked;
             caveLocationStack.Children.Add(regionsFilterButton);
 
             sitesFilterLabel = new Label();
             sitesFilterLabel.FontSize = 12;
-            sitesFilterLabel.Text = "Selektierte Sites: Keine";
+            sitesFilterLabel.Text = "Selected Sites: None";
             caveLocationStack.Children.Add(sitesFilterLabel);
 
             Button sitesFilterButton = new Button();
-            sitesFilterButton.Text = "Sites auswählen";
+            sitesFilterButton.Text = "Select Sites";
             sitesFilterButton.Clicked += SitesFilterButton_Clicked;
             caveLocationStack.Children.Add(sitesFilterButton);
 
@@ -118,7 +118,7 @@ namespace KuchaMobile.UI
             Button searchButton = new Button();
             searchButton.BackgroundColor = Color.FromHex("2196f3");
             searchButton.TextColor = Color.White;
-            searchButton.Text = "Suchen";
+            searchButton.Text = "Search";
             searchButton.Clicked += SearchButton_Clicked;
             buttonStack.Children.Add(searchButton);
             buttonFrame.Content = buttonStack;
@@ -145,8 +145,8 @@ namespace KuchaMobile.UI
             caveFilter.pickedDistricts = pickedDistricts;
             caveFilter.pickedRegions = pickedRegions;
             caveFilter.pickedSites = pickedSites;
-            caveFilter.FoundResultsString = "Ergebnisse: " + caves.Count;
-            caveFilter.SearchTimeString = "Am " + DateTime.UtcNow.ToString();
+            caveFilter.FoundResultsString = "Results: " + caves.Count;
+            caveFilter.SearchTimeString = "At " + DateTime.UtcNow.ToString();
             searchHistory.Add(caveFilter);
             var newList = searchHistory.OrderByDescending(x => x.SearchTimeString).ToList();
             Settings.CaveSearchHistorySetting = newList;
@@ -175,11 +175,11 @@ namespace KuchaMobile.UI
 
             if (pickedDistricts.Count == 0)
             {
-                districtsFilterLabel.Text = "Selektierte Districts: Keine";
+                districtsFilterLabel.Text = "Selected Districts: None";
             }
             else
             {
-                string labelString = "Selektierte Districts: ";
+                string labelString = "Selected Districts: ";
                 foreach (CaveDistrictModel district in pickedDistricts)
                 {
                     labelString += district.name + ", ";
@@ -189,11 +189,11 @@ namespace KuchaMobile.UI
 
             if (pickedRegions.Count == 0)
             {
-                regionsFilterLabel.Text = "Selektierte Regions: Keine";
+                regionsFilterLabel.Text = "Selected Regions: None";
             }
             else
             {
-                string labelString = "Selektierte Regions: ";
+                string labelString = "Selected Regions: ";
                 foreach (CaveRegionModel region in pickedRegions)
                 {
                     labelString += region.englishName + ", ";
@@ -203,11 +203,11 @@ namespace KuchaMobile.UI
 
             if (pickedSites.Count == 0)
             {
-                sitesFilterLabel.Text = "Selektierte Sites: Keine";
+                sitesFilterLabel.Text = "Selected Sites: None";
             }
             else
             {
-                string labelString = "Selektierte Sites: ";
+                string labelString = "Selected Sites: ";
                 foreach (CaveSiteModel site in pickedSites)
                 {
                     labelString += site.name + ", ";

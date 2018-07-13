@@ -96,7 +96,7 @@ namespace KuchaMobile.UI
             Label notesLabel = new Label();
             notesLabel.TextColor = Color.Black;
             notesLabel.FontSize = 20;
-            notesLabel.Text = "Private Notizen";
+            notesLabel.Text = "Private Notes";
             notesStack.Children.Add(notesLabel);
 
             notesEditor = new Editor();

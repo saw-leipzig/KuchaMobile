@@ -40,7 +40,7 @@ namespace KuchaMobile.UI
             };
 
             Entry searchEntry = new Entry();
-            searchEntry.Placeholder = "Hier suchen";
+            searchEntry.Placeholder = "Search here";
             searchEntry.TextChanged += SearchEntry_TextChanged;
             contentStack.Children.Add(searchEntry);
 
@@ -53,12 +53,12 @@ namespace KuchaMobile.UI
 
             Label infoLabel = new Label();
             infoLabel.HorizontalOptions = LayoutOptions.Center;
-            infoLabel.Text = "Ausgewählte Iconographys";
+            infoLabel.Text = "Selected Iconographys";
             listGrid.Children.Add(infoLabel, 1, 0);
 
             Label infoLabel2 = new Label();
             infoLabel2.HorizontalOptions = LayoutOptions.Center;
-            infoLabel2.Text = "Verfügbare Iconographys";
+            infoLabel2.Text = "Available Iconographys";
             listGrid.Children.Add(infoLabel2, 0, 0);
 
             selectedListView = new ListView();
@@ -74,7 +74,7 @@ namespace KuchaMobile.UI
             exclusiveSearchStack.HorizontalOptions = LayoutOptions.Center;
             exclusiveSearchStack.Orientation = StackOrientation.Horizontal;
             Label exclusiveLabel = new Label();
-            exclusiveLabel.Text = "Exklusive Suche";
+            exclusiveLabel.Text = "Exclusive Search";
             exclusiveSearchStack.Children.Add(exclusiveLabel);
 
             exclusiveSwitch = new Switch();
@@ -87,7 +87,7 @@ namespace KuchaMobile.UI
             searchButton.BackgroundColor = Color.FromHex("2196f3");
             searchButton.TextColor = Color.White;
             searchButton.HorizontalOptions = LayoutOptions.Center;
-            searchButton.Text = "Suchen";
+            searchButton.Text = "Search";
             searchButton.Clicked += SearchButton_Clicked;
             contentStack.Children.Add(searchButton);
 
@@ -115,7 +115,7 @@ namespace KuchaMobile.UI
                 {
                     List<PaintedRepresentationModel> paintedRepresentationModels = Logic.Kucha.GetPaintedRepresentationsByIconographies(selectedIconographies, false);
                     if (paintedRepresentationModels == null)
-                        UserDialogs.Instance.Toast("Fehler");
+                        UserDialogs.Instance.Toast("Error");
                     else
                         Navigation.PushAsync(new PaintedRepresentationResultUI(paintedRepresentationModels), true);
                 }
@@ -123,7 +123,7 @@ namespace KuchaMobile.UI
                 {
                     List<PaintedRepresentationModel> paintedRepresentationModels = Logic.Kucha.GetAllPaintedRepresentations();
                     if (paintedRepresentationModels == null)
-                        UserDialogs.Instance.Toast("Fehler");
+                        UserDialogs.Instance.Toast("Error");
                     else
                         Navigation.PushAsync(new PaintedRepresentationResultUI(paintedRepresentationModels), true);
                 }

@@ -14,25 +14,25 @@ namespace KuchaMobile.UI
 
         public SettingsUI()
         {
-            Title = "Einstellungen";
+            Title = "Settings";
             StackLayout contentStack = new StackLayout();
             contentStack.Padding = 16;
             downloadStatusLabel = new Label();
-            downloadStatusLabel.Text = "Daten vom " + Kucha.GetDataTimeStamp().ToShortDateString();
+            downloadStatusLabel.Text = "Data from " + Kucha.GetDataTimeStamp().ToShortDateString();
             contentStack.Children.Add(downloadStatusLabel);
 
             Button updateLocalDatabaseButton = new Button();
-            updateLocalDatabaseButton.Text = "Datenbank updaten";
+            updateLocalDatabaseButton.Text = "Update Database";
             updateLocalDatabaseButton.Clicked += UpdateLocalDatabaseButton_Clicked;
             contentStack.Children.Add(updateLocalDatabaseButton);
 
             Button clearAllNotesButton = new Button();
-            clearAllNotesButton.Text = "Eigene Notizen löschen";
+            clearAllNotesButton.Text = "Clear private notes";
             clearAllNotesButton.Clicked += ClearAllNotesButton_Clicked;
             contentStack.Children.Add(clearAllNotesButton);
 
             Button deleteLocalFilesButton = new Button();
-            deleteLocalFilesButton.Text = "Delete All Local Files";
+            deleteLocalFilesButton.Text = "Delete all local files";
             deleteLocalFilesButton.Clicked += DeleteLocalFilesButton_Clicked;
             contentStack.Children.Add(deleteLocalFilesButton);
 
@@ -47,12 +47,12 @@ namespace KuchaMobile.UI
         private void ClearAllNotesButton_Clicked(object sender, EventArgs e)
         {
             Settings.SavedNotesSetting = new List<NotesSaver>();
-            UserDialogs.Instance.Toast("Eigene Notizen zurückgesetzt!");
+            UserDialogs.Instance.Toast("Successfully cleard private notes!");
         }
 
         private async void UpdateLocalDatabaseButton_Clicked(object sender, EventArgs e)
         {
-            UserDialogs.Instance.ShowLoading("Daten werden heruntergeladen...");
+            UserDialogs.Instance.ShowLoading("Downloading Data...");
             await Task.Run(async () =>
             {
                 bool success = await Kucha.RefreshCaveData();
@@ -61,12 +61,12 @@ namespace KuchaMobile.UI
                     UserDialogs.Instance.HideLoading();
                     if (success)
                     {
-                        UserDialogs.Instance.Toast("Daten erfolgreich heruntergeladen!");
-                        downloadStatusLabel.Text = "Daten vom " + Kucha.GetDataTimeStamp().ToShortDateString();
+                        UserDialogs.Instance.Toast("Download successful!");
+                        downloadStatusLabel.Text = "Data from " + Kucha.GetDataTimeStamp().ToShortDateString();
                     }
                     else
                     {
-                        UserDialogs.Instance.Toast("Daten konnten nicht heruntergeladen werden. Bitte Netzwerkverbindung prüfen.");
+                        UserDialogs.Instance.Toast("Download failed. Please check connectivity.");
                     }
                 });
             });
@@ -75,7 +75,7 @@ namespace KuchaMobile.UI
         private void DeleteLocalFilesButton_Clicked(object sender, EventArgs e)
         {
             Kucha.RemoveAllData();
-            UserDialogs.Instance.Toast("Alle lokalen Daten gelöscht!");
+            UserDialogs.Instance.Toast("All local files deleted!");
         }
     }
 }

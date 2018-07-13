@@ -22,8 +22,7 @@ namespace KuchaMobile.UI
             Title = "Image " + image.shortName;
             StackLayout imageLayout = new StackLayout();
             Image displayImage = new Image();
-            //displayImage.Source = ImageSource.FromUri(new Uri(Connection.GetPaintedRepresentationImageURL(image.imageID, Helper.ScreenHeight)));
-            displayImage.Source = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Homo_floresiensis_cave.jpg/800px-Homo_floresiensis_cave.jpg";
+            displayImage.Source = ImageSource.FromUri(new Uri(Connection.GetPaintedRepresentationImageURL(image.imageID, Helper.ScreenHeight)));
             displayImage.Aspect = Aspect.AspectFill;
             imageLayout.Children.Add(displayImage);
             imageLayout.Padding = new Thickness(0, 10, 0, 20);
@@ -37,7 +36,7 @@ namespace KuchaMobile.UI
             editorFrame.BackgroundColor = Color.White;
             StackLayout editorStack = new StackLayout();
             Label notesLabel = new Label();
-            notesLabel.Text = "Private Notizen";
+            notesLabel.Text = "Private Notes";
             notesLabel.TextColor = Color.Black;
             notesLabel.FontSize = 20;
             editorStack.Children.Add(notesLabel);

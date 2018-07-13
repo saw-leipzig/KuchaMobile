@@ -11,8 +11,8 @@ namespace KuchaMobile.UI
         public CaveSearchHistoryUI(CaveSearchUI parent)
         {
             this.parent = parent;
-            Title = "Such-Historie";
-            ToolbarItems.Add(new ToolbarItem("Verlauf leeren", null, Clear_List));
+            Title = "Search History";
+            ToolbarItems.Add(new ToolbarItem("Clear History", null, Clear_List));
 
             StackLayout contentStack = new StackLayout();
             contentStack.Padding = 0;
@@ -47,7 +47,7 @@ namespace KuchaMobile.UI
 
         private async void Clear_List()
         {
-            bool response = await DisplayAlert("Verlauf leeren?", "Möchtest du den Suchverlauf wirklich leeren?", "Ja", "Nein");
+            bool response = await DisplayAlert("Clear History?", "Do you really want to clear your search history?", "Yes", "No");
             if (response)
             {
                 Settings.CaveSearchHistorySetting = new List<CaveFilter>();

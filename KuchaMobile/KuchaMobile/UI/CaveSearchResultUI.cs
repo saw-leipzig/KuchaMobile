@@ -8,7 +8,7 @@ namespace KuchaMobile.UI
     {
         public CaveSearchResultUI(List<CaveModel> caves)
         {
-            Title = "Cavesearch: " + caves.Count + " Ergebnis(se)";
+            Title = "Cavesearch: " + caves.Count + " Result(s)";
 
             ListView resultListView = new ListView();
             resultListView.ItemTemplate = new DataTemplate(typeof(TextCell));

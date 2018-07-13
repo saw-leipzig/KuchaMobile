@@ -30,7 +30,7 @@ namespace KuchaMobile.UI
             StackLayout generalStack = new StackLayout();
 
             Label generalInfoLabel = new Label();
-            generalInfoLabel.Text = "Generelle Infos";
+            generalInfoLabel.Text = "General Information";
             generalInfoLabel.FontSize = 20;
             generalInfoLabel.TextColor = Color.Black;
             generalStack.Children.Add(generalInfoLabel);
@@ -103,7 +103,7 @@ namespace KuchaMobile.UI
                 caveFrame.GestureRecognizers.Add(caveTap);
 
                 Label caveInfoLabel = new Label();
-                caveInfoLabel.Text = "Cave Infos";
+                caveInfoLabel.Text = "Cave Information";
                 caveInfoLabel.FontSize = 20;
                 caveInfoLabel.TextColor = Color.Black;
                 caveStack.Children.Add(caveInfoLabel);
@@ -153,7 +153,7 @@ namespace KuchaMobile.UI
             Label notesLabel = new Label();
             notesLabel.TextColor = Color.Black;
             notesLabel.FontSize = 20;
-            notesLabel.Text = "Private Notizen";
+            notesLabel.Text = "Private Notes";
             notesStack.Children.Add(notesLabel);
 
             notesEditor = new Editor();
