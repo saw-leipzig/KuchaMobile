@@ -119,14 +119,19 @@ namespace KuchaMobile.UI
 
         private void LoginButton_Clicked(object sender, EventArgs e)
         {
+            if(String.IsNullOrEmpty(nameEntry.Text) || String.IsNullOrEmpty(passwordEntry.Text))
+            {
+                UserDialogs.Instance.Toast("Please enter a username and a password");
+                return;
+            }
             UserDialogs.Instance.ShowLoading();
             Task.Run(() =>
             {
-                bool loginSuccess = Connection.Login(nameEntry.Text, passwordEntry.Text);
+                var loginSuccess = Connection.Login(nameEntry.Text, passwordEntry.Text);
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     UserDialogs.Instance.HideLoading();
-                    if (loginSuccess)
+                    if (loginSuccess == Connection.LOGIN_STATUS.SUCCESS)
                     {
                         UserDialogs.Instance.Toast("Login successful!");
                         nameEntry.IsEnabled = false;
@@ -139,9 +144,21 @@ namespace KuchaMobile.UI
                             continueButton.IsEnabled = true;
                         }
                     }
+                    else if(loginSuccess == Connection.LOGIN_STATUS.OFFLINE)
+                    {
+                        if(Kucha.CaveDataIsValid())
+                        {
+                            UserDialogs.Instance.Toast("No Connection! Functionality is restricted!");
+                            continueButton.IsEnabled = true;
+                        }
+                        else
+                        {
+                            UserDialogs.Instance.Toast("No Connection! Login failed!");
+                        }
+                    }
                     else
                     {
-                        UserDialogs.Instance.Toast("Login failed!");
+                        UserDialogs.Instance.Toast("Login failed! Wrong username/password!");
                     }
                 });
             });

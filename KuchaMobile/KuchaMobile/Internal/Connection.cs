@@ -15,8 +15,16 @@ namespace KuchaMobile.Internal
         private static string backendURL = "https://kuchatest.saw-leipzig.de/";
         private static HttpClient client = new HttpClient();
         private static string sessionID = String.Empty;
+        private static bool isInOfflineMode;
 
-        public static bool Login(string username, string password)
+        public enum LOGIN_STATUS
+        {
+            SUCCESS,
+            FAILURE,
+            OFFLINE
+        }
+
+        public static LOGIN_STATUS Login(string username, string password)
         {
             string hashedPW = Helper.GetMD5Hash(password);
 
@@ -26,9 +34,20 @@ namespace KuchaMobile.Internal
             {
                 sessionID = data;
                 Settings.LocalTokenSetting = data;
-                return true;
+                isInOfflineMode = false;
+                return LOGIN_STATUS.SUCCESS;
             }
-            else return false;
+            else if(result == HttpStatusCode.RequestTimeout || result == HttpStatusCode.Gone)
+            {
+                isInOfflineMode = true;
+                return LOGIN_STATUS.OFFLINE;
+            }
+            else return LOGIN_STATUS.FAILURE;
+        }
+
+        public static bool IsInOfflineMode()
+        {
+            return isInOfflineMode;
         }
 
         public static bool HasLegitSessionID()

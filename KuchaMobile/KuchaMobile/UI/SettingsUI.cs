@@ -21,6 +21,14 @@ namespace KuchaMobile.UI
             downloadStatusLabel.Text = "Data from " + Kucha.GetDataTimeStamp().ToShortDateString();
             contentStack.Children.Add(downloadStatusLabel);
 
+            if(Connection.IsInOfflineMode())
+            {
+                Button showLoginScreenButton = new Button();
+                showLoginScreenButton.Text = "Go to Login Screen";
+                showLoginScreenButton.Clicked += ShowLoginScreenButton_Clicked;
+                contentStack.Children.Add(showLoginScreenButton);
+            }
+
             Button updateLocalDatabaseButton = new Button();
             updateLocalDatabaseButton.Text = "Update Database";
             updateLocalDatabaseButton.Clicked += UpdateLocalDatabaseButton_Clicked;
@@ -42,6 +50,11 @@ namespace KuchaMobile.UI
             licenseLabel.Margin = new Thickness(0, 50, 0, 0);
             contentStack.Children.Add(licenseLabel);
             Content = contentStack;
+        }
+
+        private void ShowLoginScreenButton_Clicked(object sender, EventArgs e)
+        {
+            App.Current.MainPage = new LoginPage();
         }
 
         private void ClearAllNotesButton_Clicked(object sender, EventArgs e)
