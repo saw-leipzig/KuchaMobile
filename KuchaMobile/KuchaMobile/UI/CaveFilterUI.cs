@@ -22,6 +22,11 @@ namespace KuchaMobile.UI
 
         public CaveFilterUI(CAVE_FILTER_TYPE type, CaveSearchUI parent)
         {
+            //Todo
+            //finalStack
+            //  X
+            //      Y
+            //  Z
             this.type = type;
             this.parent = parent;
             switch (type)

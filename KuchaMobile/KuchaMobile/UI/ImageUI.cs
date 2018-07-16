@@ -44,7 +44,7 @@ namespace KuchaMobile.UI
             notesEditor = new Editor();
             notesEditor.BackgroundColor = Color.White;
             notesEditor.HeightRequest = 100;
-            var index = Settings.SavedNotesSetting.FindIndex(i => i.ID == image.imageID && i.Type == NotesSaver.NOTES_TYPE.NOTES_TYPE_IMAGE);
+            var index = Settings.SavedNotesSetting.FindIndex(i => i.ID == image.imageID && i.Type == NotesSaver.NOTES_TYPE.NOTE_TYPE_IMAGE);
             if (index != -1) notesEditor.Text = Settings.SavedNotesSetting[index].Note;
             editorStack.Children.Add(notesEditor);
             editorFrame.Content = editorStack;
@@ -57,6 +57,7 @@ namespace KuchaMobile.UI
 
         private void PinchGesture_PinchUpdated(object sender, PinchGestureUpdatedEventArgs e)
         {
+            //From: https://vicenteguzman.mx/2018/07/11/how-to-zoom-in-images-xamarin-forms/
             if (e.Status == GestureStatus.Started)
             {
                 startScale = Content.Scale;
@@ -95,13 +96,13 @@ namespace KuchaMobile.UI
 
         protected override void OnDisappearing()
         {
-            var index = Settings.SavedNotesSetting.FindIndex(i => i.ID == image.imageID && i.Type == NotesSaver.NOTES_TYPE.NOTES_TYPE_IMAGE);
+            var index = Settings.SavedNotesSetting.FindIndex(i => i.ID == image.imageID && i.Type == NotesSaver.NOTES_TYPE.NOTE_TYPE_IMAGE);
             if (index == -1)
             {
                 if (!String.IsNullOrEmpty(notesEditor.Text))
                 {
                     List<NotesSaver> savedNotes = Settings.SavedNotesSetting;
-                    savedNotes.Add(new NotesSaver(NotesSaver.NOTES_TYPE.NOTES_TYPE_IMAGE, image.imageID, notesEditor.Text));
+                    savedNotes.Add(new NotesSaver(NotesSaver.NOTES_TYPE.NOTE_TYPE_IMAGE, image.imageID, notesEditor.Text));
                     Settings.SavedNotesSetting = savedNotes;
                 }
             }

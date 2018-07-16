@@ -68,7 +68,7 @@ namespace KuchaMobile.UI
             UserDialogs.Instance.ShowLoading("Downloading Data...");
             await Task.Run(async () =>
             {
-                bool success = await Kucha.RefreshCaveData();
+                bool success = await Kucha.RefreshLocalData();
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     UserDialogs.Instance.HideLoading();

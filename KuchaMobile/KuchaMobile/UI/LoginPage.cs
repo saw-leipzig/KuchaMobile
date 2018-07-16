@@ -59,7 +59,7 @@ namespace KuchaMobile.UI
             downloadStatusLabel = new Label();
             downloadStatusLabel.Margin = new Thickness(0, 10, 0, 0);
             downloadStatusLabel.TranslationY += 10;
-            if (!Kucha.CaveDataIsValid())
+            if (!Kucha.KuchaContainerIsValid())
                 downloadStatusLabel.Text = "Please download initial data";
             else
                 downloadStatusLabel.Text = "Data from " + Kucha.GetDataTimeStamp().ToShortDateString();
@@ -76,7 +76,7 @@ namespace KuchaMobile.UI
             continueButton.Margin = new Thickness(0, 10, 0, 0);
             continueButton.Text = "Continue";
             continueButton.Clicked += ContinueButton_Clicked;
-            if (!Connection.HasLegitSessionID() || !Kucha.CaveDataIsValid())
+            if (!Connection.HasLegitSessionID() || !Kucha.KuchaContainerIsValid())
                 continueButton.IsEnabled = false;
             contentStack.Children.Add(continueButton);
 
@@ -95,7 +95,7 @@ namespace KuchaMobile.UI
             UserDialogs.Instance.ShowLoading("Downloading Data...");
             await Task.Run(async () =>
             {
-                bool success = await Kucha.RefreshCaveData();
+                bool success = await Kucha.RefreshLocalData();
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     UserDialogs.Instance.HideLoading();
@@ -139,14 +139,14 @@ namespace KuchaMobile.UI
                         loginButton.IsEnabled = false;
                         downloadDataButton.IsEnabled = true;
 
-                        if (Kucha.CaveDataIsValid())
+                        if (Kucha.KuchaContainerIsValid())
                         {
                             continueButton.IsEnabled = true;
                         }
                     }
                     else if(loginSuccess == Connection.LOGIN_STATUS.OFFLINE)
                     {
-                        if(Kucha.CaveDataIsValid())
+                        if(Kucha.KuchaContainerIsValid())
                         {
                             UserDialogs.Instance.Toast("No Connection! Functionality is restricted!");
                             continueButton.IsEnabled = true;

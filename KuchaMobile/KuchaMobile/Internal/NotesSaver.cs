@@ -6,7 +6,7 @@
         {
             NOTE_TYPE_CAVE,
             NOTE_TYPE_PAINTEDREPRESENTATION,
-            NOTES_TYPE_IMAGE
+            NOTE_TYPE_IMAGE
         }
 
         public int ID { get; set; }

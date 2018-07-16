@@ -23,7 +23,7 @@ namespace KuchaMobile
 
         public void LoadingPersistantDataFinished()
         {
-            if (!Kucha.CaveDataIsValid() || !Internal.Connection.HasLegitSessionID())
+            if (!Kucha.KuchaContainerIsValid() || !Internal.Connection.HasLegitSessionID())
                 MainPage = new LoginPage();
             else
                 MainPage = new MainPage();

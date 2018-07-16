@@ -10,6 +10,8 @@ namespace KuchaMobile.Internal
 
         public static string GetMD5Hash(string TextToHash)
         {
+            //Source: https://msdn.microsoft.com/de-de/library/system.security.cryptography.md5cryptoserviceprovider%28v=vs.110%29.aspx?f=255&MSPPError=-2147217396
+
             MD5 md5Hash = MD5.Create();
             // Convert the input string to a byte array and compute the hash.
             byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(TextToHash));
