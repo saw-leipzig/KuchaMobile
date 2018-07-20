@@ -65,7 +65,7 @@ namespace KuchaMobile.UI
 
             finalStack.Children.Add(scrollView);
             Button doneButton = new Button();
-            doneButton.Text = "Search";
+            doneButton.Text = "Select";
             doneButton.BackgroundColor = Color.FromHex("2196f3");
             doneButton.TextColor = Color.White;
             doneButton.HorizontalOptions = LayoutOptions.Center;
