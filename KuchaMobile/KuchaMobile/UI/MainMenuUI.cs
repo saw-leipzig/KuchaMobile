@@ -63,10 +63,10 @@ namespace KuchaMobile.UI
             imageFrame.Padding = 20;
             imageFrame.HasShadow = true;
 
-            Image huLogo = new Image();
-            huLogo.Source = "hu_logo.png";
-            huLogo.Aspect = Aspect.AspectFit;
-            imageFrame.Content = huLogo;
+            Image sawLogo = new Image();
+            sawLogo.Source = "SAW_logo.png";
+            sawLogo.Aspect = Aspect.AspectFit;
+            imageFrame.Content = sawLogo;
 
             Label statusLabel = new Label();
             statusLabel.TextColor = Color.LightGray;
