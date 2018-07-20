@@ -12,8 +12,8 @@ namespace KuchaMobile.Internal
 {
     internal static class Connection
     {
-        private static string backendURL = "https://kuchatest.saw-leipzig.de/";
-        private static HttpClient client = new HttpClient();
+        private const string backendURL = "https://kuchatest.saw-leipzig.de/";
+        private static readonly HttpClient client = new HttpClient();
         private static string sessionID = String.Empty;
         private static bool isInOfflineMode;
 
@@ -37,12 +37,15 @@ namespace KuchaMobile.Internal
                 isInOfflineMode = false;
                 return LOGIN_STATUS.SUCCESS;
             }
-            else if(result == HttpStatusCode.RequestTimeout || result == HttpStatusCode.Gone)
+            else if (result == HttpStatusCode.RequestTimeout || result == HttpStatusCode.Gone)
             {
                 isInOfflineMode = true;
                 return LOGIN_STATUS.OFFLINE;
             }
-            else return LOGIN_STATUS.FAILURE;
+            else
+            {
+                return LOGIN_STATUS.FAILURE;
+            }
         }
 
         public static bool IsInOfflineMode()
@@ -56,9 +59,7 @@ namespace KuchaMobile.Internal
             {
                 string data = "";
                 HttpStatusCode result = CallBackend("json?checkSession&sessionID=" + sessionID, ref data);
-                if (result == HttpStatusCode.NoContent) //Should be like this!
-                    return true;
-                else return false;
+                return result == HttpStatusCode.NoContent;
             }
 
             return false;
@@ -73,16 +74,14 @@ namespace KuchaMobile.Internal
         {
             if (!String.IsNullOrEmpty(sessionID))
             {
-                string returnString = "";
                 if (sizeInPx == 0)
                 {
-                    returnString = backendURL + "resource?imageID=" + id + "&sessionID=" + sessionID;
+                    return backendURL + "resource?imageID=" + id + "&sessionID=" + sessionID;
                 }
                 else
                 {
-                    returnString = backendURL + "resource?imageID=" + id + "&thumb=" + sizeInPx + "&sessionID=" + sessionID;
+                    return backendURL + "resource?imageID=" + id + "&thumb=" + sizeInPx + "&sessionID=" + sessionID;
                 }
-                return returnString;
             }
             return String.Empty;
         }
@@ -122,7 +121,10 @@ namespace KuchaMobile.Internal
                 List<PaintedRepresentationModel> models = JsonConvert.DeserializeObject<List<PaintedRepresentationModel>>(data);
                 return models;
             }
-            else return null;
+            else
+            {
+                return null;
+            }
         }
 
         public static List<PaintedRepresentationModel> GetPaintedRepresentationsByFilter(List<IconographyModel> iconographies, bool exclusive)
@@ -152,7 +154,10 @@ namespace KuchaMobile.Internal
                 List<PaintedRepresentationModel> models = JsonConvert.DeserializeObject<List<PaintedRepresentationModel>>(data);
                 return models;
             }
-            else return null;
+            else
+            {
+                return null;
+            }
         }
 
         public static List<CaveModel> GetAllCaves()
@@ -167,7 +172,10 @@ namespace KuchaMobile.Internal
                 List<CaveModel> models = JsonConvert.DeserializeObject<List<CaveModel>>(data);
                 return models;
             }
-            else return null;
+            else
+            {
+                return null;
+            }
         }
 
         public static List<CaveDistrictModel> GetCaveDistrictModels()
@@ -182,7 +190,10 @@ namespace KuchaMobile.Internal
                 List<CaveDistrictModel> models = JsonConvert.DeserializeObject<List<CaveDistrictModel>>(data);
                 return models;
             }
-            else return null;
+            else
+            {
+                return null;
+            }
         }
 
         public static List<CaveRegionModel> GetCaveRegionModels()
@@ -197,7 +208,10 @@ namespace KuchaMobile.Internal
                 List<CaveRegionModel> models = JsonConvert.DeserializeObject<List<CaveRegionModel>>(data);
                 return models;
             }
-            else return null;
+            else
+            {
+                return null;
+            }
         }
 
         public static List<CaveSiteModel> GetCaveSiteModels()
@@ -212,7 +226,10 @@ namespace KuchaMobile.Internal
                 List<CaveSiteModel> models = JsonConvert.DeserializeObject<List<CaveSiteModel>>(data);
                 return models;
             }
-            else return null;
+            else
+            {
+                return null;
+            }
         }
 
         public static List<CaveTypeModel> GetCaveTypeModels()
@@ -227,7 +244,10 @@ namespace KuchaMobile.Internal
                 List<CaveTypeModel> models = JsonConvert.DeserializeObject<List<CaveTypeModel>>(data);
                 return models;
             }
-            else return null;
+            else
+            {
+                return null;
+            }
         }
 
         public static List<IconographyModel> GetIconographyModels()
@@ -242,7 +262,10 @@ namespace KuchaMobile.Internal
                 List<IconographyModel> iconographies = JsonConvert.DeserializeObject<List<IconographyModel>>(data);
                 return iconographies;
             }
-            else return null;
+            else
+            {
+                return null;
+            }
         }
 
         private static HttpStatusCode CallBackend(string command, ref string data, int timeOut = 10, bool exactURL = false)
@@ -262,7 +285,7 @@ namespace KuchaMobile.Internal
                 System.Diagnostics.Debug.WriteLine($"API GET request: {response.StatusCode}; Query: {command}");
 
             //Analyze response content:
-            if (response != null && response.Content != null)
+            if (response?.Content != null)
                 data = System.Text.Encoding.UTF8.GetString(response.Content.ReadAsByteArrayAsync().Result);
 
             return result;

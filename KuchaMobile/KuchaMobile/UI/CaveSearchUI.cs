@@ -10,15 +10,15 @@ namespace KuchaMobile.UI
 {
     public class CaveSearchUI : ContentPage
     {
-        private Label districtsFilterLabel;
-        private Label regionsFilterLabel;
-        private Label sitesFilterLabel;
+        private readonly Label districtsFilterLabel;
+        private readonly Label regionsFilterLabel;
+        private readonly Label sitesFilterLabel;
         public Picker caveFilterPicker;
         public List<CaveDistrictModel> pickedDistricts;
         public List<CaveRegionModel> pickedRegions;
         public List<CaveSiteModel> pickedSites;
 
-        private Dictionary<string, CaveTypeModel> caveTypeDictionary;
+        private readonly Dictionary<string, CaveTypeModel> caveTypeDictionary;
 
         public CaveSearchUI()
         {
@@ -29,21 +29,27 @@ namespace KuchaMobile.UI
             pickedRegions = new List<CaveRegionModel>();
             pickedSites = new List<CaveSiteModel>();
 
-            StackLayout contentStackLayout = new StackLayout();
-            contentStackLayout.Padding = new Thickness(16, 16, 16, 16);
-            contentStackLayout.HorizontalOptions = LayoutOptions.FillAndExpand;
-            contentStackLayout.VerticalOptions = LayoutOptions.FillAndExpand;
+            StackLayout contentStackLayout = new StackLayout
+            {
+                Padding = new Thickness(16, 16, 16, 16),
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.FillAndExpand
+            };
 
-            Frame caveTypeFrame = new Frame();
-            caveTypeFrame.BackgroundColor = Color.White;
-            caveTypeFrame.HasShadow = true;
+            Frame caveTypeFrame = new Frame
+            {
+                BackgroundColor = Color.White,
+                HasShadow = true
+            };
 
             StackLayout caveTypeStack = new StackLayout();
 
-            Label caveFilterHeadlineLabel = new Label();
-            caveFilterHeadlineLabel.FontSize = 20;
-            caveFilterHeadlineLabel.Text = "Cave Type";
-            caveFilterHeadlineLabel.TextColor = Color.Black;
+            Label caveFilterHeadlineLabel = new Label
+            {
+                FontSize = 20,
+                Text = "Cave Type",
+                TextColor = Color.Black
+            };
             caveTypeStack.Children.Add(caveFilterHeadlineLabel);
 
             caveTypeDictionary = Kucha.GetCaveTypeDictionary();
@@ -59,74 +65,98 @@ namespace KuchaMobile.UI
             caveTypeFrame.Content = caveTypeStack;
             contentStackLayout.Children.Add(caveTypeFrame);
 
-            Frame caveLocationFrame = new Frame();
-            caveLocationFrame.HasShadow = true;
-            caveLocationFrame.BackgroundColor = Color.White;
+            Frame caveLocationFrame = new Frame
+            {
+                HasShadow = true,
+                BackgroundColor = Color.White
+            };
 
             StackLayout caveLocationStack = new StackLayout();
 
-            Label locationFilterHeadlineLabel = new Label();
-            locationFilterHeadlineLabel.FontSize = 20;
-            locationFilterHeadlineLabel.TextColor = Color.Black;
-            locationFilterHeadlineLabel.Text = "Location Filter";
+            Label locationFilterHeadlineLabel = new Label
+            {
+                FontSize = 20,
+                TextColor = Color.Black,
+                Text = "Location Filter"
+            };
             caveLocationStack.Children.Add(locationFilterHeadlineLabel);
 
-            districtsFilterLabel = new Label();
-            districtsFilterLabel.FontSize = 12;
-            districtsFilterLabel.Text = "Selected Districts: None";
+            districtsFilterLabel = new Label
+            {
+                FontSize = 12,
+                Text = "Selected Districts: None"
+            };
             caveLocationStack.Children.Add(districtsFilterLabel);
 
-            Button districtsFilterButton = new Button();
-            districtsFilterButton.Text = "Select Districts";
+            Button districtsFilterButton = new Button
+            {
+                Text = "Select Districts"
+            };
             districtsFilterButton.Clicked += DistrictsFilterButton_Clicked;
             caveLocationStack.Children.Add(districtsFilterButton);
 
-            regionsFilterLabel = new Label();
-            regionsFilterLabel.FontSize = 12;
-            regionsFilterLabel.Text = "Selected Regions: None";
+            regionsFilterLabel = new Label
+            {
+                FontSize = 12,
+                Text = "Selected Regions: None"
+            };
             caveLocationStack.Children.Add(regionsFilterLabel);
 
-            Button regionsFilterButton = new Button();
-            regionsFilterButton.Text = "Select Regions";
+            Button regionsFilterButton = new Button
+            {
+                Text = "Select Regions"
+            };
             regionsFilterButton.Clicked += RegionsFilterButton_Clicked;
             caveLocationStack.Children.Add(regionsFilterButton);
 
-            sitesFilterLabel = new Label();
-            sitesFilterLabel.FontSize = 12;
-            sitesFilterLabel.Text = "Selected Sites: None";
+            sitesFilterLabel = new Label
+            {
+                FontSize = 12,
+                Text = "Selected Sites: None"
+            };
             caveLocationStack.Children.Add(sitesFilterLabel);
 
-            Button sitesFilterButton = new Button();
-            sitesFilterButton.Text = "Select Sites";
+            Button sitesFilterButton = new Button
+            {
+                Text = "Select Sites"
+            };
             sitesFilterButton.Clicked += SitesFilterButton_Clicked;
             caveLocationStack.Children.Add(sitesFilterButton);
 
             caveLocationFrame.Content = caveLocationStack;
             contentStackLayout.Children.Add(caveLocationFrame);
 
-            Frame buttonFrame = new Frame();
-            buttonFrame.HasShadow = true;
-            buttonFrame.BackgroundColor = Color.White;
+            Frame buttonFrame = new Frame
+            {
+                HasShadow = true,
+                BackgroundColor = Color.White
+            };
 
             StackLayout buttonStack = new StackLayout();
-            Label buttonHeadlineLabel = new Label();
-            buttonHeadlineLabel.FontSize = 20;
-            buttonHeadlineLabel.Text = "Start searching";
-            buttonHeadlineLabel.TextColor = Color.Black;
+            Label buttonHeadlineLabel = new Label
+            {
+                FontSize = 20,
+                Text = "Start searching",
+                TextColor = Color.Black
+            };
             buttonStack.Children.Add(buttonHeadlineLabel);
 
-            Button searchButton = new Button();
-            searchButton.BackgroundColor = Color.FromHex("2196f3");
-            searchButton.TextColor = Color.White;
-            searchButton.Text = "Search";
+            Button searchButton = new Button
+            {
+                BackgroundColor = Color.Accent,
+                TextColor = Color.White,
+                Text = "Search"
+            };
             searchButton.Clicked += SearchButton_Clicked;
             buttonStack.Children.Add(searchButton);
             buttonFrame.Content = buttonStack;
 
             contentStackLayout.Children.Add(buttonFrame);
 
-            ScrollView scrollView = new ScrollView();
-            scrollView.Content = contentStackLayout;
+            ScrollView scrollView = new ScrollView
+            {
+                Content = contentStackLayout
+            };
 
             Content = scrollView;
         }
@@ -137,16 +167,16 @@ namespace KuchaMobile.UI
             CaveTypeModel caveTypeModel = caveTypeDictionary[selectedCaveTypeName];
 
             List<CaveModel> caves = Kucha.GetCavesByFilters(caveTypeModel, pickedDistricts, pickedRegions, pickedSites);
-            List<CaveFilter> searchHistory = Settings.CaveSearchHistorySetting;
-            if (searchHistory == null)
-                searchHistory = new List<CaveFilter>();
-            CaveFilter caveFilter = new CaveFilter();
-            caveFilter.caveTypeModel = caveTypeModel;
-            caveFilter.pickedDistricts = pickedDistricts;
-            caveFilter.pickedRegions = pickedRegions;
-            caveFilter.pickedSites = pickedSites;
-            caveFilter.FoundResultsString = "Results: " + caves.Count;
-            caveFilter.SearchTimeString = "At " + DateTime.UtcNow.ToString();
+            List<CaveFilter> searchHistory = Settings.CaveSearchHistorySetting ?? new List<CaveFilter>();
+            CaveFilter caveFilter = new CaveFilter
+            {
+                caveTypeModel = caveTypeModel,
+                pickedDistricts = pickedDistricts,
+                pickedRegions = pickedRegions,
+                pickedSites = pickedSites,
+                FoundResultsString = "Results: " + caves.Count,
+                SearchTimeString = "At " + DateTime.UtcNow.ToString()
+            };
             searchHistory.Add(caveFilter);
             var newList = searchHistory.OrderByDescending(x => x.SearchTimeString).ToList();
             Settings.CaveSearchHistorySetting = newList;

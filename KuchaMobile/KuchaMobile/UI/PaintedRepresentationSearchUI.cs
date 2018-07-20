@@ -9,13 +9,13 @@ namespace KuchaMobile.UI
 {
     public class PaintedRepresentationSearchUI : ContentPage
     {
-        private List<IconographyModel> allIconographies;
+        private readonly List<IconographyModel> allIconographies;
         private List<IconographyModel> availableIconographies;
         private List<IconographyModel> selectedIconographies;
 
-        private ListView availableIconsListView;
-        private ListView selectedListView;
-        private Switch exclusiveSwitch;
+        private readonly ListView availableIconsListView;
+        private readonly ListView selectedListView;
+        private readonly Switch exclusiveSwitch;
 
         public PaintedRepresentationSearchUI()
         {
@@ -23,46 +23,60 @@ namespace KuchaMobile.UI
             allIconographies = new List<IconographyModel>(KuchaMobile.Logic.Kucha.GetIconographies());
             availableIconographies = new List<IconographyModel>(allIconographies);
             selectedIconographies = new List<IconographyModel>();
-            StackLayout contentStack = new StackLayout();
-            contentStack.Padding = new Thickness(16, 10, 16, 10);
-            Grid listGrid = new Grid();
-            listGrid.HorizontalOptions = LayoutOptions.FillAndExpand;
-            listGrid.VerticalOptions = LayoutOptions.FillAndExpand;
-            listGrid.ColumnDefinitions = new ColumnDefinitionCollection
+            StackLayout contentStack = new StackLayout
+            {
+                Padding = new Thickness(16, 10, 16, 10)
+            };
+            Grid listGrid = new Grid
+            {
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                ColumnDefinitions = new ColumnDefinitionCollection
             {
                 new ColumnDefinition{ Width = new GridLength(1, GridUnitType.Star) },
                 new ColumnDefinition{ Width = new GridLength(1, GridUnitType.Star) }
-            };
-            listGrid.RowDefinitions = new RowDefinitionCollection
+            },
+                RowDefinitions = new RowDefinitionCollection
             {
                 new RowDefinition { Height = new GridLength(1, GridUnitType.Star)},
                 new RowDefinition { Height = new GridLength(9, GridUnitType.Star)}
+            }
             };
 
-            Entry searchEntry = new Entry();
-            searchEntry.Placeholder = "Search here";
+            Entry searchEntry = new Entry
+            {
+                Placeholder = "Search here"
+            };
             searchEntry.TextChanged += SearchEntry_TextChanged;
             contentStack.Children.Add(searchEntry);
 
-            availableIconsListView = new ListView();
-            availableIconsListView.ItemTemplate = new DataTemplate(typeof(TextCell));
+            availableIconsListView = new ListView
+            {
+                ItemTemplate = new DataTemplate(typeof(TextCell))
+            };
             availableIconsListView.ItemTemplate.SetBinding(TextCell.TextProperty, "text");
             availableIconsListView.ItemsSource = allIconographies;
             availableIconsListView.ItemTapped += AvailableIconsListView_ItemTapped;
             listGrid.Children.Add(availableIconsListView, 0, 1);
 
-            Label infoLabel = new Label();
-            infoLabel.HorizontalOptions = LayoutOptions.Center;
-            infoLabel.Text = "Selected Iconographys";
+            Label infoLabel = new Label
+            {
+                HorizontalOptions = LayoutOptions.Center,
+                Text = "Selected Iconographys"
+            };
             listGrid.Children.Add(infoLabel, 1, 0);
 
-            Label infoLabel2 = new Label();
-            infoLabel2.HorizontalOptions = LayoutOptions.Center;
-            infoLabel2.Text = "Available Iconographys";
+            Label infoLabel2 = new Label
+            {
+                HorizontalOptions = LayoutOptions.Center,
+                Text = "Available Iconographys"
+            };
             listGrid.Children.Add(infoLabel2, 0, 0);
 
-            selectedListView = new ListView();
-            selectedListView.ItemTemplate = new DataTemplate(typeof(TextCell));
+            selectedListView = new ListView
+            {
+                ItemTemplate = new DataTemplate(typeof(TextCell))
+            };
             selectedListView.ItemTemplate.SetBinding(TextCell.TextProperty, "text");
             selectedListView.ItemsSource = selectedIconographies;
             selectedListView.ItemTapped += SelectedListView_ItemTapped;
@@ -70,24 +84,32 @@ namespace KuchaMobile.UI
 
             contentStack.Children.Add(listGrid);
 
-            StackLayout exclusiveSearchStack = new StackLayout();
-            exclusiveSearchStack.HorizontalOptions = LayoutOptions.Center;
-            exclusiveSearchStack.Orientation = StackOrientation.Horizontal;
-            Label exclusiveLabel = new Label();
-            exclusiveLabel.Text = "Exclusive Search";
+            StackLayout exclusiveSearchStack = new StackLayout
+            {
+                HorizontalOptions = LayoutOptions.Center,
+                Orientation = StackOrientation.Horizontal
+            };
+            Label exclusiveLabel = new Label
+            {
+                Text = "Exclusive Search"
+            };
             exclusiveSearchStack.Children.Add(exclusiveLabel);
 
-            exclusiveSwitch = new Switch();
-            exclusiveSwitch.IsToggled = false;
+            exclusiveSwitch = new Switch
+            {
+                IsToggled = false
+            };
             exclusiveSearchStack.Children.Add(exclusiveSwitch);
             contentStack.Children.Add(exclusiveSearchStack);
 
-            Button searchButton = new Button();
-            searchButton.WidthRequest = 150;
-            searchButton.BackgroundColor = Color.FromHex("2196f3");
-            searchButton.TextColor = Color.White;
-            searchButton.HorizontalOptions = LayoutOptions.Center;
-            searchButton.Text = "Search";
+            Button searchButton = new Button
+            {
+                WidthRequest = 150,
+                BackgroundColor = Color.Accent,
+                TextColor = Color.White,
+                HorizontalOptions = LayoutOptions.Center,
+                Text = "Search"
+            };
             searchButton.Clicked += SearchButton_Clicked;
             contentStack.Children.Add(searchButton);
 
@@ -98,7 +120,7 @@ namespace KuchaMobile.UI
         {
             if (exclusiveSwitch.IsToggled)
             {
-                if (selectedIconographies.Any())
+                if (selectedIconographies.Count > 0)
                 {
                     List<PaintedRepresentationModel> paintedRepresentationModels = Logic.Kucha.GetPaintedRepresentationsByIconographies(selectedIconographies, true);
                     Navigation.PushAsync(new PaintedRepresentationResultUI(paintedRepresentationModels), true);
@@ -111,7 +133,7 @@ namespace KuchaMobile.UI
             }
             else
             {
-                if (selectedIconographies.Any())
+                if (selectedIconographies.Count > 0)
                 {
                     List<PaintedRepresentationModel> paintedRepresentationModels = Logic.Kucha.GetPaintedRepresentationsByIconographies(selectedIconographies, false);
                     if (paintedRepresentationModels == null)
@@ -135,8 +157,10 @@ namespace KuchaMobile.UI
             IconographyModel iconographyModel = e.Item as IconographyModel;
             List<IconographyModel> newSelected = new List<IconographyModel>(selectedIconographies);
             newSelected.Remove(iconographyModel);
-            List<IconographyModel> newAvailable = new List<IconographyModel>(availableIconographies);
-            newAvailable.Add(iconographyModel);
+            List<IconographyModel> newAvailable = new List<IconographyModel>(availableIconographies)
+            {
+                iconographyModel
+            };
             newAvailable.Sort((x, y) => x.text.CompareTo(y.text));
             availableIconsListView.ItemsSource = newAvailable;
             selectedListView.ItemsSource = newSelected;
@@ -147,8 +171,10 @@ namespace KuchaMobile.UI
         private void AvailableIconsListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             IconographyModel iconographyModel = e.Item as IconographyModel;
-            List<IconographyModel> newSelected = new List<IconographyModel>(selectedIconographies);
-            newSelected.Add(iconographyModel);
+            List<IconographyModel> newSelected = new List<IconographyModel>(selectedIconographies)
+            {
+                iconographyModel
+            };
             List<IconographyModel> newAvailable = new List<IconographyModel>(availableIconographies);
             newAvailable.Remove(iconographyModel);
             newSelected.Sort((x, y) => x.text.CompareTo(y.text));
@@ -163,7 +189,7 @@ namespace KuchaMobile.UI
             List<IconographyModel> editedList = new List<IconographyModel>();
             foreach (IconographyModel i in allIconographies)
             {
-                if (i.text.ToLower().Contains(e.NewTextValue.ToLower()))
+                if (i.text.IndexOf(e.NewTextValue, StringComparison.OrdinalIgnoreCase) >= 0)
                 {
                     editedList.Add(i);
                 }

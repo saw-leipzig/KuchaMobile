@@ -9,24 +9,30 @@ namespace KuchaMobile.UI
 {
     public class CaveUI : ContentPage
     {
-        private Editor notesEditor;
-        private CaveModel cave;
+        private readonly Editor notesEditor;
+        private readonly CaveModel cave;
 
         public CaveUI(CaveModel cave)
         {
             this.cave = cave;
             Title = "Cave " + cave.caveID;
-            StackLayout contentStack = new StackLayout();
-            contentStack.Padding = 16;
-            Frame generalCaveFrame = new Frame();
-            generalCaveFrame.HasShadow = true;
-            generalCaveFrame.BackgroundColor = Color.White;
+            StackLayout contentStack = new StackLayout
+            {
+                Padding = 16
+            };
+            Frame generalCaveFrame = new Frame
+            {
+                HasShadow = true,
+                BackgroundColor = Color.White
+            };
 
             StackLayout generalCaveStack = new StackLayout();
-            Label generalHeadlineLabel = new Label();
-            generalHeadlineLabel.FontSize = 20;
-            generalHeadlineLabel.Text = "General";
-            generalHeadlineLabel.TextColor = Color.Black;
+            Label generalHeadlineLabel = new Label
+            {
+                FontSize = 20,
+                Text = "General",
+                TextColor = Color.Black
+            };
             generalCaveStack.Children.Add(generalHeadlineLabel);
 
             Label nameLabel = new Label();
@@ -86,58 +92,74 @@ namespace KuchaMobile.UI
             generalCaveFrame.Content = generalCaveStack;
             contentStack.Children.Add(generalCaveFrame);
 
-            Frame caveSketchFrame = new Frame();
-            caveSketchFrame.HasShadow = true;
-            caveSketchFrame.BackgroundColor = Color.White;
+            Frame caveSketchFrame = new Frame
+            {
+                HasShadow = true,
+                BackgroundColor = Color.White
+            };
 
             StackLayout caveSketchStack = new StackLayout();
-            Label caveSketchHeadline = new Label();
-            caveSketchHeadline.FontSize = 20;
-            caveSketchHeadline.Text = "Cave Sketch";
-            caveSketchHeadline.TextColor = Color.Black;
+            Label caveSketchHeadline = new Label
+            {
+                FontSize = 20,
+                Text = "Cave Sketch",
+                TextColor = Color.Black
+            };
             caveSketchStack.Children.Add(caveSketchHeadline);
             if (!String.IsNullOrEmpty(cave.optionalCaveSketch))
             {
-                Image caveSketch = new Image();
-                caveSketch.WidthRequest = 200;
-                caveSketch.Aspect = Aspect.AspectFit;
-                caveSketch.Source = ImageSource.FromUri(new Uri(Internal.Connection.GetCaveSketchURL(cave.optionalCaveSketch)));
+                Image caveSketch = new Image
+                {
+                    WidthRequest = 200,
+                    Aspect = Aspect.AspectFit,
+                    Source = ImageSource.FromUri(new Uri(Internal.Connection.GetCaveSketchURL(cave.optionalCaveSketch)))
+                };
                 caveSketchStack.Children.Add(caveSketch);
             }
 
-            Image caveBackground = new Image();
-            caveBackground.WidthRequest = 200;
-            caveBackground.HeightRequest = 200;
-            caveBackground.Source = ImageSource.FromUri(new Uri(Internal.Connection.GetCaveBackgroundImageURL(cave.caveTypeID)));
+            Image caveBackground = new Image
+            {
+                WidthRequest = 200,
+                HeightRequest = 200,
+                Source = ImageSource.FromUri(new Uri(Internal.Connection.GetCaveBackgroundImageURL(cave.caveTypeID)))
+            };
 
             caveSketchStack.Children.Add(caveBackground);
 
             caveSketchFrame.Content = caveSketchStack;
             contentStack.Children.Add(caveSketchFrame);
 
-            Frame notesFrame = new Frame();
-            notesFrame.BackgroundColor = Color.White;
-            notesFrame.HasShadow = true;
+            Frame notesFrame = new Frame
+            {
+                BackgroundColor = Color.White,
+                HasShadow = true
+            };
             StackLayout notesStack = new StackLayout();
 
-            Label notesLabel = new Label();
-            notesLabel.TextColor = Color.Black;
-            notesLabel.FontSize = 20;
-            notesLabel.Text = "Private Notes";
+            Label notesLabel = new Label
+            {
+                TextColor = Color.Black,
+                FontSize = 20,
+                Text = "Private Notes"
+            };
             notesStack.Children.Add(notesLabel);
 
-            notesEditor = new Editor();
-            notesEditor.BackgroundColor = Color.White;
-            notesEditor.HeightRequest = 100;
+            notesEditor = new Editor
+            {
+                BackgroundColor = Color.White,
+                HeightRequest = 100
+            };
             var index = Settings.SavedNotesSetting.FindIndex(c => c.ID == cave.caveID && c.Type == NotesSaver.NOTES_TYPE.NOTE_TYPE_CAVE);
             if (index != -1) notesEditor.Text = Settings.SavedNotesSetting[index].Note;
             notesStack.Children.Add(notesEditor);
             notesFrame.Content = notesStack;
             contentStack.Children.Add(notesFrame);
 
-            ScrollView scrollView = new ScrollView();
-            scrollView.VerticalOptions = LayoutOptions.FillAndExpand;
-            scrollView.Content = contentStack;
+            ScrollView scrollView = new ScrollView
+            {
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                Content = contentStack
+            };
             Content = scrollView;
         }
 

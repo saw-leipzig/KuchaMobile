@@ -9,6 +9,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="UI\5r44rywa.uux~" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="UI\MainPage.cs" />
   </ItemGroup>
 

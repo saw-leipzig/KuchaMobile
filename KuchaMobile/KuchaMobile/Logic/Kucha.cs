@@ -28,17 +28,17 @@ namespace KuchaMobile.Logic
                 resultCaves.RemoveAll(cave => cave.caveTypeID != caveTypeModel.caveTypeID);
             }
 
-            if (pickedDistricts != null && pickedDistricts.Any())
+            if (pickedDistricts?.Count > 0)
             {
                 resultCaves.RemoveAll(cave => !pickedDistricts.Any(district => cave.districtID == district.districtID));
             }
 
-            if (pickedRegions != null && pickedRegions.Any())
+            if (pickedRegions?.Count > 0)
             {
                 resultCaves.RemoveAll(cave => !pickedRegions.Any(region => cave.regionID == region.regionID));
             }
 
-            if (pickedSites != null && pickedSites.Any())
+            if (pickedSites?.Count > 0)
             {
                 resultCaves.RemoveAll(cave => !pickedSites.Any(site => cave.siteID == site.siteID));
             }
@@ -194,10 +194,7 @@ namespace KuchaMobile.Logic
                 kuchaContainer = new KuchaContainer();
             Connection.LoadCachedSessionID();
 
-            Device.BeginInvokeOnMainThread(() =>
-            {
-                ((App)App.Current).LoadingPersistantDataFinished();
-            });
+            Device.BeginInvokeOnMainThread(() => ((App)App.Current).LoadingPersistantDataFinished());
         }
 
         public async static Task<bool> RefreshLocalData()
@@ -208,7 +205,6 @@ namespace KuchaMobile.Logic
             if (caveDistrictModels == null)
                 return false;
             kuchaContainer.caveDistricts = caveDistrictModels;
-
 
             List<CaveRegionModel> caveRegionModels = Connection.GetCaveRegionModels();
             if (caveRegionModels != null)
@@ -228,8 +224,10 @@ namespace KuchaMobile.Logic
             if (caveTypeModels != null)
             {
                 kuchaContainer.caveTypes = caveTypeModels;
-                kuchaContainer.caveTypeDictionary = new Dictionary<string, CaveTypeModel>();
-                kuchaContainer.caveTypeDictionary.Add("Any", null);
+                kuchaContainer.caveTypeDictionary = new Dictionary<string, CaveTypeModel>
+                {
+                    { "Any", null }
+                };
                 foreach (CaveTypeModel c in caveTypeModels)
                 {
                     kuchaContainer.caveTypeDictionary.Add(c.nameEN, c);
@@ -264,13 +262,13 @@ namespace KuchaMobile.Logic
         {
             if (kuchaContainer == null)
                 return false;
-            if (!kuchaContainer.caves.Any())
+            if (kuchaContainer.caves.Count == 0)
                 return false;
-            if (kuchaContainer.caveDistricts == new List<CaveDistrictModel>() ||
-                kuchaContainer.caveRegions == new List<CaveRegionModel>() ||
-                kuchaContainer.caveSites == new List<CaveSiteModel>() ||
-                kuchaContainer.caveTypes == new List<CaveTypeModel>() ||
-                kuchaContainer.caves == new List<CaveModel>())
+            if (kuchaContainer.caveDistricts == new List<CaveDistrictModel>()
+                || kuchaContainer.caveRegions == new List<CaveRegionModel>()
+                || kuchaContainer.caveSites == new List<CaveSiteModel>()
+                || kuchaContainer.caveTypes == new List<CaveTypeModel>()
+                || kuchaContainer.caves == new List<CaveModel>())
                 return false;
             if (kuchaContainer.iconographies == new List<IconographyModel>())
                 return false;

@@ -6,7 +6,7 @@ namespace KuchaMobile.UI
 {
     public class CaveSearchHistoryUI : ContentPage
     {
-        private CaveSearchUI parent;
+        private readonly CaveSearchUI parent;
 
         public CaveSearchHistoryUI(CaveSearchUI parent)
         {
@@ -14,10 +14,14 @@ namespace KuchaMobile.UI
             Title = "Search History";
             ToolbarItems.Add(new ToolbarItem("Clear History", null, Clear_List));
 
-            StackLayout contentStack = new StackLayout();
-            contentStack.Padding = 0;
-            ListView listView = new ListView();
-            listView.ItemTemplate = new DataTemplate(typeof(TextCell));
+            StackLayout contentStack = new StackLayout
+            {
+                Padding = 0
+            };
+            ListView listView = new ListView
+            {
+                ItemTemplate = new DataTemplate(typeof(TextCell))
+            };
             listView.ItemTemplate.SetBinding(TextCell.TextProperty, "SearchTimeString");
             listView.ItemTemplate.SetBinding(TextCell.DetailProperty, "FoundResultsString");
             listView.ItemsSource = Settings.CaveSearchHistorySetting;

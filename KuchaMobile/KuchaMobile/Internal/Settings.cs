@@ -37,7 +37,7 @@ namespace KuchaMobile.Internal
 
         #endregion Setting Constants
 
-        public static bool showPreviewPicturesSetting
+        public static bool ShowPreviewPicturesSetting
         {
             get
             {

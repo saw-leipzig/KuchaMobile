@@ -10,8 +10,10 @@ namespace KuchaMobile.UI
         {
             Title = "PR-Search: " + paintedRepresentationModels.Count + " Ergebnis(se)";
 
-            ListView resultListView = new ListView();
-            resultListView.ItemTemplate = new DataTemplate(typeof(TextCell));
+            ListView resultListView = new ListView
+            {
+                ItemTemplate = new DataTemplate(typeof(TextCell))
+            };
             resultListView.ItemTemplate.SetBinding(TextCell.TextProperty, "PRDisplayName");
             resultListView.ItemTemplate.SetBinding(TextCell.DetailProperty, "PRDetailDisplayName");
             resultListView.ItemsSource = paintedRepresentationModels;

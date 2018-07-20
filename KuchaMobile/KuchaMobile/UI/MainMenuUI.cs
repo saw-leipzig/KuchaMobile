@@ -6,33 +6,33 @@ namespace KuchaMobile.UI
 {
     public class MainMenuUI : ContentPage
     {
-        public ListView ListView { get { return listView; } }
-
-        private ListView listView;
+        public ListView ListView { get; }
 
         public MainMenuUI()
         {
-            var masterPageItems = new List<MasterPageItem>();
-            masterPageItems.Add(new MasterPageItem
+            var masterPageItems = new List<MasterPageItem>
             {
-                Title = "Cave",
-                IconSource = "cave.png",
-                TargetType = typeof(CaveSearchUI)
-            });
-            masterPageItems.Add(new MasterPageItem
-            {
-                Title = "Painted Representation",
-                IconSource = "image.png",
-                TargetType = typeof(PaintedRepresentationSearchUI)
-            });
-            masterPageItems.Add(new MasterPageItem
-            {
-                Title = "Settings",
-                IconSource = "cog.png",
-                TargetType = typeof(SettingsUI)
-            });
+                new MasterPageItem
+                {
+                    Title = "Cave",
+                    IconSource = "cave.png",
+                    TargetType = typeof(CaveSearchUI)
+                },
+                new MasterPageItem
+                {
+                    Title = "Painted Representation",
+                    IconSource = "image.png",
+                    TargetType = typeof(PaintedRepresentationSearchUI)
+                },
+                new MasterPageItem
+                {
+                    Title = "Settings",
+                    IconSource = "cog.png",
+                    TargetType = typeof(SettingsUI)
+                }
+            };
 
-            listView = new ListView
+            ListView = new ListView
             {
                 VerticalOptions = LayoutOptions.FillAndExpand,
                 ItemsSource = masterPageItems,
@@ -58,27 +58,33 @@ namespace KuchaMobile.UI
 
             Icon = "null";
             Title = "Kucha Mobile";
-            Frame imageFrame = new Frame();
-            imageFrame.BackgroundColor = Color.White;
-            imageFrame.Padding = 20;
-            imageFrame.HasShadow = true;
+            Frame imageFrame = new Frame
+            {
+                BackgroundColor = Color.White,
+                Padding = 20,
+                HasShadow = true
+            };
 
-            Image sawLogo = new Image();
-            sawLogo.Source = "SAW_logo.png";
-            sawLogo.Aspect = Aspect.AspectFit;
+            Image sawLogo = new Image
+            {
+                Source = "SAW_logo.png",
+                Aspect = Aspect.AspectFit
+            };
             imageFrame.Content = sawLogo;
 
-            Label statusLabel = new Label();
-            statusLabel.TextColor = Color.LightGray;
-            statusLabel.HorizontalOptions = LayoutOptions.Center;
-            statusLabel.Margin = new Thickness(0, 0, 0, 10);
+            Label statusLabel = new Label
+            {
+                TextColor = Color.LightGray,
+                HorizontalOptions = LayoutOptions.Center,
+                Margin = new Thickness(0, 0, 0, 10)
+            };
             if (Internal.Connection.IsInOfflineMode())
                 statusLabel.Text = "App in offline mode";
             else
                 statusLabel.Text = "App in online mode";
             Content = new StackLayout
             {
-                Children = { imageFrame, listView, statusLabel }
+                Children = { imageFrame, ListView, statusLabel }
             };
         }
     }

@@ -9,38 +9,48 @@ namespace KuchaMobile.UI
 {
     public class LoginPage : ContentPage
     {
-        private Entry nameEntry;
-        private Entry passwordEntry;
-        private Label loginstatusLabel;
-        private Label downloadStatusLabel;
-        private Button loginButton;
-        private Button downloadDataButton;
-        private Button continueButton;
+        private readonly Entry nameEntry;
+        private readonly Entry passwordEntry;
+        private readonly Label loginstatusLabel;
+        private readonly Label downloadStatusLabel;
+        private readonly Button loginButton;
+        private readonly Button downloadDataButton;
+        private readonly Button continueButton;
 
         public LoginPage()
         {
-            StackLayout contentStack = new StackLayout();
-            contentStack.Padding = 16;
-            Image huLogo = new Image();
-            huLogo.Source = "hu_logo.png";
-            huLogo.HeightRequest = 100;
-            huLogo.Aspect = Aspect.AspectFit;
+            StackLayout contentStack = new StackLayout
+            {
+                Padding = 16
+            };
+            Image huLogo = new Image
+            {
+                Source = "hu_logo.png",
+                HeightRequest = 100,
+                Aspect = Aspect.AspectFit
+            };
             contentStack.Children.Add(huLogo);
-            nameEntry = new Entry();
-            nameEntry.Placeholder = "Username";
+            nameEntry = new Entry
+            {
+                Placeholder = "Username"
+            };
             if (Connection.HasLegitSessionID())
                 nameEntry.IsEnabled = false;
             contentStack.Children.Add(nameEntry);
 
-            passwordEntry = new Entry();
-            passwordEntry.Placeholder = "Password";
-            passwordEntry.IsPassword = true;
+            passwordEntry = new Entry
+            {
+                Placeholder = "Password",
+                IsPassword = true
+            };
             if (Connection.HasLegitSessionID())
                 passwordEntry.IsEnabled = false;
             contentStack.Children.Add(passwordEntry);
 
-            loginstatusLabel = new Label();
-            loginstatusLabel.Margin = new Thickness(0, 10, 0, 0);
+            loginstatusLabel = new Label
+            {
+                Margin = new Thickness(0, 10, 0, 0)
+            };
             loginstatusLabel.TranslationY += 10;
             if (Connection.HasLegitSessionID())
                 loginstatusLabel.Text = "Logged in with valid session";
@@ -56,8 +66,10 @@ namespace KuchaMobile.UI
             loginButton.Text = "Login";
             contentStack.Children.Add(loginButton);
 
-            downloadStatusLabel = new Label();
-            downloadStatusLabel.Margin = new Thickness(0, 10, 0, 0);
+            downloadStatusLabel = new Label
+            {
+                Margin = new Thickness(0, 10, 0, 0)
+            };
             downloadStatusLabel.TranslationY += 10;
             if (!Kucha.KuchaContainerIsValid())
                 downloadStatusLabel.Text = "Please download initial data";
@@ -68,20 +80,25 @@ namespace KuchaMobile.UI
             downloadDataButton = new Button();
             downloadDataButton.Clicked += DownloadDataButton_Clicked;
             downloadDataButton.Text = "Download Data";
-            if (Connection.HasLegitSessionID() == false)
+            if (!Connection.HasLegitSessionID())
                 downloadDataButton.IsEnabled = false;
             contentStack.Children.Add(downloadDataButton);
 
-            continueButton = new Button();
-            continueButton.Margin = new Thickness(0, 10, 0, 0);
-            continueButton.Text = "Continue";
+            continueButton = new Button
+            {
+                Margin = new Thickness(0, 10, 0, 0),
+                Text = "Continue",
+                BackgroundColor = Color.Accent
+            };
             continueButton.Clicked += ContinueButton_Clicked;
             if (!Connection.HasLegitSessionID() || !Kucha.KuchaContainerIsValid())
                 continueButton.IsEnabled = false;
             contentStack.Children.Add(continueButton);
 
-            ScrollView s = new ScrollView();
-            s.Content = contentStack;
+            ScrollView s = new ScrollView
+            {
+                Content = contentStack
+            };
             Content = s;
         }
 
@@ -104,7 +121,7 @@ namespace KuchaMobile.UI
                         UserDialogs.Instance.Toast("Data successfully downloaded!");
                         downloadDataButton.IsEnabled = false;
                         downloadStatusLabel.Text = "Data from " + Kucha.GetDataTimeStamp().ToShortDateString();
-                        if (!loginButton.IsEnabled == true)
+                        if (!loginButton.IsEnabled)
                         {
                             continueButton.IsEnabled = true;
                         }

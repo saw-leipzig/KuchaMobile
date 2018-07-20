@@ -8,8 +8,8 @@ namespace KuchaMobile.UI
 {
     public class ImageUI : ContentPage
     {
-        private Editor notesEditor;
-        private RelatedImage image;
+        private readonly Editor notesEditor;
+        private readonly RelatedImage image;
 
         double currentScale = 1;
         double startScale = 1;
@@ -21,9 +21,11 @@ namespace KuchaMobile.UI
             this.image = image;
             Title = "Image " + image.shortName;
             StackLayout imageLayout = new StackLayout();
-            Image displayImage = new Image();
-            displayImage.Source = ImageSource.FromUri(new Uri(Connection.GetPaintedRepresentationImageURL(image.imageID, Helper.ScreenHeight)));
-            displayImage.Aspect = Aspect.AspectFill;
+            Image displayImage = new Image
+            {
+                Source = ImageSource.FromUri(new Uri(Connection.GetPaintedRepresentationImageURL(image.imageID, Helper.ScreenHeight))),
+                Aspect = Aspect.AspectFill
+            };
             imageLayout.Children.Add(displayImage);
             imageLayout.Padding = new Thickness(0, 10, 0, 20);
             imageLayout.Spacing = 10;
@@ -31,27 +33,35 @@ namespace KuchaMobile.UI
             pinchGesture.PinchUpdated += PinchGesture_PinchUpdated;
             imageLayout.GestureRecognizers.Add(pinchGesture);
 
-            Frame editorFrame = new Frame();
-            editorFrame.HasShadow = true;
-            editorFrame.BackgroundColor = Color.White;
+            Frame editorFrame = new Frame
+            {
+                HasShadow = true,
+                BackgroundColor = Color.White
+            };
             StackLayout editorStack = new StackLayout();
-            Label notesLabel = new Label();
-            notesLabel.Text = "Private Notes";
-            notesLabel.TextColor = Color.Black;
-            notesLabel.FontSize = 20;
+            Label notesLabel = new Label
+            {
+                Text = "Private Notes",
+                TextColor = Color.Black,
+                FontSize = 20
+            };
             editorStack.Children.Add(notesLabel);
 
-            notesEditor = new Editor();
-            notesEditor.BackgroundColor = Color.White;
-            notesEditor.HeightRequest = 100;
+            notesEditor = new Editor
+            {
+                BackgroundColor = Color.White,
+                HeightRequest = 100
+            };
             var index = Settings.SavedNotesSetting.FindIndex(i => i.ID == image.imageID && i.Type == NotesSaver.NOTES_TYPE.NOTE_TYPE_IMAGE);
             if (index != -1) notesEditor.Text = Settings.SavedNotesSetting[index].Note;
             editorStack.Children.Add(notesEditor);
             editorFrame.Content = editorStack;
             imageLayout.Children.Add(editorFrame);
 
-            ScrollView imageScrollView = new ScrollView();
-            imageScrollView.Content = imageLayout;
+            ScrollView imageScrollView = new ScrollView
+            {
+                Content = imageLayout
+            };
             Content = imageScrollView;
         }
 

@@ -10,19 +10,25 @@ namespace KuchaMobile.UI
 {
     public class SettingsUI : ContentPage
     {
-        private Label downloadStatusLabel;
+        private readonly Label downloadStatusLabel;
 
         public SettingsUI()
         {
             Title = "Settings";
-            StackLayout contentStack = new StackLayout();
-            contentStack.Padding = 16;
+            StackLayout contentStack = new StackLayout
+            {
+                Padding = 16
+            };
 
             Grid previewPicGrid = new Grid();
-            Label previewPicLabel = new Label();
-            previewPicLabel.Text = "Enable Preview Images in Painted Representations";
-            Switch previewPicSwitch = new Switch();
-            previewPicSwitch.IsToggled = Settings.showPreviewPicturesSetting;
+            Label previewPicLabel = new Label
+            {
+                Text = "Enable Preview Images in Painted Representations"
+            };
+            Switch previewPicSwitch = new Switch
+            {
+                IsToggled = Settings.ShowPreviewPicturesSetting
+            };
             previewPicSwitch.Toggled += PreviewPicSwitch_Toggled;
             previewPicGrid.Children.Add(previewPicLabel, 0, 0);
             previewPicGrid.Children.Add(previewPicSwitch, 1, 0);
@@ -31,42 +37,54 @@ namespace KuchaMobile.UI
 
             if (Connection.IsInOfflineMode())
             {
-                Button showLoginScreenButton = new Button();
-                showLoginScreenButton.Text = "Go to Login Screen";
+                Button showLoginScreenButton = new Button
+                {
+                    Text = "Go to Login Screen"
+                };
                 showLoginScreenButton.Clicked += ShowLoginScreenButton_Clicked;
                 contentStack.Children.Add(showLoginScreenButton);
             }
 
-            downloadStatusLabel = new Label();
-            downloadStatusLabel.Text = "Data from " + Kucha.GetDataTimeStamp().ToShortDateString();
+            downloadStatusLabel = new Label
+            {
+                Text = "Data from " + Kucha.GetDataTimeStamp().ToShortDateString()
+            };
             contentStack.Children.Add(downloadStatusLabel);
 
-            Button updateLocalDatabaseButton = new Button();
-            updateLocalDatabaseButton.Text = "Update Database";
+            Button updateLocalDatabaseButton = new Button
+            {
+                Text = "Update Database"
+            };
             updateLocalDatabaseButton.Clicked += UpdateLocalDatabaseButton_Clicked;
             contentStack.Children.Add(updateLocalDatabaseButton);
 
-            Button clearAllNotesButton = new Button();
-            clearAllNotesButton.Text = "Clear private notes";
+            Button clearAllNotesButton = new Button
+            {
+                Text = "Clear private notes"
+            };
             clearAllNotesButton.Clicked += ClearAllNotesButton_Clicked;
             contentStack.Children.Add(clearAllNotesButton);
 
-            Button deleteLocalFilesButton = new Button();
-            deleteLocalFilesButton.Text = "Delete all local files";
+            Button deleteLocalFilesButton = new Button
+            {
+                Text = "Delete all local files"
+            };
             deleteLocalFilesButton.Clicked += DeleteLocalFilesButton_Clicked;
             contentStack.Children.Add(deleteLocalFilesButton);
 
-            Label licenseLabel = new Label();
-            licenseLabel.TextColor = Color.LightGray;
-            licenseLabel.Text = "Icon licenses\n\ncave by Alexander Skowalsky from the Noun Project\nImage by Viktor Vorobyev from the Noun Project\ncog by Vicons Design from the Noun Project\n\nAll icons issued under Creative Commons license.";
-            licenseLabel.Margin = new Thickness(0, 50, 0, 0);
+            Label licenseLabel = new Label
+            {
+                TextColor = Color.LightGray,
+                Text = "Icon licenses\n\ncave by Alexander Skowalsky from the Noun Project\nImage by Viktor Vorobyev from the Noun Project\ncog by Vicons Design from the Noun Project\n\nAll icons issued under Creative Commons license.",
+                Margin = new Thickness(0, 50, 0, 0)
+            };
             contentStack.Children.Add(licenseLabel);
             Content = contentStack;
         }
 
         private void PreviewPicSwitch_Toggled(object sender, ToggledEventArgs e)
         {
-            Settings.showPreviewPicturesSetting = e.Value;
+            Settings.ShowPreviewPicturesSetting = e.Value;
         }
 
         private void ShowLoginScreenButton_Clicked(object sender, EventArgs e)

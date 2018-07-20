@@ -8,7 +8,7 @@ namespace KuchaMobile.UI
 {
     public class CaveFilterUI : ContentPage
     {
-        private StackLayout listStack;
+        private readonly StackLayout listStack;
 
         public enum CAVE_FILTER_TYPE
         {
@@ -17,8 +17,8 @@ namespace KuchaMobile.UI
             REGION
         }
 
-        private CAVE_FILTER_TYPE type;
-        private CaveSearchUI parent;
+        private readonly CAVE_FILTER_TYPE type;
+        private readonly CaveSearchUI parent;
 
         public CaveFilterUI(CAVE_FILTER_TYPE type, CaveSearchUI parent)
         {
@@ -35,8 +35,10 @@ namespace KuchaMobile.UI
                 case CAVE_FILTER_TYPE.REGION: Title = "Regions"; break;
                 case CAVE_FILTER_TYPE.SITE: Title = "Sites"; break;
             }
-            StackLayout finalStack = new StackLayout();
-            finalStack.Padding = new Thickness(16, 10, 16, 10);
+            StackLayout finalStack = new StackLayout
+            {
+                Padding = new Thickness(16, 10, 16, 10)
+            };
 
             listStack = new StackLayout();
             if (type == CAVE_FILTER_TYPE.DISTRICT)
@@ -60,15 +62,19 @@ namespace KuchaMobile.UI
                     listStack.Children.Add(new CaveSiteGrid(caveSite, parent.pickedSites.Contains(caveSite)));
                 }
             }
-            ScrollView scrollView = new ScrollView();
-            scrollView.Content = listStack;
+            ScrollView scrollView = new ScrollView
+            {
+                Content = listStack
+            };
 
             finalStack.Children.Add(scrollView);
-            Button doneButton = new Button();
-            doneButton.Text = "Select";
-            doneButton.BackgroundColor = Color.FromHex("2196f3");
-            doneButton.TextColor = Color.White;
-            doneButton.HorizontalOptions = LayoutOptions.Center;
+            Button doneButton = new Button
+            {
+                Text = "Select",
+                BackgroundColor = Color.Accent,
+                TextColor = Color.White,
+                HorizontalOptions = LayoutOptions.Center
+            };
             doneButton.Clicked += DoneButton_Clicked;
             doneButton.Margin = new Thickness(0, 20, 0, 10);
             listStack.Children.Add(doneButton);
@@ -130,12 +136,16 @@ namespace KuchaMobile.UI
             public CaveDistrictGrid(CaveDistrictModel caveDistrictModel, bool enabled)
             {
                 this.caveDistrictModel = caveDistrictModel;
-                Label nameLabel = new Label();
-                nameLabel.Text = caveDistrictModel.name;
+                Label nameLabel = new Label
+                {
+                    Text = caveDistrictModel.name
+                };
                 Children.Add(nameLabel, 0, 0);
 
-                Switch enabledSwitch = new Switch();
-                enabledSwitch.IsToggled = enabled;
+                Switch enabledSwitch = new Switch
+                {
+                    IsToggled = enabled
+                };
                 Children.Add(enabledSwitch, 1, 0);
             }
         }
@@ -147,12 +157,16 @@ namespace KuchaMobile.UI
             public CaveRegionGrid(CaveRegionModel caveRegionModel, bool enabled)
             {
                 this.caveRegionModel = caveRegionModel;
-                Label nameLabel = new Label();
-                nameLabel.Text = caveRegionModel.englishName;
+                Label nameLabel = new Label
+                {
+                    Text = caveRegionModel.englishName
+                };
                 Children.Add(nameLabel, 0, 0);
 
-                Switch enabledSwitch = new Switch();
-                enabledSwitch.IsToggled = enabled;
+                Switch enabledSwitch = new Switch
+                {
+                    IsToggled = enabled
+                };
                 Children.Add(enabledSwitch, 1, 0);
             }
         }
@@ -164,12 +178,16 @@ namespace KuchaMobile.UI
             public CaveSiteGrid(CaveSiteModel caveSiteModel, bool enabled)
             {
                 this.caveSiteModel = caveSiteModel;
-                Label nameLabel = new Label();
-                nameLabel.Text = caveSiteModel.name;
+                Label nameLabel = new Label
+                {
+                    Text = caveSiteModel.name
+                };
                 Children.Add(nameLabel, 0, 0);
 
-                Switch enabledSwitch = new Switch();
-                enabledSwitch.IsToggled = enabled;
+                Switch enabledSwitch = new Switch
+                {
+                    IsToggled = enabled
+                };
                 Children.Add(enabledSwitch, 1, 0);
             }
         }

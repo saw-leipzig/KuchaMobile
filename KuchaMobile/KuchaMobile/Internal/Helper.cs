@@ -9,7 +9,7 @@ namespace KuchaMobile.Internal
         public static int ScreenWidth { get; set; }
 
         public static string GetMD5Hash(string input)
-        {            
+        {
             //Source: https://msdn.microsoft.com/de-de/library/system.security.cryptography.md5cryptoserviceprovider%28v=vs.110%29.aspx?f=255&MSPPError=-2147217396
 
             // Create a new instance of the MD5CryptoServiceProvider object.

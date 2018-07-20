@@ -7,7 +7,7 @@ namespace KuchaMobile
 {
     public class MainPage : MasterDetailPage
     {
-        private MainMenuUI mainMenu;
+        private readonly MainMenuUI mainMenu;
 
         public MainPage()
         {
@@ -21,10 +21,9 @@ namespace KuchaMobile
 
         private void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            var item = e.SelectedItem as MasterPageItem;
-            if (item != null)
+            if (e.SelectedItem is MasterPageItem item)
             {
-                if(item.TargetType.Name == "PaintedRepresentationSearchUI" && Internal.Connection.IsInOfflineMode())
+                if (item.TargetType.Name == "PaintedRepresentationSearchUI" && Internal.Connection.IsInOfflineMode())
                 {
                     UserDialogs.Instance.Toast("Not available in offline mode!");
                     return;
