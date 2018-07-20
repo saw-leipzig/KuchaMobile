@@ -34,6 +34,7 @@ namespace KuchaMobile.UI
 
             listView = new ListView
             {
+                VerticalOptions = LayoutOptions.FillAndExpand,
                 ItemsSource = masterPageItems,
                 ItemTemplate = new DataTemplate(() =>
                 {
@@ -66,9 +67,18 @@ namespace KuchaMobile.UI
             huLogo.Source = "hu_logo.png";
             huLogo.Aspect = Aspect.AspectFit;
             imageFrame.Content = huLogo;
+
+            Label statusLabel = new Label();
+            statusLabel.TextColor = Color.LightGray;
+            statusLabel.HorizontalOptions = LayoutOptions.Center;
+            statusLabel.Margin = new Thickness(0, 0, 0, 10);
+            if (Internal.Connection.IsInOfflineMode())
+                statusLabel.Text = "App in offline mode";
+            else
+                statusLabel.Text = "App in online mode";
             Content = new StackLayout
             {
-                Children = { imageFrame, listView }
+                Children = { imageFrame, listView, statusLabel }
             };
         }
     }

@@ -1,4 +1,5 @@
-﻿using KuchaMobile.UI;
+﻿using Acr.UserDialogs;
+using KuchaMobile.UI;
 using System;
 using Xamarin.Forms;
 
@@ -23,6 +24,11 @@ namespace KuchaMobile
             var item = e.SelectedItem as MasterPageItem;
             if (item != null)
             {
+                if(item.TargetType.Name == "PaintedRepresentationSearchUI" && Internal.Connection.IsInOfflineMode())
+                {
+                    UserDialogs.Instance.Toast("Not available in offline mode!");
+                    return;
+                }
                 Detail = new NavigationPage((Page)Activator.CreateInstance(item.TargetType));
                 mainMenu.ListView.SelectedItem = null;
                 IsPresented = false;
