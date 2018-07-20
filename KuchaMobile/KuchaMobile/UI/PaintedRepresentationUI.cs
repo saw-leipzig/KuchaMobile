@@ -37,46 +37,62 @@ namespace KuchaMobile.UI
             if (!String.IsNullOrEmpty(paintedRepresentation.description))
             {
                 Label descriptionLabel = new Label();
-                descriptionLabel.Text = "Description: " + paintedRepresentation.description;
+                var descriptionText = new FormattedString();
+                descriptionText.Spans.Add(new Span { Text = "Description: ", FontAttributes = FontAttributes.Bold });
+                descriptionText.Spans.Add(new Span { Text = paintedRepresentation.description });
+                descriptionLabel.FormattedText = descriptionText;
                 generalStack.Children.Add(descriptionLabel);
             }
             if (!String.IsNullOrEmpty(paintedRepresentation.acquiredByExpedition))
             {
                 Label aquiredByExpeditionLabel = new Label();
-                aquiredByExpeditionLabel.Text = "Aquired by Expedition: " + paintedRepresentation.acquiredByExpedition;
+                var descriptionText = new FormattedString();
+                descriptionText.Spans.Add(new Span { Text = "Aquired by Expedition: ", FontAttributes = FontAttributes.Bold });
+                descriptionText.Spans.Add(new Span { Text = paintedRepresentation.acquiredByExpedition });
+                aquiredByExpeditionLabel.FormattedText = descriptionText;
                 generalStack.Children.Add(aquiredByExpeditionLabel);
             }
 
             if (!String.IsNullOrEmpty(paintedRepresentation.currentLocation))
             {
                 Label currentLocationLabel = new Label();
-                currentLocationLabel.Text = "Current Location: " + paintedRepresentation.currentLocation;
+                var descriptionText = new FormattedString();
+                descriptionText.Spans.Add(new Span { Text = "Current Location: ", FontAttributes = FontAttributes.Bold });
+                descriptionText.Spans.Add(new Span { Text = paintedRepresentation.currentLocation });
+                currentLocationLabel.FormattedText = descriptionText;
                 generalStack.Children.Add(currentLocationLabel);
             }
             if (!String.IsNullOrEmpty(paintedRepresentation.vendor))
             {
                 Label vendorLabel = new Label();
-                vendorLabel.Text = "Vendor: " + paintedRepresentation.vendor;
+                var descriptionText = new FormattedString();
+                descriptionText.Spans.Add(new Span { Text = "Vendor: ", FontAttributes = FontAttributes.Bold });
+                descriptionText.Spans.Add(new Span { Text = paintedRepresentation.vendor });
+                vendorLabel.FormattedText = descriptionText;
                 generalStack.Children.Add(vendorLabel);
             }
             if (paintedRepresentation.Iconography.Any())
             {
                 Label iconographyLabel = new Label();
-                iconographyLabel.Text = "Iconography: ";
+                var descriptionText = new FormattedString();
+                descriptionText.Spans.Add(new Span { Text = "Iconography:\n", FontAttributes = FontAttributes.Bold });
                 foreach (string i in paintedRepresentation.Iconography)
                 {
-                    iconographyLabel.Text += i + "\n";
+                    descriptionText.Spans.Add(new Span { Text = i+"\n" });
                 }
+                iconographyLabel.FormattedText = descriptionText;
                 generalStack.Children.Add(iconographyLabel);
             }
             if (paintedRepresentation.PictorialElements.Any())
             {
                 Label pictorialElementsLabel = new Label();
-                pictorialElementsLabel.Text = "Pictorial Elements: ";
+                var descriptionText = new FormattedString();
+                descriptionText.Spans.Add(new Span { Text = "Pictorial Elements:\n", FontAttributes = FontAttributes.Bold });
                 foreach (string i in paintedRepresentation.PictorialElements)
                 {
-                    pictorialElementsLabel.Text += i + "\n";
+                    descriptionText.Spans.Add(new Span { Text = i + "\n" });
                 }
+                pictorialElementsLabel.FormattedText = descriptionText;
                 generalStack.Children.Add(pictorialElementsLabel);
             }
             generalFrame.Content = generalStack;
@@ -223,40 +239,58 @@ namespace KuchaMobile.UI
                 Label idLabel = new Label();
                 idLabel.TextColor = Color.Black;
                 idLabel.FontSize = 20;
-                idLabel.Text = "ImageID: " + image.imageID;
+                var idText = new FormattedString();
+                idText.Spans.Add(new Span { Text = "ImageID: ", FontAttributes = FontAttributes.Bold });
+                idText.Spans.Add(new Span { Text = image.imageID+""});
+                idLabel.FormattedText = idText;
                 Children.Add(idLabel);
 
                 if (!String.IsNullOrEmpty(image.title))
                 {
                     Label titleLabel = new Label();
-                    titleLabel.Text = "Titel: " + image.title;
+                    var descriptionText = new FormattedString();
+                    descriptionText.Spans.Add(new Span { Text = "Title: ", FontAttributes = FontAttributes.Bold });
+                    descriptionText.Spans.Add(new Span { Text = image.title + "" });
+                    titleLabel.FormattedText = descriptionText;
                     Children.Add(titleLabel);
                 }
 
                 if (!String.IsNullOrEmpty(image.shortName))
                 {
                     Label shortNameLabel = new Label();
-                    shortNameLabel.Text = "ShortName: " + image.shortName;
+                    var descriptionText = new FormattedString();
+                    descriptionText.Spans.Add(new Span { Text = "Shortname: ", FontAttributes = FontAttributes.Bold });
+                    descriptionText.Spans.Add(new Span { Text = image.shortName + "" });
+                    shortNameLabel.FormattedText = descriptionText;
                     Children.Add(shortNameLabel);
                 }
 
                 if (!String.IsNullOrEmpty(image.copyright))
                 {
                     Label copyRightLabel = new Label();
-                    copyRightLabel.Text = "Copyright: " + image.copyright;
+                    var descriptionText = new FormattedString();
+                    descriptionText.Spans.Add(new Span { Text = "Copyright: ", FontAttributes = FontAttributes.Bold });
+                    descriptionText.Spans.Add(new Span { Text = image.copyright + "" });
+                    copyRightLabel.FormattedText = descriptionText;
                     Children.Add(copyRightLabel);
                 }
 
                 if (!String.IsNullOrEmpty(image.comment))
                 {
                     Label commentLabel = new Label();
-                    commentLabel.Text = "Comment: " + image.comment;
+                    var descriptionText = new FormattedString();
+                    descriptionText.Spans.Add(new Span { Text = "Comment: ", FontAttributes = FontAttributes.Bold });
+                    descriptionText.Spans.Add(new Span { Text = image.comment + "" });
+                    commentLabel.FormattedText = descriptionText;
                     Children.Add(commentLabel);
                 }
                 if (!String.IsNullOrEmpty(image.date))
                 {
                     Label dateLabel = new Label();
-                    dateLabel.Text = "Date: " + image.date;
+                    var descriptionText = new FormattedString();
+                    descriptionText.Spans.Add(new Span { Text = "Date: ", FontAttributes = FontAttributes.Bold });
+                    descriptionText.Spans.Add(new Span { Text = image.date + "" });
+                    dateLabel.FormattedText = descriptionText;
                     Children.Add(dateLabel);
                 }
                 if (Settings.showPreviewPicturesSetting)

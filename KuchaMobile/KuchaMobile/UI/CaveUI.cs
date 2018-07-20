@@ -28,32 +28,59 @@ namespace KuchaMobile.UI
             generalHeadlineLabel.Text = "General";
             generalHeadlineLabel.TextColor = Color.Black;
             generalCaveStack.Children.Add(generalHeadlineLabel);
+
             Label nameLabel = new Label();
-            nameLabel.Text = "Historical Name: " + cave.historicalName;
+            var nameText = new FormattedString();
+            nameText.Spans.Add(new Span { Text = "Historical Name: ", FontAttributes = FontAttributes.Bold });
+            nameText.Spans.Add(new Span { Text = cave.historicalName });
+            nameLabel.FormattedText = nameText;
             generalCaveStack.Children.Add(nameLabel);
+
             if (!String.IsNullOrEmpty(cave.optionalHistoricalName))
             {
                 Label optHistoricalNameLabel = new Label();
-                optHistoricalNameLabel.Text = "Optional Historical Name: " + cave.optionalHistoricalName;
+                var optNameText = new FormattedString();
+                optNameText.Spans.Add(new Span { Text = "Optional Historical Name: ", FontAttributes = FontAttributes.Bold });
+                optNameText.Spans.Add(new Span { Text = cave.optionalHistoricalName });
+                optHistoricalNameLabel.FormattedText = optNameText;
                 generalCaveStack.Children.Add(optHistoricalNameLabel);
             }
+
             Label siteLabel = new Label();
-            siteLabel.Text = "Site: " + Kucha.GetCaveSiteStringByID(cave.siteID);
+            var siteText = new FormattedString();
+            siteText.Spans.Add(new Span { Text = "Site: ", FontAttributes = FontAttributes.Bold });
+            siteText.Spans.Add(new Span { Text = Kucha.GetCaveSiteStringByID(cave.siteID) });
+            siteLabel.FormattedText = siteText;
             generalCaveStack.Children.Add(siteLabel);
+
             Label districtLabel = new Label();
-            districtLabel.Text = "District: " + Kucha.GetCaveDistrictStringByID(cave.districtID);
+            var districtText = new FormattedString();
+            districtText.Spans.Add(new Span { Text = "District: ", FontAttributes = FontAttributes.Bold });
+            districtText.Spans.Add(new Span { Text = Kucha.GetCaveDistrictStringByID(cave.districtID) });
+            districtLabel.FormattedText = districtText;
             generalCaveStack.Children.Add(districtLabel);
+
             Label regionLabel = new Label();
-            regionLabel.Text = "Region: " + Kucha.GetCaveRegionStringByID(cave.regionID);
+            var regionText = new FormattedString();
+            regionText.Spans.Add(new Span { Text = "Region: ", FontAttributes = FontAttributes.Bold });
+            regionText.Spans.Add(new Span { Text = Kucha.GetCaveRegionStringByID(cave.regionID) });
+            regionLabel.FormattedText = regionText;
             generalCaveStack.Children.Add(regionLabel);
+
             Label typeLabel = new Label();
-            typeLabel.Text = "Type: " + Kucha.GetCaveTypeStringByID(cave.caveTypeID);
+            var typeText = new FormattedString();
+            typeText.Spans.Add(new Span { Text = "Type: ", FontAttributes = FontAttributes.Bold });
+            typeText.Spans.Add(new Span { Text = Kucha.GetCaveTypeStringByID(cave.caveTypeID) });
+            typeLabel.FormattedText = typeText;
             generalCaveStack.Children.Add(typeLabel);
 
             if (!String.IsNullOrEmpty(cave.measurementString))
             {
                 Label measurementLabel = new Label();
-                measurementLabel.Text = "Measurement: " + cave.measurementString;
+                var measurementText = new FormattedString();
+                measurementText.Spans.Add(new Span { Text = "Measurement:\n", FontAttributes = FontAttributes.Bold });
+                measurementText.Spans.Add(new Span { Text = cave.measurementString });
+                measurementLabel.FormattedText = measurementText;
                 generalCaveStack.Children.Add(measurementLabel);
             }
             generalCaveFrame.Content = generalCaveStack;
