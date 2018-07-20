@@ -14,6 +14,192 @@ namespace KuchaMobile.Logic
     {
         private static KuchaContainer kuchaContainer;
 
+        //Caves
+        public static CaveModel GetCaveByID(int id)
+        {
+            return kuchaContainer.caves.Find(c => c.caveID == id);
+        }
+
+        public static List<CaveModel> GetCavesByFilters(CaveTypeModel caveTypeModel, List<CaveDistrictModel> pickedDistricts, List<CaveRegionModel> pickedRegions, List<CaveSiteModel> pickedSites)
+        {
+            List<CaveModel> resultCaves = new List<CaveModel>(kuchaContainer.caves);   //Clone them to not access the full list
+            if (caveTypeModel != null)
+            {
+                resultCaves.RemoveAll(cave => cave.caveTypeID != caveTypeModel.caveTypeID);
+            }
+
+            if (pickedDistricts != null && pickedDistricts.Any())
+            {
+                resultCaves.RemoveAll(cave => !pickedDistricts.Any(district => cave.districtID == district.districtID));
+            }
+
+            if (pickedRegions != null && pickedRegions.Any())
+            {
+                resultCaves.RemoveAll(cave => !pickedRegions.Any(region => cave.regionID == region.regionID));
+            }
+
+            if (pickedSites != null && pickedSites.Any())
+            {
+                resultCaves.RemoveAll(cave => !pickedSites.Any(site => cave.siteID == site.siteID));
+            }
+            return resultCaves;
+        }
+
+        public static Dictionary<string, CaveTypeModel> GetCaveTypeDictionary()
+        {
+            return kuchaContainer.caveTypeDictionary;
+        }
+
+        public static List<CaveDistrictModel> GetCaveDistricts()
+        {
+            return kuchaContainer.caveDistricts;
+        }
+
+        public static List<CaveRegionModel> GetCaveRegions()
+        {
+            return kuchaContainer.caveRegions;
+        }
+
+        public static List<CaveSiteModel> GetCaveSites()
+        {
+            return kuchaContainer.caveSites;
+        }
+
+        public static List<CaveTypeModel> GetCaveTypes()
+        {
+            return kuchaContainer.caveTypes;
+        }
+
+        public static string GetCaveDistrictStringByID(int id)
+        {
+            CaveDistrictModel c = kuchaContainer.caveDistricts.Find(x => x.districtID == id);
+            if (c == null) return String.Empty;
+            return c.name;
+        }
+
+        public static string GetCaveRegionStringByID(int id)
+        {
+            CaveRegionModel c = kuchaContainer.caveRegions.Find(x => x.regionID == id);
+            if (c == null) return String.Empty;
+            return c.englishName;
+        }
+
+        public static string GetCaveSiteStringByID(int id)
+        {
+            CaveSiteModel c = kuchaContainer.caveSites.Find(x => x.siteID == id);
+            if (c == null) return String.Empty;
+            return c.name;
+        }
+
+        public static string GetCaveTypeStringByID(int id)
+        {
+            CaveTypeModel c = kuchaContainer.caveTypes.Find(x => x.caveTypeID == id);
+            if (c == null) return String.Empty;
+            return c.nameEN;
+        }
+
+        public static string GetCaveTypeSketchByID(int id)
+        {
+            CaveTypeModel c = kuchaContainer.caveTypes.Find(x => x.caveTypeID == id);
+            if (c == null) return String.Empty;
+            return c.sketchName;
+        }
+
+        public static void SaveCaveNotes(int caveID, string notes)
+        {
+            //Device memory
+            List<NotesSaver> currentSavedNotes = Settings.SavedNotesSetting;
+            var savedNote = currentSavedNotes.Find(id => id.ID == caveID && id.Type == NotesSaver.NOTES_TYPE.NOTE_TYPE_CAVE);
+            if (savedNote != null) //Element found
+                savedNote.Note = notes;
+            else
+                currentSavedNotes.Add(new NotesSaver(NotesSaver.NOTES_TYPE.NOTE_TYPE_CAVE, caveID, notes));
+            Settings.SavedNotesSetting = currentSavedNotes;
+        }
+
+        //Painted Representations & Iconographies
+        public static List<PaintedRepresentationModel> GetAllPaintedRepresentations()
+        {
+            return Connection.GetAllPaintedRepresentations();
+        }
+
+        public static List<PaintedRepresentationModel> GetPaintedRepresentationsByIconographies(List<IconographyModel> iconographies, bool exclusive)
+        {
+            return Connection.GetPaintedRepresentationsByFilter(iconographies, exclusive);
+        }
+
+        public static List<IconographyModel> GetIconographies()
+        {
+            return kuchaContainer.iconographies;
+        }
+
+        public static void SavePaintedRepresentationNotes(int paintedRepresentationID, string notes)
+        {
+            //We dont cache the Painted Representations for now, so only save on device memory
+            List<NotesSaver> currentSavedNotes = Settings.SavedNotesSetting;
+            var index = currentSavedNotes.FindIndex(id => id.ID == paintedRepresentationID && id.Type == NotesSaver.NOTES_TYPE.NOTE_TYPE_PAINTEDREPRESENTATION);
+            if (index > -1) //Element found
+            {
+                currentSavedNotes[index].Note = notes;
+            }
+            else
+            {
+                currentSavedNotes.Add(new NotesSaver(NotesSaver.NOTES_TYPE.NOTE_TYPE_PAINTEDREPRESENTATION, paintedRepresentationID, notes));
+            }
+            Settings.SavedNotesSetting = currentSavedNotes;
+        }
+
+        //Global
+        public async static void LoadPersistantData()
+        {
+            IFolder rootFolder = FileSystem.Current.LocalStorage;
+            ExistenceCheckResult kuchaFolderExists = await rootFolder.CheckExistsAsync("Kucha");
+            bool loadSuccess = false;
+            if (kuchaFolderExists == ExistenceCheckResult.FolderExists)
+            {
+                IFolder kuchaFolder = await rootFolder.GetFolderAsync("Kucha");
+                IFile kuchaContainerFile;
+                if (kuchaFolder != null)
+                {
+                    ExistenceCheckResult kuchaFileExists = await kuchaFolder.CheckExistsAsync("KuchaContainer");
+                    if (kuchaFileExists == ExistenceCheckResult.FileExists)
+                    {
+                        kuchaContainerFile = await kuchaFolder.GetFileAsync("KuchaContainer");
+                        if (kuchaContainerFile != null)
+                        {
+                            string fileString = await kuchaContainerFile.ReadAllTextAsync();
+                            kuchaContainer = JsonConvert.DeserializeObject<KuchaContainer>(fileString);
+                            if (kuchaContainer != null)
+                                loadSuccess = true;
+                            else
+                                kuchaContainer = new KuchaContainer();
+                        }
+                    }
+                    else
+                    {
+                        await kuchaFolder.CreateFileAsync("KuchaContainer", CreationCollisionOption.ReplaceExisting);
+                        kuchaContainer = new KuchaContainer();
+                    }
+                }
+            }
+            else
+            {
+                //Kucha Folder does not exist - Create Folder and empty file
+                await rootFolder.CreateFolderAsync("Kucha", CreationCollisionOption.ReplaceExisting);
+                IFolder kuchaFolder = await rootFolder.GetFolderAsync("Kucha");
+                await kuchaFolder.CreateFileAsync("KuchaContainer", CreationCollisionOption.ReplaceExisting);
+            }
+
+            if (!loadSuccess)
+                kuchaContainer = new KuchaContainer();
+            Connection.LoadCachedSessionID();
+
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                ((App)App.Current).LoadingPersistantDataFinished();
+            });
+        }
+
         public async static Task<bool> RefreshLocalData()
         {
             if (kuchaContainer == null)
@@ -74,194 +260,6 @@ namespace KuchaMobile.Logic
             return true;
         }
 
-        public static CaveModel GetCaveByID(int id)
-        {
-            return kuchaContainer.caves.Find(c => c.caveID == id);
-        }
-
-        public static DateTime GetDataTimeStamp()
-        {
-            return kuchaContainer.timeStamp;
-        }
-
-        public static void SaveCaveNotes(int caveID, string notes)
-        {
-            //Device memory
-            List<NotesSaver> currentSavedNotes = Settings.SavedNotesSetting;
-            var savedNote = currentSavedNotes.Find(id => id.ID == caveID && id.Type == NotesSaver.NOTES_TYPE.NOTE_TYPE_CAVE);
-            if (savedNote != null) //Element found
-                savedNote.Note = notes;
-            else
-                currentSavedNotes.Add(new NotesSaver(NotesSaver.NOTES_TYPE.NOTE_TYPE_CAVE, caveID, notes));
-            Settings.SavedNotesSetting = currentSavedNotes;
-        }
-
-        public static void SavePaintedRepresentationNotes(int paintedRepresentationID, string notes)
-        {
-            //We dont cache the Painted Representations for now, so only save on device memory
-            List<NotesSaver> currentSavedNotes = Settings.SavedNotesSetting;
-            var index = currentSavedNotes.FindIndex(id => id.ID == paintedRepresentationID && id.Type == NotesSaver.NOTES_TYPE.NOTE_TYPE_PAINTEDREPRESENTATION);
-            if (index > -1) //Element found
-            {
-                currentSavedNotes[index].Note = notes;
-            }
-            else
-            {
-                currentSavedNotes.Add(new NotesSaver(NotesSaver.NOTES_TYPE.NOTE_TYPE_PAINTEDREPRESENTATION, paintedRepresentationID, notes));
-            }
-            Settings.SavedNotesSetting = currentSavedNotes;
-        }
-
-        public static List<CaveModel> GetCavesByFilters(CaveTypeModel caveTypeModel, List<CaveDistrictModel> pickedDistricts, List<CaveRegionModel> pickedRegions, List<CaveSiteModel> pickedSites)
-        {
-            List<CaveModel> resultCaves = new List<CaveModel>(kuchaContainer.caves);   //Clone them to not access the full list
-            if (caveTypeModel != null)
-            {
-                resultCaves.RemoveAll(cave => cave.caveTypeID != caveTypeModel.caveTypeID);
-            }
-
-            if (pickedDistricts != null && pickedDistricts.Any())
-            {
-                resultCaves.RemoveAll(cave => !pickedDistricts.Any(district => cave.districtID == district.districtID));
-            }
-
-            if (pickedRegions != null && pickedRegions.Any())
-            {
-                resultCaves.RemoveAll(cave => !pickedRegions.Any(region => cave.regionID == region.regionID));
-            }
-
-            if (pickedSites != null && pickedSites.Any())
-            {
-                resultCaves.RemoveAll(cave => !pickedSites.Any(site => cave.siteID == site.siteID));
-            }
-            return resultCaves;
-        }
-
-        public static Dictionary<string, CaveTypeModel> GetCaveTypeDictionary()
-        {
-            return kuchaContainer.caveTypeDictionary;
-        }
-
-        public static List<CaveDistrictModel> GetCaveDistricts()
-        {
-            return kuchaContainer.caveDistricts;
-        }
-
-        public static List<CaveRegionModel> GetCaveRegions()
-        {
-            return kuchaContainer.caveRegions;
-        }
-
-        public static List<CaveSiteModel> GetCaveSites()
-        {
-            return kuchaContainer.caveSites;
-        }
-
-        public static List<CaveTypeModel> GetCaveTypes()
-        {
-            return kuchaContainer.caveTypes;
-        }
-
-        public static List<IconographyModel> GetIconographies()
-        {
-            return kuchaContainer.iconographies;
-        }
-
-        public static string GetCaveDistrictStringByID(int id)
-        {
-            CaveDistrictModel c = kuchaContainer.caveDistricts.Find(x => x.districtID == id);
-            if (c == null) return String.Empty;
-            return c.name;
-        }
-
-        public static string GetCaveRegionStringByID(int id)
-        {
-            CaveRegionModel c = kuchaContainer.caveRegions.Find(x => x.regionID == id);
-            if (c == null) return String.Empty;
-            return c.englishName;
-        }
-
-        public static string GetCaveSiteStringByID(int id)
-        {
-            CaveSiteModel c = kuchaContainer.caveSites.Find(x => x.siteID == id);
-            if (c == null) return String.Empty;
-            return c.name;
-        }
-
-        public static string GetCaveTypeStringByID(int id)
-        {
-            CaveTypeModel c = kuchaContainer.caveTypes.Find(x => x.caveTypeID == id);
-            if (c == null) return String.Empty;
-            return c.nameEN;
-        }
-
-        public static string GetCaveTypeSketchByID(int id)
-        {
-            CaveTypeModel c = kuchaContainer.caveTypes.Find(x => x.caveTypeID == id);
-            if (c == null) return String.Empty;
-            return c.sketchName;
-        }
-
-        public static List<PaintedRepresentationModel> GetAllPaintedRepresentations()
-        {
-            return Connection.GetAllPaintedRepresentations();
-        }
-
-        public static List<PaintedRepresentationModel> GetPaintedRepresentationsByIconographies(List<IconographyModel> iconographies, bool exclusive)
-        {
-            return Connection.GetPaintedRepresentationsByFilter(iconographies, exclusive);
-        }
-
-        public async static void LoadPersistantData()
-        {
-            IFolder rootFolder = FileSystem.Current.LocalStorage;
-            ExistenceCheckResult kuchaFolderExists = await rootFolder.CheckExistsAsync("Kucha");
-            bool loadSuccess = false;
-            if (kuchaFolderExists == ExistenceCheckResult.FolderExists)
-            {
-                IFolder kuchaFolder = await rootFolder.GetFolderAsync("Kucha");
-                IFile kuchaContainerFile;
-                if (kuchaFolder != null)
-                {
-                    ExistenceCheckResult kuchaFileExists = await kuchaFolder.CheckExistsAsync("KuchaContainer");
-                    if (kuchaFileExists == ExistenceCheckResult.FileExists)
-                    {
-                        kuchaContainerFile = await kuchaFolder.GetFileAsync("KuchaContainer");
-                        if (kuchaContainerFile != null)
-                        {
-                            string fileString = await kuchaContainerFile.ReadAllTextAsync();
-                            kuchaContainer = JsonConvert.DeserializeObject<KuchaContainer>(fileString);
-                            if (kuchaContainer != null)
-                                loadSuccess = true;
-                            else
-                                kuchaContainer = new KuchaContainer();
-                        }
-                    }
-                    else
-                    {
-                        await kuchaFolder.CreateFileAsync("KuchaContainer", CreationCollisionOption.ReplaceExisting);
-                        kuchaContainer = new KuchaContainer();
-                    }
-                }
-            }
-            else
-            {
-                //Kucha Folder does not exist - Create Folder and empty file
-                await rootFolder.CreateFolderAsync("Kucha", CreationCollisionOption.ReplaceExisting);
-                IFolder kuchaFolder = await rootFolder.GetFolderAsync("Kucha");
-                await kuchaFolder.CreateFileAsync("KuchaContainer", CreationCollisionOption.ReplaceExisting);
-            }
-
-            if (!loadSuccess)
-                kuchaContainer = new KuchaContainer();
-            Connection.LoadCachedSessionID();
-
-            Device.BeginInvokeOnMainThread(() =>
-            {
-                ((App)App.Current).LoadingPersistantDataFinished();
-            });
-        }
-
         public static bool KuchaContainerIsValid()
         {
             if (kuchaContainer == null)
@@ -290,6 +288,11 @@ namespace KuchaMobile.Logic
                 kuchaContainer = null;
                 App.Current.MainPage = new UI.LoginPage();
             }
+        }
+
+        public static DateTime GetDataTimeStamp()
+        {
+            return kuchaContainer.timeStamp;
         }
     }
 }

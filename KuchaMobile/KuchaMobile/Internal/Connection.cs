@@ -29,7 +29,7 @@ namespace KuchaMobile.Internal
             string hashedPW = Helper.GetMD5Hash(password);
 
             string data = "";
-            HttpStatusCode result = CallAPI("json?login=" + username + "&pw=" + hashedPW, ref data);
+            HttpStatusCode result = CallBackend("json?login=" + username + "&pw=" + hashedPW, ref data);
             if (result == HttpStatusCode.OK && !String.IsNullOrEmpty(data))
             {
                 sessionID = data;
@@ -55,7 +55,7 @@ namespace KuchaMobile.Internal
             if (!String.IsNullOrEmpty(sessionID))
             {
                 string data = "";
-                HttpStatusCode result = CallAPI("json?checkSession&sessionID=" + sessionID, ref data);
+                HttpStatusCode result = CallBackend("json?checkSession&sessionID=" + sessionID, ref data);
                 if (result == HttpStatusCode.NoContent) //Should be like this!
                     return true;
                 else return false;
@@ -115,7 +115,7 @@ namespace KuchaMobile.Internal
             string data = "";
             HttpStatusCode result;
             string queryString = "json?paintedRepID=all&sessionID=" + sessionID;
-            result = CallAPI(queryString, ref data);
+            result = CallBackend(queryString, ref data);
 
             if (result == HttpStatusCode.OK && !String.IsNullOrEmpty(data))
             {
@@ -140,12 +140,12 @@ namespace KuchaMobile.Internal
             if (exclusive)
             {
                 string queryString = "json?exclusivePaintedRepFromIconographyID=" + String.Join(",", allIconographiesIDList) + "&sessionID=" + sessionID;
-                result = CallAPI(queryString, ref data);
+                result = CallBackend(queryString, ref data);
             }
             else
             {
                 string queryString = "json?paintedRepFromIconographyID=" + String.Join(",", allIconographiesIDList) + "&sessionID=" + sessionID;
-                result = CallAPI(queryString, ref data);
+                result = CallBackend(queryString, ref data);
             }
             if (result == HttpStatusCode.OK && !String.IsNullOrEmpty(data))
             {
@@ -161,7 +161,7 @@ namespace KuchaMobile.Internal
                 return null;
 
             string data = "";
-            HttpStatusCode result = CallAPI("json?caveID=all&sessionID=" + sessionID, ref data);
+            HttpStatusCode result = CallBackend("json?caveID=all&sessionID=" + sessionID, ref data);
             if (result == HttpStatusCode.OK && !String.IsNullOrEmpty(data))
             {
                 List<CaveModel> models = JsonConvert.DeserializeObject<List<CaveModel>>(data);
@@ -176,7 +176,7 @@ namespace KuchaMobile.Internal
                 return null;
 
             string data = "";
-            HttpStatusCode result = CallAPI("json?districtID=all&sessionID=" + sessionID, ref data);
+            HttpStatusCode result = CallBackend("json?districtID=all&sessionID=" + sessionID, ref data);
             if (result == HttpStatusCode.OK && !String.IsNullOrEmpty(data))
             {
                 List<CaveDistrictModel> models = JsonConvert.DeserializeObject<List<CaveDistrictModel>>(data);
@@ -191,7 +191,7 @@ namespace KuchaMobile.Internal
                 return null;
 
             string data = "";
-            HttpStatusCode result = CallAPI("json?regionID=all&sessionID=" + sessionID, ref data);
+            HttpStatusCode result = CallBackend("json?regionID=all&sessionID=" + sessionID, ref data);
             if (result == HttpStatusCode.OK && !String.IsNullOrEmpty(data))
             {
                 List<CaveRegionModel> models = JsonConvert.DeserializeObject<List<CaveRegionModel>>(data);
@@ -206,7 +206,7 @@ namespace KuchaMobile.Internal
                 return null;
 
             string data = "";
-            HttpStatusCode result = CallAPI("json?siteID=all&sessionID=" + sessionID, ref data);
+            HttpStatusCode result = CallBackend("json?siteID=all&sessionID=" + sessionID, ref data);
             if (result == HttpStatusCode.OK && !String.IsNullOrEmpty(data))
             {
                 List<CaveSiteModel> models = JsonConvert.DeserializeObject<List<CaveSiteModel>>(data);
@@ -221,7 +221,7 @@ namespace KuchaMobile.Internal
                 return null;
 
             string data = "";
-            HttpStatusCode result = CallAPI("json?caveTypeID=all&sessionID=" + sessionID, ref data);
+            HttpStatusCode result = CallBackend("json?caveTypeID=all&sessionID=" + sessionID, ref data);
             if (result == HttpStatusCode.OK && !String.IsNullOrEmpty(data))
             {
                 List<CaveTypeModel> models = JsonConvert.DeserializeObject<List<CaveTypeModel>>(data);
@@ -236,7 +236,7 @@ namespace KuchaMobile.Internal
                 return null;
 
             string data = "";
-            HttpStatusCode result = CallAPI("json?iconographyID=used&sessionID=" + sessionID, ref data);
+            HttpStatusCode result = CallBackend("json?iconographyID=used&sessionID=" + sessionID, ref data);
             if (result == HttpStatusCode.OK && !String.IsNullOrEmpty(data))
             {
                 List<IconographyModel> iconographies = JsonConvert.DeserializeObject<List<IconographyModel>>(data);
@@ -245,7 +245,7 @@ namespace KuchaMobile.Internal
             else return null;
         }
 
-        public static HttpStatusCode CallAPI(string command, ref string data, int timeOut = 10, bool exactURL = false)
+        private static HttpStatusCode CallBackend(string command, ref string data, int timeOut = 10, bool exactURL = false)
         {
             //Get URI:
             string finalURL = command;
@@ -257,7 +257,7 @@ namespace KuchaMobile.Internal
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, requestUri);
 
             //Get response:
-            HttpStatusCode result = CallApi(request, out HttpResponseMessage response, timeOut);
+            HttpStatusCode result = GetHttpAnswer(request, out HttpResponseMessage response, timeOut);
             if (response != null)
                 System.Diagnostics.Debug.WriteLine($"API GET request: {response.StatusCode}; Query: {command}");
 
@@ -268,7 +268,7 @@ namespace KuchaMobile.Internal
             return result;
         }
 
-        private static HttpStatusCode CallApi(HttpRequestMessage request, out HttpResponseMessage response, int timeOut)
+        private static HttpStatusCode GetHttpAnswer(HttpRequestMessage request, out HttpResponseMessage response, int timeOut)
         {
             //Prepare timeout functionality:
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
