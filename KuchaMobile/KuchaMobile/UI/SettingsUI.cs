@@ -17,17 +17,29 @@ namespace KuchaMobile.UI
             Title = "Settings";
             StackLayout contentStack = new StackLayout();
             contentStack.Padding = 16;
-            downloadStatusLabel = new Label();
-            downloadStatusLabel.Text = "Data from " + Kucha.GetDataTimeStamp().ToShortDateString();
-            contentStack.Children.Add(downloadStatusLabel);
 
-            if(Connection.IsInOfflineMode())
+            Grid previewPicGrid = new Grid();
+            Label previewPicLabel = new Label();
+            previewPicLabel.Text = "Enable Preview Images in Painted Representations";
+            Switch previewPicSwitch = new Switch();
+            previewPicSwitch.IsToggled = Settings.showPreviewPicturesSetting;
+            previewPicSwitch.Toggled += PreviewPicSwitch_Toggled;
+            previewPicGrid.Children.Add(previewPicLabel, 0, 0);
+            previewPicGrid.Children.Add(previewPicSwitch, 1, 0);
+            previewPicGrid.HorizontalOptions = LayoutOptions.CenterAndExpand;
+            contentStack.Children.Add(previewPicGrid);
+
+            if (Connection.IsInOfflineMode())
             {
                 Button showLoginScreenButton = new Button();
                 showLoginScreenButton.Text = "Go to Login Screen";
                 showLoginScreenButton.Clicked += ShowLoginScreenButton_Clicked;
                 contentStack.Children.Add(showLoginScreenButton);
             }
+
+            downloadStatusLabel = new Label();
+            downloadStatusLabel.Text = "Data from " + Kucha.GetDataTimeStamp().ToShortDateString();
+            contentStack.Children.Add(downloadStatusLabel);
 
             Button updateLocalDatabaseButton = new Button();
             updateLocalDatabaseButton.Text = "Update Database";
@@ -50,6 +62,11 @@ namespace KuchaMobile.UI
             licenseLabel.Margin = new Thickness(0, 50, 0, 0);
             contentStack.Children.Add(licenseLabel);
             Content = contentStack;
+        }
+
+        private void PreviewPicSwitch_Toggled(object sender, ToggledEventArgs e)
+        {
+            Settings.showPreviewPicturesSetting = e.Value;
         }
 
         private void ShowLoginScreenButton_Clicked(object sender, EventArgs e)

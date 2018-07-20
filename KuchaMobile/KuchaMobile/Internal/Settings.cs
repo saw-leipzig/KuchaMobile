@@ -32,7 +32,22 @@ namespace KuchaMobile.Internal
         private const string caveSearchHistory = "caveSearchHistory";
         public static readonly string caveSearchHistoryDefault = JsonConvert.SerializeObject(new List<CaveFilter>());
 
+        private const string showPreviewPictures = "showPreviewPictures";
+        public static readonly bool showPreviewPicturesDefault = true;
+
         #endregion Setting Constants
+
+        public static bool showPreviewPicturesSetting
+        {
+            get
+            {
+                return AppSettings.GetValueOrDefault(showPreviewPictures, showPreviewPicturesDefault);
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue(showPreviewPictures, value);
+            }
+        }
 
         public static List<CaveFilter> CaveSearchHistorySetting
         {

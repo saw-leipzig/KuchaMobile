@@ -259,12 +259,22 @@ namespace KuchaMobile.UI
                     dateLabel.Text = "Date: " + image.date;
                     Children.Add(dateLabel);
                 }
-
-                Image prImage = new Image();
-                prImage.WidthRequest = 150;
-                prImage.HeightRequest = 150;
-                prImage.Source = ImageSource.FromUri(new Uri(Internal.Connection.GetPaintedRepresentationImageURL(image.imageID, 150)));
-                Children.Add(prImage);
+                if (Settings.showPreviewPicturesSetting)
+                {
+                    Image prImage = new Image();
+                    prImage.WidthRequest = 150;
+                    prImage.HeightRequest = 150;
+                    prImage.Source = ImageSource.FromUri(new Uri(Internal.Connection.GetPaintedRepresentationImageURL(image.imageID, 150)));
+                    Children.Add(prImage);
+                }
+                else
+                {
+                    Label l = new Label();
+                    l.Text = "Preview pictures are disabled in Settings";
+                    l.TextColor = Color.LightGray;
+                    l.HorizontalOptions = LayoutOptions.Center;
+                    Children.Add(l);
+                }
             }
         }
     }
