@@ -10,6 +10,9 @@ namespace KuchaMobile.UI
 {
     public class CaveSearchUI : ContentPage
     {
+        /// <summary>
+        /// This class draws the UI for the Cave Search.
+        /// </summary>
         private readonly Label districtsFilterLabel;
         private readonly Label regionsFilterLabel;
         private readonly Label sitesFilterLabel;
@@ -178,8 +181,7 @@ namespace KuchaMobile.UI
                 SearchTimeString = "At " + DateTime.UtcNow.ToString()
             };
             searchHistory.Add(caveFilter);
-            var newList = searchHistory.OrderByDescending(x => x.SearchTimeString).ToList();
-            Settings.CaveSearchHistorySetting = newList;
+            Settings.CaveSearchHistorySetting = searchHistory.OrderByDescending(x => x.SearchTimeString).ToList();
 
             Navigation.PushAsync(new CaveSearchResultUI(caves), true);
         }

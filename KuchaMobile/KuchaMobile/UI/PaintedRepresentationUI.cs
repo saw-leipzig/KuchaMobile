@@ -10,6 +10,9 @@ namespace KuchaMobile.UI
 {
     public class PaintedRepresentationUI : ContentPage
     {
+        /// <summary>
+        /// UI for a painted representation
+        /// </summary>
         public CaveModel cave { get; set; }
 
         private readonly Editor notesEditor;
@@ -221,27 +224,7 @@ namespace KuchaMobile.UI
 
         protected override void OnDisappearing()
         {
-            var index = Settings.SavedNotesSetting.FindIndex(pr => pr.ID == paintedRepresentation.depictionID && pr.Type == NotesSaver.NOTES_TYPE.NOTE_TYPE_PAINTEDREPRESENTATION);
-            if (index == -1)
-            {
-                if (!String.IsNullOrEmpty(notesEditor.Text))
-                {
-                    List<NotesSaver> savedNotes = Settings.SavedNotesSetting;
-                    savedNotes.Add(new NotesSaver(NotesSaver.NOTES_TYPE.NOTE_TYPE_PAINTEDREPRESENTATION, paintedRepresentation.depictionID, notesEditor.Text));
-                    Settings.SavedNotesSetting = savedNotes;
-                }
-            }
-            else
-            {
-                NotesSaver currentNote = Settings.SavedNotesSetting[index];
-                if (currentNote.Note != notesEditor.Text)
-                {
-                    currentNote.Note = notesEditor.Text;
-                    List<NotesSaver> savedNotes = Settings.SavedNotesSetting;
-                    savedNotes[index] = currentNote;
-                    Settings.SavedNotesSetting = savedNotes;
-                }
-            }
+            Kucha.SavePaintedRepresentationNotes(paintedRepresentation.depictionID, notesEditor.Text);
             base.OnDisappearing();
         }
 

@@ -2,6 +2,9 @@
 {
     public class CaveModel
     {
+        /// <summary>
+        /// This model represents a cave.
+        /// </summary>
         public int caveID { get; set; }
         public string officialNumber { get; set; }
         public string historicalName { get; set; }

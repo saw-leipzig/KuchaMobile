@@ -6,6 +6,9 @@ namespace KuchaMobile.UI
 {
     public class CaveSearchHistoryUI : ContentPage
     {
+        /// <summary>
+        /// Draws a simple list to pick a previous Cave Search History and put the data in the parents page
+        /// </summary>
         private readonly CaveSearchUI parent;
 
         public CaveSearchHistoryUI(CaveSearchUI parent)

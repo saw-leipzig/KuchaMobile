@@ -165,27 +165,7 @@ namespace KuchaMobile.UI
 
         protected override void OnDisappearing()
         {
-            var index = Settings.SavedNotesSetting.FindIndex(c => c.ID == cave.caveID && c.Type == NotesSaver.NOTES_TYPE.NOTE_TYPE_CAVE);
-            if (index == -1)
-            {
-                if (!String.IsNullOrEmpty(notesEditor.Text))
-                {
-                    List<NotesSaver> savedNotes = Settings.SavedNotesSetting;
-                    savedNotes.Add(new NotesSaver(NotesSaver.NOTES_TYPE.NOTE_TYPE_CAVE, cave.caveID, notesEditor.Text));
-                    Settings.SavedNotesSetting = savedNotes;
-                }
-            }
-            else
-            {
-                NotesSaver currentNote = Settings.SavedNotesSetting[index];
-                if (currentNote.Note != notesEditor.Text)
-                {
-                    currentNote.Note = notesEditor.Text;
-                    List<NotesSaver> savedNotes = Settings.SavedNotesSetting;
-                    savedNotes[index] = currentNote;
-                    Settings.SavedNotesSetting = savedNotes;
-                }
-            }
+            Kucha.SaveCaveNotes(cave.caveID, notesEditor.Text);
             base.OnDisappearing();
         }
     }

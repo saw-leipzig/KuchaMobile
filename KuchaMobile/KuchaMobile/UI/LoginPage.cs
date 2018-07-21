@@ -9,6 +9,9 @@ namespace KuchaMobile.UI
 {
     public class LoginPage : ContentPage
     {
+        /// <summary>
+        /// UI for the login page
+        /// </summary>
         private readonly Entry nameEntry;
         private readonly Entry passwordEntry;
         private readonly Label loginstatusLabel;
@@ -95,11 +98,7 @@ namespace KuchaMobile.UI
                 continueButton.IsEnabled = false;
             contentStack.Children.Add(continueButton);
 
-            ScrollView s = new ScrollView
-            {
-                Content = contentStack
-            };
-            Content = s;
+            Content = new ScrollView { Content = contentStack };
         }
 
         private void ContinueButton_Clicked(object sender, EventArgs e)

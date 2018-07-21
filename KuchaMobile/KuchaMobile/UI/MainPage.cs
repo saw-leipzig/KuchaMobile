@@ -7,6 +7,9 @@ namespace KuchaMobile
 {
     public class MainPage : MasterDetailPage
     {
+        /// <summary>
+        /// MasterDetailPage is the Xamarin concept of a main menu (master) and actual pages (Detail)
+        /// </summary>
         private readonly MainMenuUI mainMenu;
 
         public MainPage()

@@ -2,6 +2,9 @@
 {
     public class CaveDistrictModel
     {
+        /// <summary>
+        /// This model represents a Cave District
+        /// </summary>
         public int districtID { get; set; }
         public string name { get; set; }
         public int siteID { get; set; }

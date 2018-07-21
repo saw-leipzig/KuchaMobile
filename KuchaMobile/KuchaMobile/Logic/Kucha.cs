@@ -12,6 +12,9 @@ namespace KuchaMobile.Logic
 {
     public static class Kucha
     {
+        /// <summary>
+        /// This class contains all method to access data for the UI
+        /// </summary>
         private static KuchaContainer kuchaContainer;
 
         //Caves
@@ -45,6 +48,10 @@ namespace KuchaMobile.Logic
             return resultCaves;
         }
 
+        /// <summary>
+        /// We use a dictionary for the Picker Element in CaveSearchUI to bind readable names to CaveTypeModels
+        /// </summary>
+        /// <returns></returns>
         public static Dictionary<string, CaveTypeModel> GetCaveTypeDictionary()
         {
             return kuchaContainer.caveTypeDictionary;
@@ -107,14 +114,27 @@ namespace KuchaMobile.Logic
 
         public static void SaveCaveNotes(int caveID, string notes)
         {
-            //Device memory
-            List<NotesSaver> currentSavedNotes = Settings.SavedNotesSetting;
-            var savedNote = currentSavedNotes.Find(id => id.ID == caveID && id.Type == NotesSaver.NOTES_TYPE.NOTE_TYPE_CAVE);
-            if (savedNote != null) //Element found
-                savedNote.Note = notes;
+            var index = Settings.SavedNotesSetting.FindIndex(c => c.ID == caveID && c.Type == NotesSaver.NOTES_TYPE.NOTE_TYPE_CAVE);
+            if (index == -1)
+            {
+                if (!String.IsNullOrEmpty(notes))
+                {
+                    List<NotesSaver> savedNotes = Settings.SavedNotesSetting;
+                    savedNotes.Add(new NotesSaver(NotesSaver.NOTES_TYPE.NOTE_TYPE_CAVE, caveID, notes));
+                    Settings.SavedNotesSetting = savedNotes;
+                }
+            }
             else
-                currentSavedNotes.Add(new NotesSaver(NotesSaver.NOTES_TYPE.NOTE_TYPE_CAVE, caveID, notes));
-            Settings.SavedNotesSetting = currentSavedNotes;
+            {
+                NotesSaver currentNote = Settings.SavedNotesSetting[index];
+                if (currentNote.Note != notes)
+                {
+                    currentNote.Note = notes;
+                    List<NotesSaver> savedNotes = Settings.SavedNotesSetting;
+                    savedNotes[index] = currentNote;
+                    Settings.SavedNotesSetting = savedNotes;
+                }
+            }
         }
 
         //Painted Representations & Iconographies
@@ -135,21 +155,59 @@ namespace KuchaMobile.Logic
 
         public static void SavePaintedRepresentationNotes(int paintedRepresentationID, string notes)
         {
-            //We dont cache the Painted Representations for now, so only save on device memory
-            List<NotesSaver> currentSavedNotes = Settings.SavedNotesSetting;
-            var index = currentSavedNotes.FindIndex(id => id.ID == paintedRepresentationID && id.Type == NotesSaver.NOTES_TYPE.NOTE_TYPE_PAINTEDREPRESENTATION);
-            if (index > -1) //Element found
+            var index = Settings.SavedNotesSetting.FindIndex(pr => pr.ID == paintedRepresentationID && pr.Type == NotesSaver.NOTES_TYPE.NOTE_TYPE_PAINTEDREPRESENTATION);
+            if (index == -1)
             {
-                currentSavedNotes[index].Note = notes;
+                if (!String.IsNullOrEmpty(notes))
+                {
+                    List<NotesSaver> savedNotes = Settings.SavedNotesSetting;
+                    savedNotes.Add(new NotesSaver(NotesSaver.NOTES_TYPE.NOTE_TYPE_PAINTEDREPRESENTATION, paintedRepresentationID, notes));
+                    Settings.SavedNotesSetting = savedNotes;
+                }
             }
             else
             {
-                currentSavedNotes.Add(new NotesSaver(NotesSaver.NOTES_TYPE.NOTE_TYPE_PAINTEDREPRESENTATION, paintedRepresentationID, notes));
+                NotesSaver currentNote = Settings.SavedNotesSetting[index];
+                if (currentNote.Note != notes)
+                {
+                    currentNote.Note = notes;
+                    List<NotesSaver> savedNotes = Settings.SavedNotesSetting;
+                    savedNotes[index] = currentNote;
+                    Settings.SavedNotesSetting = savedNotes;
+                }
             }
-            Settings.SavedNotesSetting = currentSavedNotes;
+        }
+
+        //Image
+        public static void SaveImageNotes(int imageID, string notes)
+        {
+            var index = Settings.SavedNotesSetting.FindIndex(i => i.ID == imageID && i.Type == NotesSaver.NOTES_TYPE.NOTE_TYPE_IMAGE);
+            if (index == -1)
+            {
+                if (!String.IsNullOrEmpty(notes))
+                {
+                    List<NotesSaver> savedNotes = Settings.SavedNotesSetting;
+                    savedNotes.Add(new NotesSaver(NotesSaver.NOTES_TYPE.NOTE_TYPE_IMAGE, imageID, notes));
+                    Settings.SavedNotesSetting = savedNotes;
+                }
+            }
+            else
+            {
+                NotesSaver currentNote = Settings.SavedNotesSetting[index];
+                if (currentNote.Note != notes)
+                {
+                    currentNote.Note = notes;
+                    List<NotesSaver> savedNotes = Settings.SavedNotesSetting;
+                    savedNotes[index] = currentNote;
+                    Settings.SavedNotesSetting = savedNotes;
+                }
+            }
         }
 
         //Global
+        /// <summary>
+        /// Only used during App Launch
+        /// </summary>
         public async static void LoadPersistantData()
         {
             IFolder rootFolder = FileSystem.Current.LocalStorage;
@@ -288,6 +346,10 @@ namespace KuchaMobile.Logic
             }
         }
 
+        /// <summary>
+        /// Returns a timestamp of the current used local Database
+        /// </summary>
+        /// <returns></returns>
         public static DateTime GetDataTimeStamp()
         {
             return kuchaContainer.timeStamp;

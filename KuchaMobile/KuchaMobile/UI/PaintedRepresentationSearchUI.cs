@@ -9,6 +9,9 @@ namespace KuchaMobile.UI
 {
     public class PaintedRepresentationSearchUI : ContentPage
     {
+        /// <summary>
+        /// UI for the painted representation search
+        /// </summary>
         private readonly List<IconographyModel> allIconographies;
         private List<IconographyModel> availableIconographies;
         private List<IconographyModel> selectedIconographies;

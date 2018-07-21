@@ -5,6 +5,9 @@ namespace KuchaMobile.Logic.Models
 {
     public class PaintedRepresentationModel
     {
+        /// <summary>
+        /// This model represents a Painted Representation
+        /// </summary>
         public int depictionID { get; set; }
         public string description { get; set; }
         public int caveID { get; set; }

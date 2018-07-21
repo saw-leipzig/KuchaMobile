@@ -106,27 +106,7 @@ namespace KuchaMobile.UI
 
         protected override void OnDisappearing()
         {
-            var index = Settings.SavedNotesSetting.FindIndex(i => i.ID == image.imageID && i.Type == NotesSaver.NOTES_TYPE.NOTE_TYPE_IMAGE);
-            if (index == -1)
-            {
-                if (!String.IsNullOrEmpty(notesEditor.Text))
-                {
-                    List<NotesSaver> savedNotes = Settings.SavedNotesSetting;
-                    savedNotes.Add(new NotesSaver(NotesSaver.NOTES_TYPE.NOTE_TYPE_IMAGE, image.imageID, notesEditor.Text));
-                    Settings.SavedNotesSetting = savedNotes;
-                }
-            }
-            else
-            {
-                NotesSaver currentNote = Settings.SavedNotesSetting[index];
-                if (currentNote.Note != notesEditor.Text)
-                {
-                    currentNote.Note = notesEditor.Text;
-                    List<NotesSaver> savedNotes = Settings.SavedNotesSetting;
-                    savedNotes[index] = currentNote;
-                    Settings.SavedNotesSetting = savedNotes;
-                }
-            }
+            Logic.Kucha.SaveImageNotes(image.imageID, notesEditor.Text);
             base.OnDisappearing();
         }
     }

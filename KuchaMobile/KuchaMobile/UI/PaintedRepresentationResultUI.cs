@@ -6,6 +6,10 @@ namespace KuchaMobile.UI
 {
     public class PaintedRepresentationResultUI : ContentPage
     {
+        /// <summary>
+        /// Draws a list with the painted representation search results
+        /// </summary>
+        /// <param name="paintedRepresentationModels"></param>
         public PaintedRepresentationResultUI(List<PaintedRepresentationModel> paintedRepresentationModels)
         {
             Title = "PR-Search: " + paintedRepresentationModels.Count + " Ergebnis(se)";

@@ -10,6 +10,9 @@ namespace KuchaMobile.UI
 {
     public class SettingsUI : ContentPage
     {
+        /// <summary>
+        /// UI for the Settings Page
+        /// </summary>
         private readonly Label downloadStatusLabel;
 
         public SettingsUI()

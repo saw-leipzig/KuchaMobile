@@ -5,6 +5,9 @@ namespace KuchaMobile.Internal
 {
     public static class Helper
     {
+        /// <summary>
+        /// This class contains minor helper methods/propertys
+        /// </summary>
         public static int ScreenHeight { get; set; }
         public static int ScreenWidth { get; set; }
 

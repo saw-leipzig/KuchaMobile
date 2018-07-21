@@ -12,6 +12,9 @@ namespace KuchaMobile.Internal
 {
     internal static class Connection
     {
+        /// <summary>
+        /// This class is responsible for connection handling
+        /// </summary>
         private const string backendURL = "https://kuchatest.saw-leipzig.de/";
         private static readonly HttpClient client = new HttpClient();
         private static string sessionID = String.Empty;
@@ -30,7 +33,7 @@ namespace KuchaMobile.Internal
 
             string data = "";
             HttpStatusCode result = CallBackend("json?login=" + username + "&pw=" + hashedPW, ref data);
-            if (result == HttpStatusCode.OK && !String.IsNullOrEmpty(data))
+            if (result == HttpStatusCode.OK && !String.IsNullOrEmpty(data)) //Server returns OK 200 even if login wrong
             {
                 sessionID = data;
                 Settings.LocalTokenSetting = data;
@@ -268,6 +271,14 @@ namespace KuchaMobile.Internal
             }
         }
 
+        /// <summary>
+        /// This method should be called when adding any server requests
+        /// </summary>
+        /// <param name="command">The URL endpoint</param>
+        /// <param name="data">Will include data from server after the request</param>
+        /// <param name="timeOut">Specify a shorter/longer timeOut</param>
+        /// <param name="exactURL">Can be used to overwrite the backend url</param>
+        /// <returns></returns>
         private static HttpStatusCode CallBackend(string command, ref string data, int timeOut = 10, bool exactURL = false)
         {
             //Get URI:
@@ -291,6 +302,13 @@ namespace KuchaMobile.Internal
             return result;
         }
 
+        /// <summary>
+        /// Should only ever be called by CallBackend
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// <param name="timeOut"></param>
+        /// <returns></returns>
         private static HttpStatusCode GetHttpAnswer(HttpRequestMessage request, out HttpResponseMessage response, int timeOut)
         {
             //Prepare timeout functionality:

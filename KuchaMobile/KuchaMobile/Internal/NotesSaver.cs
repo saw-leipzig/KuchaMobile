@@ -2,6 +2,9 @@
 {
     public class NotesSaver
     {
+        /// <summary>
+        /// This is a template for the private notes to be saved with the Settings Plugin
+        /// </summary>
         public enum NOTES_TYPE
         {
             NOTE_TYPE_CAVE,

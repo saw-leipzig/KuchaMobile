@@ -4,6 +4,9 @@ namespace KuchaMobile.UI
 {
     public class LoadingScreenUI : ContentPage
     {
+        /// <summary>
+        /// Shows a loading screen while the local files are being loaded during app launch
+        /// </summary>
         public LoadingScreenUI()
         {
             Image huLogo = new Image

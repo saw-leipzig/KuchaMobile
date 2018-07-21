@@ -6,6 +6,10 @@ namespace KuchaMobile.UI
 {
     public class CaveSearchResultUI : ContentPage
     {
+        /// <summary>
+        /// Draws a list to show the cave search results.
+        /// </summary>
+        /// <param name="caves"></param>
         public CaveSearchResultUI(List<CaveModel> caves)
         {
             Title = "Cavesearch: " + caves.Count + " Result(s)";

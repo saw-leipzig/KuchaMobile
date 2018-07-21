@@ -8,6 +8,9 @@ namespace KuchaMobile.UI
 {
     public class CaveFilterUI : ContentPage
     {
+        /// <summary>
+        /// The UI that is called when selecting cave filters
+        /// </summary>
         private readonly StackLayout listStack;
 
         public enum CAVE_FILTER_TYPE
@@ -22,11 +25,6 @@ namespace KuchaMobile.UI
 
         public CaveFilterUI(CAVE_FILTER_TYPE type, CaveSearchUI parent)
         {
-            //Todo
-            //finalStack
-            //  X
-            //      Y
-            //  Z
             this.type = type;
             this.parent = parent;
             switch (type)

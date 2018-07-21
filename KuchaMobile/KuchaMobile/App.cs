@@ -11,16 +11,19 @@ namespace KuchaMobile
         {
         }
 
+        /// <summary>
+        /// This is the App Start in the shared project. Will be called by Android/iOS Project
+        /// </summary>
         protected override void OnStart()
         {
-            Task.Run(() =>
-            {
-                Kucha.LoadPersistantData();
-            });
+            Task.Run(() => Kucha.LoadPersistantData());
 
             MainPage = new LoadingScreenUI();
         }
 
+        /// <summary>
+        /// Called from LoadingScreen once the local database has been loaded
+        /// </summary>
         public void LoadingPersistantDataFinished()
         {
             if (!Kucha.KuchaContainerIsValid() || !Internal.Connection.HasLegitSessionID())

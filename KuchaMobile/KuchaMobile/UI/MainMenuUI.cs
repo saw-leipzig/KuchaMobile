@@ -6,6 +6,9 @@ namespace KuchaMobile.UI
 {
     public class MainMenuUI : ContentPage
     {
+        /// <summary>
+        /// Draws the main menu appearing on the left side
+        /// </summary>
         public ListView ListView { get; }
 
         public MainMenuUI()
@@ -65,12 +68,11 @@ namespace KuchaMobile.UI
                 HasShadow = true
             };
 
-            Image sawLogo = new Image
+            imageFrame.Content = new Image
             {
                 Source = "SAW_logo.png",
                 Aspect = Aspect.AspectFit
             };
-            imageFrame.Content = sawLogo;
 
             Label statusLabel = new Label
             {

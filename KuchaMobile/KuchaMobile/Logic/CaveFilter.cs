@@ -6,6 +6,9 @@ namespace KuchaMobile.Internal
 {
     public class CaveFilter
     {
+        /// <summary>
+        /// This class will be only used for filtering Caves
+        /// </summary>
         public CaveTypeModel caveTypeModel { get; set; }
         public List<CaveDistrictModel> pickedDistricts { get; set; }
         public List<CaveRegionModel> pickedRegions { get; set; }

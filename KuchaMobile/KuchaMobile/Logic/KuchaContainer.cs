@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace KuchaMobile.Logic
 {
+    /// <summary>
+    /// This class holds all data that is locally available (because saved on the device) during runtime
+    /// </summary>
     public class KuchaContainer
     {
         public List<CaveDistrictModel> caveDistricts;
