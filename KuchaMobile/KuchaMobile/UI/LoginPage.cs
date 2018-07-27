@@ -28,7 +28,7 @@ namespace KuchaMobile.UI
             };
             Image huLogo = new Image
             {
-                Source = "hu_logo.png",
+                Source = "SAW_logo.png",
                 HeightRequest = 100,
                 Aspect = Aspect.AspectFit
             };
@@ -91,7 +91,8 @@ namespace KuchaMobile.UI
             {
                 Margin = new Thickness(0, 10, 0, 0),
                 Text = "Continue",
-                BackgroundColor = Color.Accent
+                BackgroundColor = Color.Accent,
+                TextColor = Color.White
             };
             continueButton.Clicked += ContinueButton_Clicked;
             if (!Connection.HasLegitSessionID() || !Kucha.KuchaContainerIsValid())
