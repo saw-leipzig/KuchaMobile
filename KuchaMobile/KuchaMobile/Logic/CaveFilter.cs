@@ -2,7 +2,7 @@
 using KuchaMobile.Logic.Models;
 using System.Collections.Generic;
 
-namespace KuchaMobile.Internal
+namespace KuchaMobile.Logic
 {
     public class CaveFilter
     {
