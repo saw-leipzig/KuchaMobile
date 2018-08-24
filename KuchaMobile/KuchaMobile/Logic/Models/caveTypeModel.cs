@@ -1,4 +1,4 @@
-﻿namespace KuchaMobile.Logic
+﻿namespace KuchaMobile.Logic.Models
 {
     public class CaveTypeModel
     {
