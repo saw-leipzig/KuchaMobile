@@ -20,12 +20,12 @@ namespace KuchaMobile.Logic
         //Caves
         public static CaveModel GetCaveByID(int id)
         {
-            return kuchaContainer.caves.Find(c => c.caveID == id);
+            return kuchaContainer.Caves.Find(c => c.caveID == id);
         }
 
         public static List<CaveModel> GetCavesByFilters(CaveTypeModel caveTypeModel, List<CaveDistrictModel> pickedDistricts, List<CaveRegionModel> pickedRegions, List<CaveSiteModel> pickedSites)
         {
-            List<CaveModel> resultCaves = new List<CaveModel>(kuchaContainer.caves);   //Clone them to not access the full list
+            List<CaveModel> resultCaves = new List<CaveModel>(kuchaContainer.Caves);   //Clone them to not access the full list
             if (caveTypeModel != null)
             {
                 resultCaves.RemoveAll(cave => cave.caveTypeID != caveTypeModel.caveTypeID);
@@ -54,60 +54,60 @@ namespace KuchaMobile.Logic
         /// <returns></returns>
         public static Dictionary<string, CaveTypeModel> GetCaveTypeDictionary()
         {
-            return kuchaContainer.caveTypeDictionary;
+            return kuchaContainer.CaveTypeDictionary;
         }
 
         public static List<CaveDistrictModel> GetCaveDistricts()
         {
-            return kuchaContainer.caveDistricts;
+            return kuchaContainer.CaveDistricts;
         }
 
         public static List<CaveRegionModel> GetCaveRegions()
         {
-            return kuchaContainer.caveRegions;
+            return kuchaContainer.CaveRegions;
         }
 
         public static List<CaveSiteModel> GetCaveSites()
         {
-            return kuchaContainer.caveSites;
+            return kuchaContainer.CaveSites;
         }
 
         public static List<CaveTypeModel> GetCaveTypes()
         {
-            return kuchaContainer.caveTypes;
+            return kuchaContainer.CaveTypes;
         }
 
         public static string GetCaveDistrictStringByID(int id)
         {
-            CaveDistrictModel c = kuchaContainer.caveDistricts.Find(x => x.districtID == id);
+            CaveDistrictModel c = kuchaContainer.CaveDistricts.Find(x => x.districtID == id);
             if (c == null) return String.Empty;
             return c.name;
         }
 
         public static string GetCaveRegionStringByID(int id)
         {
-            CaveRegionModel c = kuchaContainer.caveRegions.Find(x => x.regionID == id);
+            CaveRegionModel c = kuchaContainer.CaveRegions.Find(x => x.regionID == id);
             if (c == null) return String.Empty;
             return c.englishName;
         }
 
         public static string GetCaveSiteStringByID(int id)
         {
-            CaveSiteModel c = kuchaContainer.caveSites.Find(x => x.siteID == id);
+            CaveSiteModel c = kuchaContainer.CaveSites.Find(x => x.siteID == id);
             if (c == null) return String.Empty;
             return c.name;
         }
 
         public static string GetCaveTypeStringByID(int id)
         {
-            CaveTypeModel c = kuchaContainer.caveTypes.Find(x => x.caveTypeID == id);
+            CaveTypeModel c = kuchaContainer.CaveTypes.Find(x => x.caveTypeID == id);
             if (c == null) return String.Empty;
             return c.nameEN;
         }
 
         public static string GetCaveTypeSketchByID(int id)
         {
-            CaveTypeModel c = kuchaContainer.caveTypes.Find(x => x.caveTypeID == id);
+            CaveTypeModel c = kuchaContainer.CaveTypes.Find(x => x.caveTypeID == id);
             if (c == null) return String.Empty;
             return c.sketchName;
         }
@@ -150,7 +150,7 @@ namespace KuchaMobile.Logic
 
         public static List<IconographyModel> GetIconographies()
         {
-            return kuchaContainer.iconographies;
+            return kuchaContainer.Iconographies;
         }
 
         public static void SavePaintedRepresentationNotes(int paintedRepresentationID, string notes)
@@ -262,33 +262,33 @@ namespace KuchaMobile.Logic
             List<CaveDistrictModel> caveDistrictModels = Connection.GetCaveDistrictModels();
             if (caveDistrictModels == null)
                 return false;
-            kuchaContainer.caveDistricts = caveDistrictModels;
+            kuchaContainer.CaveDistricts = caveDistrictModels;
 
             List<CaveRegionModel> caveRegionModels = Connection.GetCaveRegionModels();
             if (caveRegionModels != null)
             {
-                kuchaContainer.caveRegions = caveRegionModels;
+                kuchaContainer.CaveRegions = caveRegionModels;
             }
             else return false;
 
             List<CaveSiteModel> caveSiteModels = Connection.GetCaveSiteModels();
             if (caveSiteModels != null)
             {
-                kuchaContainer.caveSites = caveSiteModels;
+                kuchaContainer.CaveSites = caveSiteModels;
             }
             else return false;
 
             List<CaveTypeModel> caveTypeModels = Connection.GetCaveTypeModels();
             if (caveTypeModels != null)
             {
-                kuchaContainer.caveTypes = caveTypeModels;
-                kuchaContainer.caveTypeDictionary = new Dictionary<string, CaveTypeModel>
+                kuchaContainer.CaveTypes = caveTypeModels;
+                kuchaContainer.CaveTypeDictionary = new Dictionary<string, CaveTypeModel>
                 {
                     { "Any", null }
                 };
                 foreach (CaveTypeModel c in caveTypeModels)
                 {
-                    kuchaContainer.caveTypeDictionary.Add(c.nameEN, c);
+                    kuchaContainer.CaveTypeDictionary.Add(c.nameEN, c);
                 }
             }
             else return false;
@@ -296,18 +296,18 @@ namespace KuchaMobile.Logic
             List<CaveModel> caveModels = Connection.GetAllCaves();
             if (caveModels != null)
             {
-                kuchaContainer.caves = caveModels;
+                kuchaContainer.Caves = caveModels;
             }
             else return false;
 
             List<IconographyModel> iconographieModels = Connection.GetIconographyModels();
             if (iconographieModels != null)
             {
-                kuchaContainer.iconographies = iconographieModels;
+                kuchaContainer.Iconographies = iconographieModels;
             }
             else return false;
 
-            kuchaContainer.timeStamp = DateTime.UtcNow;
+            kuchaContainer.TimeStamp = DateTime.UtcNow;
             IFolder rootFolder = FileSystem.Current.LocalStorage;
             IFolder kuchaFolder = await rootFolder.CreateFolderAsync("Kucha", CreationCollisionOption.OpenIfExists);
             IFile kuchaContainerStorage = await kuchaFolder.CreateFileAsync("KuchaContainer", CreationCollisionOption.ReplaceExisting);
@@ -320,15 +320,15 @@ namespace KuchaMobile.Logic
         {
             if (kuchaContainer == null)
                 return false;
-            if (kuchaContainer.caves.Count == 0)
+            if (kuchaContainer.Caves.Count == 0)
                 return false;
-            if (kuchaContainer.caveDistricts == new List<CaveDistrictModel>()
-                || kuchaContainer.caveRegions == new List<CaveRegionModel>()
-                || kuchaContainer.caveSites == new List<CaveSiteModel>()
-                || kuchaContainer.caveTypes == new List<CaveTypeModel>()
-                || kuchaContainer.caves == new List<CaveModel>())
+            if (kuchaContainer.CaveDistricts == new List<CaveDistrictModel>()
+                || kuchaContainer.CaveRegions == new List<CaveRegionModel>()
+                || kuchaContainer.CaveSites == new List<CaveSiteModel>()
+                || kuchaContainer.CaveTypes == new List<CaveTypeModel>()
+                || kuchaContainer.Caves == new List<CaveModel>())
                 return false;
-            if (kuchaContainer.iconographies == new List<IconographyModel>())
+            if (kuchaContainer.Iconographies == new List<IconographyModel>())
                 return false;
             return true;
         }
@@ -352,7 +352,7 @@ namespace KuchaMobile.Logic
         /// <returns></returns>
         public static DateTime GetDataTimeStamp()
         {
-            return kuchaContainer.timeStamp;
+            return kuchaContainer.TimeStamp;
         }
     }
 }

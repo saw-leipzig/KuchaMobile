@@ -9,27 +9,25 @@ namespace KuchaMobile.Logic
     /// </summary>
     public class KuchaContainer
     {
-        public List<CaveDistrictModel> caveDistricts;
-        public List<CaveRegionModel> caveRegions;
-        public List<CaveSiteModel> caveSites;
-        public List<CaveTypeModel> caveTypes;
-        public List<CaveModel> caves;
-        public List<IconographyModel> iconographies;
-
-        public Dictionary<string, CaveTypeModel> caveTypeDictionary;
-
-        public DateTime timeStamp;
+        public List<CaveDistrictModel> CaveDistricts { get; set; }
+        public List<CaveRegionModel> CaveRegions { get; set; }
+        public List<CaveSiteModel> CaveSites { get; set; }
+        public List<CaveTypeModel> CaveTypes { get; set; }
+        public List<CaveModel> Caves { get; set; }
+        public List<IconographyModel> Iconographies { get; set; }
+        public Dictionary<string, CaveTypeModel> CaveTypeDictionary { get; set; }
+        public DateTime TimeStamp { get; set; }
 
         public KuchaContainer()
         {
-            caveDistricts = new List<CaveDistrictModel>();
-            caveRegions = new List<CaveRegionModel>();
-            caveSites = new List<CaveSiteModel>();
-            caveTypes = new List<CaveTypeModel>();
-            caves = new List<CaveModel>();
-            caveTypeDictionary = new Dictionary<string, CaveTypeModel>();
-            iconographies = new List<IconographyModel>();
-            timeStamp = DateTime.Now;
+            CaveDistricts = new List<CaveDistrictModel>();
+            CaveRegions = new List<CaveRegionModel>();
+            CaveSites = new List<CaveSiteModel>();
+            CaveTypes = new List<CaveTypeModel>();
+            Caves = new List<CaveModel>();
+            CaveTypeDictionary = new Dictionary<string, CaveTypeModel>();
+            Iconographies = new List<IconographyModel>();
+            TimeStamp = DateTime.Now;
         }
     }
 }
