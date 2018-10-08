@@ -1,2 +1,2 @@
 # KuchaMobile
-Private project for my bachelor thesis
+This work is the result of my bachelor thesis. 
